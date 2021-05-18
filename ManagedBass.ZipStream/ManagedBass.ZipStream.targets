@@ -1,0 +1,7 @@
+﻿<Project>
+	<ItemGroup>
+		<None Include="$(MSBuildThisFileDirectory)\$(Platform)\bass_zipstream.dll" Link="$(Platform)\bass_zipstream.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+</Project>

@@ -1,0 +1,7 @@
+#pragma once
+
+#include "../7z/CPP/7zip/Archive/IArchive.h"
+#include "../7z/CPP/7zip/UI/Common/IFileExtractCallback.h"
+#include "../7z/CPP/7zip/ICoder.h"
+#include "../7z/CPP/7zip/IPassword.h"
+#include "../7z/CPP/7zip/IStream.h"
