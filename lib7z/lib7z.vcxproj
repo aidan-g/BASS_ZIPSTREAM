@@ -359,6 +359,7 @@
     </Link>
     <Lib>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <TargetMachine>MachineX86</TargetMachine>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -375,9 +376,10 @@
     </Link>
     <Lib>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
+      <TargetMachine>MachineX64</TargetMachine>
     </Lib>
   </ItemDefinitionGroup>
-    <ItemGroup Condition="'$(Platform)'=='Win32'">
+  <ItemGroup Condition="'$(Platform)'=='Win32'">
     <Library Include="..\lib\x86\msvcrt.lib" />
   </ItemGroup>
   <ItemGroup Condition="'$(Platform)'=='x64'">

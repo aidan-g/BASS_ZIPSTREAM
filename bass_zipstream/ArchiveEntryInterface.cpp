@@ -5,18 +5,28 @@
 
 extern "C" {
 
-	BOOL ARCHIVEDEF(ARCHIVE_OpenEntry)(const void* file, DWORD index, ARCHIVE_ENTRY_HANDLE* handle) {
+	BOOL ARCHIVEDEF(ARCHIVE_OpenEntry)(const void* file, DWORD index, ARCHIVE_ENTRY_HANDLE** handle) {
+
+		*handle = (ARCHIVE_ENTRY_HANDLE*)malloc(sizeof(ARCHIVE_ENTRY_HANDLE));
+		if (!*handle) {
+			//TODO: Warn.
+			return FALSE;
+		}
+
 		Archive* archive = nullptr;
 		ArchiveEntry* entry = nullptr;
 		try {
 			archive = new Archive();
 			archive->Open(UString((const wchar_t*)file));
 			entry = archive->OpenEntry(index);
-			handle->archive = archive;
-			handle->entry = entry;
+			(*handle)->archive = archive;
+			(*handle)->entry = entry;
 			return TRUE;
 		}
 		catch (CSystemException e) {
+			if (*handle) {
+				free(*handle);
+			}
 			if (entry) {
 				delete entry;
 			}

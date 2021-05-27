@@ -28,7 +28,7 @@ namespace ManagedBass.ZipStream.Tests
 
                 for (var a = 0; a < count; a++)
                 {
-                    var format = default(ArchiveFormat);
+                    var format = default(Archive.ArchiveFormat);
                     if (!Archive.GetFormat(archive, out format, a))
                     {
                         Assert.Fail("Failed to get format.");
@@ -62,30 +62,7 @@ namespace ManagedBass.ZipStream.Tests
                     Assert.Fail("Failed to open archive.");
                 }
 
-                var count = default(int);
-                if (!Archive.GetEntryCount(archive, out count))
-                {
-                    Assert.Fail("Failed to get entry count.");
-                }
-
-                var pass = default(bool);
-                for (var a = 0; a < count; a++)
-                {
-                    var entry = default(ArchiveEntry);
-                    if (!Archive.GetEntry(archive, out entry, a))
-                    {
-                        Assert.Fail("Failed to get entry.");
-                    }
-                    if (string.Equals(entry.path, entryPath, StringComparison.OrdinalIgnoreCase))
-                    {
-                        pass = true;
-                        break;
-                    }
-                }
-                if (!pass)
-                {
-                    Assert.Fail("The expected entry was not found.");
-                }
+                Utils.GetEntryIndex(archive, entryPath);
             }
             finally
             {

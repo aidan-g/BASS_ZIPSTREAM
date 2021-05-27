@@ -1,9 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace ManagedBass.ZipStream.Tests
 {
@@ -18,7 +15,7 @@ namespace ManagedBass.ZipStream.Tests
         public void Test001(string archiveName, string entryPath)
         {
             var fileName = Path.Combine(Location, "Media", archiveName);
-            var index = this.GetEntryIndex(archiveName, entryPath);
+            var index = Utils.GetEntryIndex(archiveName, entryPath);
 
             if (!Bass.Init(Bass.DefaultDevice))
             {
@@ -60,51 +57,6 @@ namespace ManagedBass.ZipStream.Tests
                 {
                     Assert.Fail(string.Format("Failed to free BASS: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
                 }
-            }
-        }
-
-        private int GetEntryIndex(string archiveName, string entryPath)
-        {
-            var fileName = Path.Combine(Location, "Media", archiveName);
-
-            var archive = default(IntPtr);
-            if (!Archive.Create(out archive))
-            {
-                Assert.Fail("Failed to create archive.");
-            }
-
-            try
-            {
-                if (!Archive.Open(archive, fileName))
-                {
-                    Assert.Fail("Failed to open archive.");
-                }
-
-                var count = default(int);
-                if (!Archive.GetEntryCount(archive, out count))
-                {
-                    Assert.Fail("Failed to get entry count.");
-                }
-
-                for (var a = 0; a < count; a++)
-                {
-                    var entry = default(ArchiveEntry);
-                    if (!Archive.GetEntry(archive, out entry, a))
-                    {
-                        Assert.Fail("Failed to get entry.");
-                    }
-                    if (string.Equals(entry.path, entryPath, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return a;
-                    }
-                }
-                Assert.Fail("The expected entry was not found.");
-                throw new NotImplementedException();
-            }
-            finally
-            {
-                Archive.Close(archive);
-                Archive.Release(archive);
             }
         }
     }

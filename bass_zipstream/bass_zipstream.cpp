@@ -48,13 +48,8 @@ extern "C" {
 
 	HSTREAM BASSZIPSTREAMDEF(BASS_ZIPSTREAM_StreamCreateFile)(BOOL mem, const void* file, DWORD index, QWORD offset, QWORD length, DWORD flags) {
 		try {
-			ARCHIVE_ENTRY_HANDLE* handle = (ARCHIVE_ENTRY_HANDLE*)malloc(sizeof(ARCHIVE_ENTRY_HANDLE));
-			if (!handle) {
-				//TODO: Warn.
-				return 0;
-			}
-			if (!ARCHIVE_OpenEntry(file, index, handle)) {
-				free(handle);
+			ARCHIVE_ENTRY_HANDLE* handle;
+			if (!ARCHIVE_OpenEntry(file, index, &handle)) {
 				//TODO: Warn.
 				return 0;
 			}

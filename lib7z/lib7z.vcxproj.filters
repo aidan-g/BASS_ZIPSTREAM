@@ -914,4 +914,7 @@
       <Filter>Asm</Filter>
     </CustomBuild>
   </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\lib\x64\msvcrt.lib" />
+  </ItemGroup>
 </Project>

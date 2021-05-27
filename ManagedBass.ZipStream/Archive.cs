@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Linq;
 
 namespace ManagedBass.ZipStream
 {
     public static class Archive
     {
         const string DllName = "bass_zipstream";
-
-        public const int MAX_FORMATS = 64;
-
-        public const int MAX_EXTENSIONS = 32;
 
         [DllImport(DllName)]
         static extern bool ARCHIVE_Create(out IntPtr instance);
@@ -75,21 +70,21 @@ namespace ManagedBass.ZipStream
         {
             ARCHIVE_Release(instance);
         }
-    }
 
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    public struct ArchiveFormat
-    {
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 50)]
-        public string name;
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
-        public string extensions;
-    }
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public struct ArchiveFormat
+        {
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 50)]
+            public string name;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+            public string extensions;
+        }
 
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    public struct ArchiveEntry
-    {
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
-        public string path;
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public struct ArchiveEntry
+        {
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+            public string path;
+        }
     }
 }
