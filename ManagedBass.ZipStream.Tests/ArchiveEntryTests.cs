@@ -31,8 +31,10 @@ namespace ManagedBass.ZipStream.Tests
 
             try
             {
+                Assert.AreEqual(0, ArchiveEntry.GetEntryPosition(entry));
                 Assert.AreEqual(length, ArchiveEntry.GetEntryLength(entry));
                 Assert.AreEqual(hashCode, Utils.GetEntryHashCode(entry));
+                Assert.AreEqual(length, ArchiveEntry.GetEntryPosition(entry));
             }
             finally
             {

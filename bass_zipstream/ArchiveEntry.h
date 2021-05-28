@@ -12,6 +12,8 @@ public:
 
 	void Open();
 
+	UInt64 GetPosition();
+
 	UInt64 GetSize();
 
 	UInt32 Read(void* buffer, UInt32 length);

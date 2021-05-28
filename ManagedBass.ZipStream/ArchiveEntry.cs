@@ -16,6 +16,14 @@ namespace ManagedBass.ZipStream
         }
 
         [DllImport(DllName)]
+        static extern long ARCHIVE_GetEntryPosition(IntPtr instance);
+
+        public static long GetEntryPosition(IntPtr instance)
+        {
+            return ARCHIVE_GetEntryPosition(instance);
+        }
+
+        [DllImport(DllName)]
         static extern long ARCHIVE_GetEntryLength(IntPtr instance);
 
         public static long GetEntryLength(IntPtr instance)

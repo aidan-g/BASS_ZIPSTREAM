@@ -27,6 +27,15 @@ void ArchiveEntry::CreateInStream() {
 	}
 }
 
+UInt64 ArchiveEntry::GetPosition() {
+	UInt64 position;
+	if (this->InStream->Seek(0, STREAM_SEEK_CUR, &position) != S_OK) {
+		//TODO: Warn.
+		throw CSystemException(S_FALSE);
+	}
+	return position;
+}
+
 UInt64 ArchiveEntry::GetSize() {
 	CMyComPtr<IStreamGetSize> getSize;
 	if (this->InStream->QueryInterface(IID_IStreamGetSize, (void**)&getSize) != S_OK) {

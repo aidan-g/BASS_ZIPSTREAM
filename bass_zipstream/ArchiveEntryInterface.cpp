@@ -38,6 +38,18 @@ extern "C" {
 		}
 	}
 
+	QWORD ARCHIVEDEF(ARCHIVE_GetEntryPosition)(void* user) {
+		try {
+			ARCHIVE_ENTRY_HANDLE* handle = (ARCHIVE_ENTRY_HANDLE*)user;
+			ArchiveEntry* entry = (ArchiveEntry*)handle->entry;
+			return entry->GetPosition();
+		}
+		catch (CSystemException e) {
+			//TODO: Warn.
+			return 0;
+		}
+	}
+
 	QWORD ARCHIVEDEF(ARCHIVE_GetEntryLength)(void* user) {
 		try {
 			ARCHIVE_ENTRY_HANDLE* handle = (ARCHIVE_ENTRY_HANDLE*)user;
