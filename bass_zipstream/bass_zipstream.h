@@ -11,7 +11,7 @@
 extern "C" {
 #endif
 	typedef enum {
-
+		ZS_OVERWRITE = 1
 	} ZS_ATTRIBUTE;
 
 	__declspec(dllexport) BOOL BASSZIPSTREAMDEF(BASS_ZIPSTREAM_Init)();
@@ -21,6 +21,8 @@ extern "C" {
 	__declspec(dllexport) BOOL BASSZIPSTREAMDEF(BASS_ZIPSTREAM_GetConfig)(ZS_ATTRIBUTE attrib, DWORD* value);
 
 	__declspec(dllexport) HSTREAM BASSZIPSTREAMDEF(BASS_ZIPSTREAM_StreamCreateFile)(BOOL mem, const void* file, DWORD index, QWORD offset, QWORD length, DWORD flags);
+
+	__declspec(dllexport) BOOL BASSZIPSTREAMDEF(BASS_ZIPSTREAM_Free)();
 
 #if __cplusplus
 }

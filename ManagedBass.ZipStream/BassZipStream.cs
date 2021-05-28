@@ -7,6 +7,23 @@ namespace ManagedBass.ZipStream
     {
         const string DllName = "bass_zipstream";
 
+        public static bool Overwrite
+        {
+            get
+            {
+                var overwrite = default(bool);
+                if (!GetConfig(BassZipStreamAttribute.Overwrite, out overwrite))
+                {
+                    return false;
+                }
+                return overwrite;
+            }
+            set
+            {
+                SetConfig(BassZipStreamAttribute.Overwrite, value);
+            }
+        }
+
         [DllImport(DllName)]
         static extern bool BASS_ZIPSTREAM_Init();
 
@@ -32,19 +49,35 @@ namespace ManagedBass.ZipStream
         }
 
         [DllImport(DllName)]
-        static extern bool BASS_ZIPSTREAM_SetConfig(BassZipStreamAttribute Attrib, int Value);
+        static extern bool BASS_ZIPSTREAM_GetConfig(BassZipStreamAttribute Attrib, out bool Value);
 
-        public static bool SetConfig(BassZipStreamAttribute Attrib, int Value)
+        public static bool GetConfig(BassZipStreamAttribute Attrib, out bool Value)
         {
-            return BASS_ZIPSTREAM_SetConfig(Attrib, Value);
+            return BASS_ZIPSTREAM_GetConfig(Attrib, out Value);
         }
 
         [DllImport(DllName)]
         static extern bool BASS_ZIPSTREAM_GetConfig(BassZipStreamAttribute Attrib, out int Value);
 
-        public static bool GetConfig(BassZipStreamAttribute Attrib, out int Value)
+        public static bool SetConfig(BassZipStreamAttribute Attrib, out int Value)
         {
             return BASS_ZIPSTREAM_GetConfig(Attrib, out Value);
+        }
+
+        [DllImport(DllName)]
+        static extern bool BASS_ZIPSTREAM_SetConfig(BassZipStreamAttribute Attrib, bool Value);
+
+        public static bool SetConfig(BassZipStreamAttribute Attrib, bool Value)
+        {
+            return BASS_ZIPSTREAM_SetConfig(Attrib, Value);
+        }
+
+        [DllImport(DllName)]
+        static extern bool BASS_ZIPSTREAM_SetConfig(BassZipStreamAttribute Attrib, int Value);
+
+        public static bool SetConfig(BassZipStreamAttribute Attrib, int Value)
+        {
+            return BASS_ZIPSTREAM_SetConfig(Attrib, Value);
         }
 
         [DllImport(DllName, CharSet = CharSet.Unicode)]
@@ -58,6 +91,7 @@ namespace ManagedBass.ZipStream
 
     public enum BassZipStreamAttribute : byte
     {
-        None = 0
+        None = 0,
+        Overwrite = 1
     }
 }

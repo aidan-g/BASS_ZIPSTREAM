@@ -40,13 +40,15 @@ public:
 
 	void Open(UString& fileName);
 
+	bool IsOpen(UString& fileName);
+
 	int GetEntryCount();
 
 	void GetEntry(UString& path, int index);
 
-	void ExtractEntry(UString& path, int index);
+	void ExtractEntry(UString& path, int index, bool overwrite);
 
-	ArchiveEntry* OpenEntry(int index);
+	ArchiveEntry* OpenEntry(int index, bool overwrite);
 
 	void CloseEntry(ArchiveEntry* entry);
 

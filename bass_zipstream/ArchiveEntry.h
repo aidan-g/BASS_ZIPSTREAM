@@ -8,7 +8,7 @@ class Archive;
 class ArchiveEntry
 {
 public:
-	ArchiveEntry(Archive* parent, int index);
+	ArchiveEntry(Archive* parent, int index, bool overwrite);
 
 	void Open();
 
@@ -23,6 +23,7 @@ public:
 private:
 	Archive* Parent;
 	int Index;
+	bool Overwrite;
 
 	UString FileName;
 	CMyComPtr<IInStream> InStream;

@@ -5,7 +5,7 @@
 
 extern "C" {
 
-	BOOL ARCHIVEDEF(ARCHIVE_OpenEntry)(const void* file, DWORD index, ARCHIVE_ENTRY_HANDLE** handle) {
+	BOOL ARCHIVEDEF(ARCHIVE_OpenEntry)(const void* file, DWORD index, BOOL overwrite, ARCHIVE_ENTRY_HANDLE** handle) {
 
 		*handle = (ARCHIVE_ENTRY_HANDLE*)malloc(sizeof(ARCHIVE_ENTRY_HANDLE));
 		if (!*handle) {
@@ -18,7 +18,7 @@ extern "C" {
 		try {
 			archive = new Archive();
 			archive->Open(UString((const wchar_t*)file));
-			entry = archive->OpenEntry(index);
+			entry = archive->OpenEntry(index, overwrite);
 			(*handle)->archive = archive;
 			(*handle)->entry = entry;
 			return TRUE;

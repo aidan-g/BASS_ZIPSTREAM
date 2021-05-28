@@ -22,6 +22,11 @@ namespace ManagedBass.ZipStream.Tests
                 Assert.Fail(string.Format("Failed to initialize BASS: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
             }
 
+            if (!BassZipStream.Init())
+            {
+                Assert.Fail("Failed to initialize ZIPSTREAM.");
+            }
+
             try
             {
                 var sourceChannel = BassZipStream.CreateStream(fileName, index);
@@ -53,6 +58,11 @@ namespace ManagedBass.ZipStream.Tests
             }
             finally
             {
+                if (!BassZipStream.Free())
+                {
+                    Assert.Fail(string.Format("Failed to free ZIPSTREAM: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
+                }
+
                 if (!Bass.Free())
                 {
                     Assert.Fail(string.Format("Failed to free BASS: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));

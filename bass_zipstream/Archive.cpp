@@ -105,6 +105,11 @@ bool Archive::ReadProperty(UInt64& value, PROPID propID, int index) {
 	return false;
 }
 
+bool Archive::IsOpen(UString& fileName) {
+	fileName = this->FileName;
+	return !fileName.IsEmpty();
+}
+
 int Archive::GetEntryCount() {
 	UInt32 count;
 	if (this->InArchive->GetNumberOfItems(&count) != S_OK) {
@@ -121,12 +126,12 @@ void Archive::GetEntry(UString& path, int index) {
 	}
 }
 
-void Archive::ExtractEntry(UString& path, int index) {
+void Archive::ExtractEntry(UString& path, int index, bool overwrite) {
 	const UInt32 indices[1] = {
 		index
 	};
 
-	ArchiveExtractCallback* archiveExtractCallback = new ArchiveExtractCallback();
+	ArchiveExtractCallback* archiveExtractCallback = new ArchiveExtractCallback(this, overwrite);
 
 	CMyComPtr<IArchiveExtractCallback> ptr = archiveExtractCallback;
 	if (this->InArchive->Extract(indices, 1, false, ptr.Detach()) != S_OK) {
@@ -140,8 +145,8 @@ void Archive::ExtractEntry(UString& path, int index) {
 	}
 }
 
-ArchiveEntry* Archive::OpenEntry(int index) {
-	ArchiveEntry* entry = new ArchiveEntry(this, index);
+ArchiveEntry* Archive::OpenEntry(int index, bool overwrite) {
+	ArchiveEntry* entry = new ArchiveEntry(this, index, overwrite);
 	entry->Open();
 	return entry;
 }
@@ -155,4 +160,8 @@ void Archive::Close() {
 	if (this->InArchive) {
 		this->InArchive->Close();
 	}
+	if (this->InStream) {
+		//TODO: Close input stream.
+	}
+	this->FileName.Empty();
 }

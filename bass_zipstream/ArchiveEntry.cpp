@@ -3,9 +3,10 @@
 
 #include "../7z/CPP/7zip/Common/FileStreams.h"
 
-ArchiveEntry::ArchiveEntry(Archive* parent, int index) {
+ArchiveEntry::ArchiveEntry(Archive* parent, int index, bool overwrite) {
 	this->Parent = parent;
 	this->Index = index;
+	this->Overwrite = overwrite;
 }
 
 void ArchiveEntry::Open() {
@@ -14,7 +15,7 @@ void ArchiveEntry::Open() {
 }
 
 void ArchiveEntry::Extract() {
-	this->Parent->ExtractEntry(this->FileName, this->Index);
+	this->Parent->ExtractEntry(this->FileName, this->Index, this->Overwrite);
 }
 
 void ArchiveEntry::CreateInStream() {
@@ -58,5 +59,7 @@ bool ArchiveEntry::Seek(UInt64 position) {
 }
 
 void ArchiveEntry::Close() {
-	//TODO: Close input stream.
+	if (this->InStream) {
+		//TODO: Close input stream.
+	}
 }

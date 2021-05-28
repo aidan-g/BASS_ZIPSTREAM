@@ -2,6 +2,8 @@
 
 #include "Interfaces.h"
 
+class Archive;
+
 struct ArchiveExtractFile {
 	UString Path;
 	CMyComPtr<ISequentialOutStream> Stream;
@@ -13,6 +15,9 @@ class ArchiveExtractCallback :
 	public CMyUnknownImp
 {
 private:
+	Archive* Parent;
+	bool Overwrite;
+
 	CObjectVector<ArchiveExtractFile> Files;
 
 	bool GetTempFileName(UString& path, int index);
@@ -26,7 +31,7 @@ public:
 		INTERFACE_IArchiveExtractCallback(;)
 
 public:
-	ArchiveExtractCallback();
+	ArchiveExtractCallback(Archive* parent, bool overwrite);
 
 	bool GetPath(UString& path, int index);
 };
