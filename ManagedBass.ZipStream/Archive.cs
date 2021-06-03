@@ -85,6 +85,7 @@ namespace ManagedBass.ZipStream
         {
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
             public string path;
+            public long size;
         }
     }
 }

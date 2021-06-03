@@ -6,6 +6,7 @@
 #include "..\7z\CPP\7zip\UI\Common\LoadCodecs.h"
 
 class ArchiveEntry;
+class ArchiveExtractTask;
 
 class Archive
 {
@@ -16,6 +17,7 @@ private:
 	CCodecs* Codecs;
 	CMyComPtr<IInStream> InStream;
 	CMyComPtr<IInArchive> InArchive;
+	CObjectVector<ArchiveExtractTask*> Tasks;
 
 	void LoadCodecs();
 
@@ -31,6 +33,8 @@ private:
 
 	bool ReadProperty(UInt64& value, PROPID propID, int index);
 
+	void WaitForTasks();
+
 public:
 	Archive();
 
@@ -44,9 +48,9 @@ public:
 
 	int GetEntryCount();
 
-	void GetEntry(UString& path, int index);
+	void GetEntry(UString& path, UInt64& size, int index);
 
-	void ExtractEntry(IInStream** stream, int index, bool overwrite);
+	void ExtractEntry(IInStream** stream, ArchiveExtractTask** task, int index, bool overwrite);
 
 	ArchiveEntry* OpenEntry(int index, bool overwrite);
 

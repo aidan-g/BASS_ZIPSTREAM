@@ -17,6 +17,7 @@ extern "C" {
 
 	typedef struct ARCHIVE_ENTRY {
 		wchar_t path[MAX_PATH];
+		QWORD size;
 	} ARCHIVE_ENTRY;
 
 	__declspec(dllexport) BOOL ARCHIVEDEF(ARCHIVE_Create)(void** instance);

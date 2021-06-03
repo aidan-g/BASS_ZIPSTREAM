@@ -21,9 +21,13 @@ extern "C" {
 
 	__declspec(dllexport) QWORD ARCHIVEDEF(ARCHIVE_GetEntryLength)(void* user);
 
+	__declspec(dllexport) QWORD ARCHIVEDEF(ARCHIVE_GetEntryAvailable)(void* user);
+
 	__declspec(dllexport) DWORD ARCHIVEDEF(ARCHIVE_ReadEntry)(void* buffer, DWORD length, void* user);
 
 	__declspec(dllexport) BOOL ARCHIVEDEF(ARCHIVE_SeekEntry)(QWORD offset, void* user);
+
+	__declspec(dllexport) BOOL ARCHIVEDEF(ARCHIVE_IsEOF)(void* user);
 
 	_declspec(dllexport) VOID ARCHIVEDEF(ARCHIVE_CloseEntry)(void* user);
 

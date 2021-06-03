@@ -1,20 +1,23 @@
 #include "Archive.h"
 #include "ArchiveEntry.h"
+#include"ArchiveExtractTask.h"
 
 #include "../7z/CPP/7zip/Common/FileStreams.h"
 
 ArchiveEntry::ArchiveEntry(Archive* parent, int index, bool overwrite) {
 	this->Parent = parent;
 	this->Index = index;
+	this->Size = 0;
 	this->Overwrite = overwrite;
 }
 
 void ArchiveEntry::Open() {
+	this->Parent->GetEntry(this->Path, this->Size, this->Index);
 	this->Extract();
 }
 
 void ArchiveEntry::Extract() {
-	this->Parent->ExtractEntry(&this->InStream, this->Index, this->Overwrite);
+	this->Parent->ExtractEntry(&this->InStream, &this->Task, this->Index, this->Overwrite);
 }
 
 UInt64 ArchiveEntry::GetPosition() {
@@ -27,17 +30,18 @@ UInt64 ArchiveEntry::GetPosition() {
 }
 
 UInt64 ArchiveEntry::GetSize() {
-	CMyComPtr<IStreamGetSize> getSize;
-	if (this->InStream->QueryInterface(IID_IStreamGetSize, (void**)&getSize) != S_OK) {
-		//TODO: Warn.
-		throw CSystemException(S_FALSE);
+	return this->Size;
+}
+
+UInt64 ArchiveEntry::GetAvailable() {
+	UInt64 available;
+	bool completed;
+	if (this->Task->IsRunning(this->Index, available, completed)) {
+		if (!completed) {
+			return available;
+		}
 	}
-	UInt64 size;
-	if (getSize->GetSize(&size) != S_OK) {
-		//TODO: Warn.
-		throw CSystemException(S_FALSE);
-	}
-	return size;
+	return this->Size;
 }
 
 UInt32 ArchiveEntry::Read(void* buffer, UInt32 length) {
@@ -49,7 +53,23 @@ UInt32 ArchiveEntry::Read(void* buffer, UInt32 length) {
 	return count;
 }
 
+bool ArchiveEntry::Buffer(UInt64 position, UInt32 timeout) {
+	if (position > this->Size) {
+		return false;
+	}
+	for (unsigned a = 0; a < timeout; a++) {
+		if (this->GetAvailable() >= position) {
+			return true;
+		}
+		Sleep(1);
+	}
+	return false;
+}
+
 bool ArchiveEntry::Seek(UInt64 position) {
+	if (position > this->GetAvailable()) {
+		return false;
+	}
 	if (this->InStream->Seek(position, STREAM_SEEK_SET, nullptr) == S_OK) {
 		return true;
 	}

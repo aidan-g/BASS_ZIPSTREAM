@@ -9,10 +9,13 @@ namespace ManagedBass.ZipStream.Tests
     {
         private static readonly string Location = Path.GetDirectoryName(typeof(ArchiveTests).Assembly.Location);
 
-        [TestCase("Music.zip", "Gift\\01 Smile.flac")]
-        [TestCase("Music.zip", "Gift\\02 Again & Again.flac")]
-        [TestCase("Music.zip", "Gift\\03 Emotional Times.flac")]
-        public void Test001(string archiveName, string entryPath)
+        [TestCase("Music.zip", "Gift\\01 Smile.flac", true, 37573200)]
+        [TestCase("Music.zip", "Gift\\01 Smile.flac", false, 37573200)]
+        [TestCase("Music.zip", "Gift\\02 Again & Again.flac", true, 41630400)]
+        [TestCase("Music.zip", "Gift\\02 Again & Again.flac", false, 41630400)]
+        [TestCase("Music.zip", "Gift\\03 Emotional Times.flac", true, 32281200)]
+        [TestCase("Music.zip", "Gift\\03 Emotional Times.flac", false, 32281200)]
+        public void Test001(string archiveName, string entryPath, bool overwrite, long length)
         {
             var fileName = Path.Combine(Location, "Media", archiveName);
             var index = Utils.GetEntryIndex(archiveName, entryPath);
@@ -27,6 +30,8 @@ namespace ManagedBass.ZipStream.Tests
                 Assert.Fail("Failed to initialize ZIPSTREAM.");
             }
 
+            BassZipStream.Overwrite = overwrite;
+
             try
             {
                 var sourceChannel = BassZipStream.CreateStream(fileName, index);
@@ -34,6 +39,8 @@ namespace ManagedBass.ZipStream.Tests
                 {
                     Assert.Fail(string.Format("Failed to create source stream: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
                 }
+
+                Assert.AreEqual(length, Bass.ChannelGetLength(sourceChannel));
 
                 if (!Bass.ChannelPlay(sourceChannel))
                 {
@@ -49,7 +56,13 @@ namespace ManagedBass.ZipStream.Tests
                 }
 
                 //Play for a bit.
-                global::System.Threading.Thread.Sleep(10000);
+                while (Bass.ChannelIsActive(sourceChannel) == PlaybackState.Playing)
+                {
+                    global::System.Threading.Thread.Sleep(1000);
+                }
+
+                //TODO: Not working, reported position is greater than the length?
+                //Assert.AreEqual(length, Bass.ChannelGetPosition(sourceChannel));
 
                 if (!Bass.StreamFree(sourceChannel))
                 {

@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
 using System.IO;
+using System.Threading;
 
 namespace ManagedBass.ZipStream.Tests
 {

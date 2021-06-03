@@ -6,6 +6,7 @@ class Archive;
 
 struct ArchiveExtractFile {
 	UString Path;
+	UInt64 Size;
 	CMyComPtr<IInStream> InStream;
 	CMyComPtr<IOutStream> OutStream;
 	UInt32 Index;
@@ -22,6 +23,8 @@ private:
 	CObjectVector<ArchiveExtractFile*> Files;
 
 	bool GetTempFileName(UString& path, UInt32 index);
+
+	bool GetEntrySize(UInt64& size, UInt32 index);
 
 	bool OpenFile(UInt32 index);
 

@@ -1,9 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 
 namespace ManagedBass.ZipStream.Tests
 {
@@ -35,6 +32,36 @@ namespace ManagedBass.ZipStream.Tests
                 Assert.AreEqual(length, ArchiveEntry.GetEntryLength(entry));
                 Assert.AreEqual(hashCode, Utils.GetEntryHashCode(entry));
                 Assert.AreEqual(length, ArchiveEntry.GetEntryPosition(entry));
+            }
+            finally
+            {
+                ArchiveEntry.CloseEntry(entry);
+            }
+        }
+
+        [TestCase("Music.zip", "Gift\\01 Smile.flac", true, 27873249)]
+        [TestCase("Music.zip", "Gift\\01 Smile.flac", false, 27873249)]
+        [TestCase("Music.zip", "Gift\\02 Again & Again.flac", true, 30222116)]
+        [TestCase("Music.zip", "Gift\\02 Again & Again.flac", false, 30222116)]
+        [TestCase("Music.zip", "Gift\\03 Emotional Times.flac", true, 23088352)]
+        [TestCase("Music.zip", "Gift\\03 Emotional Times.flac", false, 23088352)]
+        public void Test002(string archiveName, string entryPath, bool overwrite, long length)
+        {
+            var fileName = Path.Combine(Location, "Media", archiveName);
+            var index = Utils.GetEntryIndex(archiveName, entryPath);
+
+            var entry = default(IntPtr);
+            if (!ArchiveEntry.OpenEntry(fileName, index, overwrite, out entry))
+            {
+                Assert.Fail("Failed to open entry.");
+            }
+
+            try
+            {
+                Assert.AreEqual(0, ArchiveEntry.GetEntryPosition(entry));
+                Assert.IsTrue(ArchiveEntry.SeekEntry(entry, length));
+                Assert.AreEqual(length, ArchiveEntry.GetEntryPosition(entry));
+                Assert.IsTrue(ArchiveEntry.IsEOF(entry));
             }
             finally
             {

@@ -1,5 +1,6 @@
 #include "Archive.h"
 #include "ArchiveEntry.h"
+#include "ArchiveExtractTask.h"
 
 #include "Common.h"
 #include "ArchiveExtractCallback.h"
@@ -98,8 +99,13 @@ bool Archive::ReadProperty(UString& value, PROPID propID, int index) {
 bool Archive::ReadProperty(UInt64& value, PROPID propID, int index) {
 	NWindows::NCOM::CPropVariant property;
 	if (this->InArchive->GetProperty(index, propID, &property) == S_OK) {
-		if (property.vt == VT_INT && property.intVal) {
-
+		if (property.vt == VT_UI4 && property.ulVal) {
+			value = property.ulVal;
+			return true;
+		}
+		else if (property.vt == VT_UI8 && property.uhVal.QuadPart) {
+			value = property.uhVal.QuadPart;
+			return true;
 		}
 	}
 	return false;
@@ -119,34 +125,40 @@ int Archive::GetEntryCount() {
 	return count;
 }
 
-void Archive::GetEntry(UString& path, int index) {
+void Archive::GetEntry(UString& path, UInt64& size, int index) {
 	if (!this->ReadProperty(path, kpidPath, index)) {
+		//TODO: Warn.
+		throw CSystemException(S_FALSE);
+	}
+	if (!this->ReadProperty(size, kpidSize, index)) {
 		//TODO: Warn.
 		throw CSystemException(S_FALSE);
 	}
 }
 
-void Archive::ExtractEntry(IInStream** stream, int index, bool overwrite) {
+void Archive::ExtractEntry(IInStream** stream, ArchiveExtractTask** task, int index, bool overwrite) {
 	const UInt32 indices[1] = {
 		index
 	};
 
-	ArchiveExtractCallback* archiveExtractCallback = new ArchiveExtractCallback(this, overwrite);
-	if (!archiveExtractCallback->OpenFiles(indices, 1)) {
+	ArchiveExtractCallback* callback = new ArchiveExtractCallback(this, overwrite);
+	if (!callback->OpenFiles(indices, 1)) {
 		//TODO: Warn.
 		throw CSystemException(S_FALSE);
 	}
 
-	CMyComPtr<IArchiveExtractCallback> ptr = archiveExtractCallback;
-	if (this->InArchive->Extract(indices, 1, false, ptr.Detach()) != S_OK) {
+	if (!callback->GetInStream(stream, index)) {
 		//TODO: Warn.
 		throw CSystemException(S_FALSE);
 	}
 
-	if (!archiveExtractCallback->GetInStream(stream, index)) {
+	*task = new ArchiveExtractTask(this->InArchive, callback);
+	if (!(*task)->Start(indices, 1)) {
 		//TODO: Warn.
 		throw CSystemException(S_FALSE);
 	}
+
+	this->Tasks.Add(*task);
 }
 
 ArchiveEntry* Archive::OpenEntry(int index, bool overwrite) {
@@ -160,7 +172,16 @@ void Archive::CloseEntry(ArchiveEntry* entry) {
 	delete entry;
 }
 
+void Archive::WaitForTasks() {
+	for (unsigned a = 0; a < this->Tasks.Size(); a++) {
+		this->Tasks[a]->Wait();
+		delete this->Tasks[a];
+	}
+	this->Tasks.Clear();
+}
+
 void Archive::Close() {
+	this->WaitForTasks();
 	if (this->InArchive) {
 		this->InArchive->Close();
 	}

@@ -77,7 +77,7 @@ extern "C" {
 		try {
 			Archive* archive = (Archive*)instance;
 			UString path;
-			archive->GetEntry(path, index);
+			archive->GetEntry(path, entry->size, index);
 			COPYSTRING(entry->path, path);
 			return TRUE;
 		}

@@ -1,10 +1,12 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
 namespace ManagedBass.ZipStream
 {
     public static class BassZipStream
     {
+        const int BUFFER_FACTOR = 1;
+        const int BUFFER_TIMEOUT = 3000;
+
         const string DllName = "bass_zipstream";
 
         public static bool Overwrite
@@ -59,7 +61,7 @@ namespace ManagedBass.ZipStream
         [DllImport(DllName)]
         static extern bool BASS_ZIPSTREAM_GetConfig(BassZipStreamAttribute Attrib, out int Value);
 
-        public static bool SetConfig(BassZipStreamAttribute Attrib, out int Value)
+        public static bool GetConfig(BassZipStreamAttribute Attrib, out int Value)
         {
             return BASS_ZIPSTREAM_GetConfig(Attrib, out Value);
         }
