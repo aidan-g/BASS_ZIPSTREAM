@@ -11,7 +11,7 @@ ArchiveExtractCallback::ArchiveExtractCallback(Archive* parent, bool overwrite) 
 	this->Overwrite = overwrite;
 }
 
-bool ArchiveExtractCallback::GetTempFileName(UString& path, int index) {
+bool ArchiveExtractCallback::GetTempFileName(UString& path, UInt32 index) {
 	if (!NWindows::NFile::NDir::MyGetTempPath(path)) {
 		return false;
 	}
@@ -31,22 +31,102 @@ bool ArchiveExtractCallback::GetTempFileName(UString& path, int index) {
 	return true;
 }
 
+bool ArchiveExtractCallback::OpenInputFile(ArchiveExtractFile* file) {
+	CInFileStream* fileStream = new CInFileStream();
+	if (!fileStream->File.OpenShared(file->Path, true)) {
+		return false;
+	}
+
+	file->InStream = fileStream;
+
+	return true;
+}
+
+bool ArchiveExtractCallback::OpenOutputFile(ArchiveExtractFile* file) {
+	COutFileStream* fileStream = new COutFileStream();
+	if (!fileStream->Open(file->Path, CREATE_ALWAYS)) {
+		return false;
+	}
+
+	file->OutStream = fileStream;
+
+	return true;
+}
+
+bool ArchiveExtractCallback::OpenFile(UInt32 index) {
+	UString path;
+	if (!this->GetTempFileName(path, index)) {
+		return false;
+	}
+
+	ArchiveExtractFile* file = new ArchiveExtractFile();
+	file->Path = path;
+	file->Index = index;
+
+	if (!this->Overwrite) {
+		NWindows::NFile::NFind::CFileInfo fileInfo;
+		if (fileInfo.Find(path)) {
+			if (this->OpenInputFile(file)) {
+				this->Files.Add(file);
+				return true;
+			}
+		}
+	}
+
+	if (!this->OpenOutputFile(file)) {
+		return false;
+	}
+
+	if (!this->OpenInputFile(file)) {
+		return false;
+	}
+
+	this->Files.Add(file);
+
+	return true;
+}
+
+bool ArchiveExtractCallback::OpenFiles(const UInt32* indices, UInt32 count) {
+	for (UInt32 a = 0; a < count; a++) {
+		if (!this->OpenFile(indices[a])) {
+			return false;
+		}
+	}
+	return true;
+}
+
 void ArchiveExtractCallback::CloseFiles() {
 	for (int a = 0; a < this->Files.Size(); a++) {
-		ArchiveExtractFile file = this->Files[a];
-		if (!file.Stream) {
-			continue;
+		ArchiveExtractFile* file = this->Files[a];
+		if (file->OutStream) {
+			COutFileStream* fileStream = (COutFileStream*)(IOutStream*)file->OutStream;
+			fileStream->Close();
 		}
-		COutFileStream* stream = (COutFileStream*)(ISequentialOutStream*)file.Stream;
-		stream->Close();
 	}
 }
 
-bool ArchiveExtractCallback::GetPath(UString& path, int index) {
+bool ArchiveExtractCallback::GetInStream(IInStream** stream, int index) {
 	for (int a = 0; a < this->Files.Size(); a++) {
-		ArchiveExtractFile file = this->Files[a];
-		if (file.Index == index) {
-			path = file.Path;
+		ArchiveExtractFile* file = this->Files[a];
+		if (file->Index == index) {
+			if (!file->InStream) {
+				return false;
+			}
+			*stream = file->InStream;
+			return true;
+		}
+	}
+	return false;
+}
+
+bool ArchiveExtractCallback::GetOutStream(IOutStream** stream, int index) {
+	for (int a = 0; a < this->Files.Size(); a++) {
+		ArchiveExtractFile* file = this->Files[a];
+		if (file->Index == index) {
+			if (!file->OutStream) {
+				return false;
+			}
+			*stream = file->OutStream;
 			return true;
 		}
 	}
@@ -58,37 +138,10 @@ STDMETHODIMP ArchiveExtractCallback::GetStream(UInt32 index, ISequentialOutStrea
 	//Empty outStream means skip.
 	*outStream = nullptr;
 
-	UString path;
-	if (!this->GetTempFileName(path, index)) {
-		//TODO: Warn.
-		return S_FALSE;
+	CMyComPtr<IOutStream> fileStream;
+	if (this->GetOutStream(&fileStream, index)) {
+		*outStream = fileStream.Detach();
 	}
-
-	ArchiveExtractFile file = ArchiveExtractFile();
-	file.Path = path;
-	file.Index = index;
-
-	if (!this->Overwrite) {
-		NWindows::NFile::NFind::CFileInfo fileInfo;
-		if (fileInfo.Find(path)) {
-			//File exists and not overwriting, nothing to do.
-			this->Files.Add(file);
-			return S_OK;
-		}
-	}
-
-	COutFileStream* fileStream = new COutFileStream();
-
-	if (!fileStream->Open(path, CREATE_ALWAYS)) {
-		//TODO: Warn.
-		return S_FALSE;
-	}
-
-	file.Stream = fileStream;
-	this->Files.Add(file);
-
-	CMyComPtr<ISequentialOutStream> ptr = fileStream;
-	*outStream = ptr.Detach();
 
 	return S_OK;
 }

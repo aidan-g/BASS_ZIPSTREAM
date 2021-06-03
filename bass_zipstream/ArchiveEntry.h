@@ -27,10 +27,7 @@ private:
 	int Index;
 	bool Overwrite;
 
-	UString FileName;
 	CMyComPtr<IInStream> InStream;
 
 	void Extract();
-
-	void CreateInStream();
 };

@@ -6,7 +6,8 @@ class Archive;
 
 struct ArchiveExtractFile {
 	UString Path;
-	CMyComPtr<ISequentialOutStream> Stream;
+	CMyComPtr<IInStream> InStream;
+	CMyComPtr<IOutStream> OutStream;
 	UInt32 Index;
 };
 
@@ -18,9 +19,15 @@ private:
 	Archive* Parent;
 	bool Overwrite;
 
-	CObjectVector<ArchiveExtractFile> Files;
+	CObjectVector<ArchiveExtractFile*> Files;
 
-	bool GetTempFileName(UString& path, int index);
+	bool GetTempFileName(UString& path, UInt32 index);
+
+	bool OpenFile(UInt32 index);
+
+	bool OpenInputFile(ArchiveExtractFile* file);
+
+	bool OpenOutputFile(ArchiveExtractFile* file);
 
 	void CloseFiles();
 
@@ -33,6 +40,10 @@ public:
 public:
 	ArchiveExtractCallback(Archive* parent, bool overwrite);
 
-	bool GetPath(UString& path, int index);
+	bool OpenFiles(const UInt32* indices, UInt32 count);
+
+	bool GetInStream(IInStream** stream, int index);
+
+	bool GetOutStream(IOutStream** stream, int index);
 };
 

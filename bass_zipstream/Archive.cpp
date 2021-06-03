@@ -126,12 +126,16 @@ void Archive::GetEntry(UString& path, int index) {
 	}
 }
 
-void Archive::ExtractEntry(UString& path, int index, bool overwrite) {
+void Archive::ExtractEntry(IInStream** stream, int index, bool overwrite) {
 	const UInt32 indices[1] = {
 		index
 	};
 
 	ArchiveExtractCallback* archiveExtractCallback = new ArchiveExtractCallback(this, overwrite);
+	if (!archiveExtractCallback->OpenFiles(indices, 1)) {
+		//TODO: Warn.
+		throw CSystemException(S_FALSE);
+	}
 
 	CMyComPtr<IArchiveExtractCallback> ptr = archiveExtractCallback;
 	if (this->InArchive->Extract(indices, 1, false, ptr.Detach()) != S_OK) {
@@ -139,7 +143,7 @@ void Archive::ExtractEntry(UString& path, int index, bool overwrite) {
 		throw CSystemException(S_FALSE);
 	}
 
-	if (!archiveExtractCallback->GetPath(path, index)) {
+	if (!archiveExtractCallback->GetInStream(stream, index)) {
 		//TODO: Warn.
 		throw CSystemException(S_FALSE);
 	}

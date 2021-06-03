@@ -11,20 +11,10 @@ ArchiveEntry::ArchiveEntry(Archive* parent, int index, bool overwrite) {
 
 void ArchiveEntry::Open() {
 	this->Extract();
-	this->CreateInStream();
 }
 
 void ArchiveEntry::Extract() {
-	this->Parent->ExtractEntry(this->FileName, this->Index, this->Overwrite);
-}
-
-void ArchiveEntry::CreateInStream() {
-	CInFileStream* fileStream = new CInFileStream;
-	this->InStream = fileStream;
-	if (!fileStream->Open(this->FileName)) {
-		//TODO: Warn.
-		throw CSystemException(S_FALSE);
-	}
+	this->Parent->ExtractEntry(&this->InStream, this->Index, this->Overwrite);
 }
 
 UInt64 ArchiveEntry::GetPosition() {

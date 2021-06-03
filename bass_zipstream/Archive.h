@@ -46,7 +46,7 @@ public:
 
 	void GetEntry(UString& path, int index);
 
-	void ExtractEntry(UString& path, int index, bool overwrite);
+	void ExtractEntry(IInStream** stream, int index, bool overwrite);
 
 	ArchiveEntry* OpenEntry(int index, bool overwrite);
 
