@@ -1,6 +1,8 @@
 #include "ArchiveExtractCallback.h"
 
 #include "Archive.h"
+#include "CFileStream.h"
+#include "IClosable.h"
 
 #include "../7z/CPP/Common/IntToString.h"
 #include "../7z/CPP/Windows/FileDir.h"
@@ -31,24 +33,20 @@ bool ArchiveExtractCallback::GetTempFileName(UString& path, UInt32 index) {
 	return true;
 }
 
-bool ArchiveExtractCallback::OpenInputFile(ArchiveExtractFile* file) {
-	CInFileStream* fileStream = new CInFileStream();
-	if (!fileStream->File.OpenShared(file->Path, true)) {
-		return false;
+bool ArchiveExtractCallback::OpenFile(ArchiveExtractFile* file, bool overwrite) {
+	CFileStream* fileStream = new CFileStream();
+	if (overwrite) {
+		if (!fileStream->Create(file->Path, file->Size)) {
+			return false;
+		}
+	}
+	else {
+		if (!fileStream->Open(file->Path, file->Size)) {
+			return false;
+		}
 	}
 
-	file->InStream = fileStream;
-
-	return true;
-}
-
-bool ArchiveExtractCallback::OpenOutputFile(ArchiveExtractFile* file) {
-	COutFileStream* fileStream = new COutFileStream();
-	if (!fileStream->Open(file->Path, CREATE_ALWAYS)) {
-		return false;
-	}
-
-	file->OutStream = fileStream;
+	file->Stream = fileStream;
 
 	return true;
 }
@@ -63,21 +61,17 @@ bool ArchiveExtractCallback::OpenFile(UInt32 index) {
 	file->Path = path;
 	file->Index = index;
 
+	this->Parent->GetEntry(path, file->Size, index);
+
+	bool overwrite = true;
 	if (!this->Overwrite) {
 		NWindows::NFile::NFind::CFileInfo fileInfo;
-		if (fileInfo.Find(path)) {
-			if (this->OpenInputFile(file)) {
-				this->Files.Add(file);
-				return true;
-			}
+		if (fileInfo.Find(file->Path)) {
+			overwrite = false;
 		}
 	}
 
-	if (!this->OpenOutputFile(file)) {
-		return false;
-	}
-
-	if (!this->OpenInputFile(file)) {
+	if (!this->OpenFile(file, overwrite)) {
 		return false;
 	}
 
@@ -95,12 +89,17 @@ bool ArchiveExtractCallback::OpenFiles(const UInt32* indices, UInt32 count) {
 	return true;
 }
 
-void ArchiveExtractCallback::CloseFiles() {
+void ArchiveExtractCallback::CloseWriters() {
 	for (int a = 0; a < this->Files.Size(); a++) {
 		ArchiveExtractFile* file = this->Files[a];
-		if (file->OutStream) {
-			COutFileStream* fileStream = (COutFileStream*)(IOutStream*)file->OutStream;
-			fileStream->Close();
+		if (file->Stream) {
+			CMyComPtr<IOutStream> stream;
+			if (file->Stream->GetWriter(stream)) {
+				CMyComPtr<IClosable> closable;
+				if (stream->QueryInterface(IID_IClosable, (void**)&closable) == S_OK) {
+					closable->Close();
+				}
+			}
 		}
 	}
 }
@@ -109,11 +108,10 @@ bool ArchiveExtractCallback::GetInStream(CMyComPtr<IInStream>& stream, int index
 	for (int a = 0; a < this->Files.Size(); a++) {
 		ArchiveExtractFile* file = this->Files[a];
 		if (file->Index == index) {
-			if (!file->InStream) {
+			if (!file->Stream) {
 				return false;
 			}
-			stream = file->InStream;
-			return true;
+			return file->Stream->GetReader(stream);
 		}
 	}
 	return false;
@@ -123,11 +121,10 @@ bool ArchiveExtractCallback::GetOutStream(CMyComPtr<IOutStream>& stream, int ind
 	for (int a = 0; a < this->Files.Size(); a++) {
 		ArchiveExtractFile* file = this->Files[a];
 		if (file->Index == index) {
-			if (!file->OutStream) {
+			if (!file->Stream) {
 				return false;
 			}
-			stream = file->OutStream;
-			return true;
+			return file->Stream->GetWriter(stream);
 		}
 	}
 	return false;
@@ -151,7 +148,7 @@ STDMETHODIMP ArchiveExtractCallback::PrepareOperation(Int32 askExtractMode) {
 }
 
 STDMETHODIMP ArchiveExtractCallback::SetOperationResult(Int32 opRes) {
-	this->CloseFiles();
+	this->CloseWriters();
 	return S_OK;
 }
 

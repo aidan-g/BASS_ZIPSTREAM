@@ -83,6 +83,8 @@
     <ClCompile Include="ArchiveInterface.cpp" />
     <ClCompile Include="bass_zipstream.cpp" />
     <ClCompile Include="ArchiveExtractTask.cpp" />
+    <ClCompile Include="CFile.cpp" />
+    <ClCompile Include="CFileStream.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\bass\bass.h" />
@@ -93,9 +95,12 @@
     <ClInclude Include="ArchiveExtractCallback.h" />
     <ClInclude Include="ArchiveInterface.h" />
     <ClInclude Include="bass_zipstream.h" />
+    <ClInclude Include="CFile.h" />
+    <ClInclude Include="CFileStream.h" />
     <ClInclude Include="Codecs.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="ArchiveExtractTask.h" />
+    <ClInclude Include="IClosable.h" />
     <ClInclude Include="Interfaces.h" />
     <ClInclude Include="IOUtils.h" />
   </ItemGroup>

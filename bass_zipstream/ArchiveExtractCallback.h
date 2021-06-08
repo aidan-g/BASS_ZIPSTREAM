@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Interfaces.h"
+#include "CFileStream.h"
 
 class Archive;
 
@@ -12,8 +13,7 @@ public:
 
 	UString Path;
 	UInt64 Size;
-	CMyComPtr<IInStream> InStream;
-	CMyComPtr<IOutStream> OutStream;
+	CMyComPtr<CFileStream> Stream;
 	UInt32 Index;
 };
 
@@ -29,15 +29,9 @@ private:
 
 	bool GetTempFileName(UString& path, UInt32 index);
 
-	bool GetEntrySize(UInt64& size, UInt32 index);
-
 	bool OpenFile(UInt32 index);
 
-	bool OpenInputFile(ArchiveExtractFile* file);
-
-	bool OpenOutputFile(ArchiveExtractFile* file);
-
-	void CloseFiles();
+	bool OpenFile(ArchiveExtractFile* file, bool overwrite);
 
 public:
 	MY_QUERYINTERFACE_BEGIN2(IArchiveExtractCallback)
@@ -49,6 +43,8 @@ public:
 	ArchiveExtractCallback(Archive* parent, bool overwrite);
 
 	bool OpenFiles(const UInt32* indices, UInt32 count);
+
+	void CloseWriters();
 
 	bool GetInStream(CMyComPtr<IInStream>& stream, int index);
 
