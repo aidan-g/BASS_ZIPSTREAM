@@ -52,7 +52,8 @@ extern "C" {
 	BOOL ARCHIVEDEF(ARCHIVE_Open)(void* instance, const void* file) {
 		try {
 			Archive* archive = (Archive*)instance;
-			archive->Open(UString((const wchar_t*)file));
+			UString fileName = UString((const wchar_t*)file);
+			archive->Open(fileName);
 			return TRUE;
 		}
 		catch (CSystemException e) {
@@ -98,6 +99,7 @@ extern "C" {
 	}
 
 	VOID ARCHIVEDEF(ARCHIVE_Release)(void* instance) {
+		ARCHIVE_Close(instance);
 		delete instance;
 	}
 }

@@ -37,7 +37,6 @@ namespace ManagedBass.ZipStream.Tests
             }
             finally
             {
-                Archive.Close(archive);
                 Archive.Release(archive);
             }
         }
@@ -66,7 +65,6 @@ namespace ManagedBass.ZipStream.Tests
             }
             finally
             {
-                Archive.Close(archive);
                 Archive.Release(archive);
             }
         }

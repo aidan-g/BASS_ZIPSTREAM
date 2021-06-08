@@ -32,6 +32,7 @@ namespace ManagedBass.ZipStream.Tests
                 Assert.AreEqual(length, ArchiveEntry.GetEntryLength(entry));
                 Assert.AreEqual(hashCode, Utils.GetEntryHashCode(entry));
                 Assert.AreEqual(length, ArchiveEntry.GetEntryPosition(entry));
+                Assert.IsTrue(ArchiveEntry.IsEOF(entry));
             }
             finally
             {
@@ -66,6 +67,35 @@ namespace ManagedBass.ZipStream.Tests
             finally
             {
                 ArchiveEntry.CloseEntry(entry);
+            }
+        }
+
+        [TestCase("Music.zip", 100)]
+        public void Test003(string archiveName, int iterations)
+        {
+            var fileName = Path.Combine(Location, "Media", archiveName);
+            var count = Utils.GetEntryCount(fileName);
+
+            for (var a = 0; a < iterations; a++)
+            {
+                for (var b = 0; b < count; b++)
+                {
+                    var entry = default(IntPtr);
+                    if (!ArchiveEntry.OpenEntry(fileName, b, a % 2 == 0, out entry))
+                    {
+                        Assert.Fail("Failed to open entry.");
+                    }
+
+                    try
+                    {
+                        Utils.GetEntryHashCode(entry);
+                        Assert.IsTrue(ArchiveEntry.IsEOF(entry));
+                    }
+                    finally
+                    {
+                        ArchiveEntry.CloseEntry(entry);
+                    }
+                }
             }
         }
     }

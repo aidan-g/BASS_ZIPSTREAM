@@ -1,6 +1,4 @@
 #include "Archive.h"
-#include "ArchiveEntry.h"
-#include"ArchiveExtractTask.h"
 
 #include "../7z/CPP/7zip/Common/FileStreams.h"
 
@@ -17,7 +15,7 @@ void ArchiveEntry::Open() {
 }
 
 void ArchiveEntry::Extract() {
-	this->Parent->ExtractEntry(&this->InStream, &this->Task, this->Index, this->Overwrite);
+	this->Parent->ExtractEntry(this->InStream, this->Task, this->Index, this->Overwrite);
 }
 
 UInt64 ArchiveEntry::GetPosition() {
@@ -35,11 +33,8 @@ UInt64 ArchiveEntry::GetSize() {
 
 UInt64 ArchiveEntry::GetAvailable() {
 	UInt64 available;
-	bool completed;
-	if (this->Task->IsRunning(this->Index, available, completed)) {
-		if (!completed) {
-			return available;
-		}
+	if (this->Task->IsRunning(this->Index, available)) {
+		return available;
 	}
 	return this->Size;
 }

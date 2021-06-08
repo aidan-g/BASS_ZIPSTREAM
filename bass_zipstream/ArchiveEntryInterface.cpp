@@ -17,9 +17,10 @@ extern "C" {
 
 		Archive* archive = nullptr;
 		ArchiveEntry* entry = nullptr;
+		UString fileName = UString((const wchar_t*)file);
 		try {
 			archive = new Archive();
-			archive->Open(UString((const wchar_t*)file));
+			archive->Open(fileName);
 			entry = archive->OpenEntry(index, overwrite);
 			(*handle)->archive = archive;
 			(*handle)->entry = entry;
@@ -91,6 +92,9 @@ extern "C" {
 					}
 					entry->Buffer(position, BUFFER_TIMEOUT);
 					count = entry->Read(buffer, length);
+					if (!count && entry->GetPosition() < entry->GetSize()) {
+						throw CSystemException(S_FALSE);
+					}
 				}
 			}
 			return count;

@@ -105,28 +105,28 @@ void ArchiveExtractCallback::CloseFiles() {
 	}
 }
 
-bool ArchiveExtractCallback::GetInStream(IInStream** stream, int index) {
+bool ArchiveExtractCallback::GetInStream(CMyComPtr<IInStream>& stream, int index) {
 	for (int a = 0; a < this->Files.Size(); a++) {
 		ArchiveExtractFile* file = this->Files[a];
 		if (file->Index == index) {
 			if (!file->InStream) {
 				return false;
 			}
-			*stream = file->InStream;
+			stream = file->InStream;
 			return true;
 		}
 	}
 	return false;
 }
 
-bool ArchiveExtractCallback::GetOutStream(IOutStream** stream, int index) {
+bool ArchiveExtractCallback::GetOutStream(CMyComPtr<IOutStream>& stream, int index) {
 	for (int a = 0; a < this->Files.Size(); a++) {
 		ArchiveExtractFile* file = this->Files[a];
 		if (file->Index == index) {
 			if (!file->OutStream) {
 				return false;
 			}
-			*stream = file->OutStream;
+			stream = file->OutStream;
 			return true;
 		}
 	}
@@ -139,7 +139,7 @@ STDMETHODIMP ArchiveExtractCallback::GetStream(UInt32 index, ISequentialOutStrea
 	*outStream = nullptr;
 
 	CMyComPtr<IOutStream> fileStream;
-	if (this->GetOutStream(&fileStream, index)) {
+	if (this->GetOutStream(fileStream, index)) {
 		*outStream = fileStream.Detach();
 	}
 

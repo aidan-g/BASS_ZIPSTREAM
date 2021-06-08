@@ -1,6 +1,5 @@
 #include "Archive.h"
 #include "ArchiveEntry.h"
-#include "ArchiveExtractTask.h"
 
 #include "Common.h"
 #include "ArchiveExtractCallback.h"
@@ -136,7 +135,7 @@ void Archive::GetEntry(UString& path, UInt64& size, int index) {
 	}
 }
 
-void Archive::ExtractEntry(IInStream** stream, ArchiveExtractTask** task, int index, bool overwrite) {
+void Archive::ExtractEntry(CMyComPtr<IInStream>& stream, CMyComPtr<ArchiveExtractTask>& task, int index, bool overwrite) {
 	const UInt32 indices[1] = {
 		index
 	};
@@ -152,13 +151,13 @@ void Archive::ExtractEntry(IInStream** stream, ArchiveExtractTask** task, int in
 		throw CSystemException(S_FALSE);
 	}
 
-	*task = new ArchiveExtractTask(this->InArchive, callback);
-	if (!(*task)->Start(indices, 1)) {
+	task = new ArchiveExtractTask(this->InArchive, callback);
+	if (!task->Start(indices, 1)) {
 		//TODO: Warn.
 		throw CSystemException(S_FALSE);
 	}
 
-	this->Tasks.Add(*task);
+	this->Tasks.Add(task);
 }
 
 ArchiveEntry* Archive::OpenEntry(int index, bool overwrite) {
@@ -175,7 +174,6 @@ void Archive::CloseEntry(ArchiveEntry* entry) {
 void Archive::WaitForTasks() {
 	for (unsigned a = 0; a < this->Tasks.Size(); a++) {
 		this->Tasks[a]->Wait();
-		delete this->Tasks[a];
 	}
 	this->Tasks.Clear();
 }

@@ -31,13 +31,15 @@ HRESULT ArchiveExtractTask::Run() {
 	return result;
 }
 
-bool ArchiveExtractTask::IsRunning(UInt32 index, UInt64& available, bool& completed) {
+bool ArchiveExtractTask::IsRunning(UInt32 index, UInt64& available) {
+	if (this->Completed) {
+		return false;
+	}
 	for (unsigned a = 0; a < this->Indices.Size(); a++) {
 		if (this->Indices[a] == index) {
-			completed = this->Completed;
 			ArchiveExtractCallback* callback = (ArchiveExtractCallback*)(IArchiveExtractCallback*)this->Callback;
-			IOutStream* stream;
-			if (callback->GetOutStream(&stream, index) && stream->Seek(0, SEEK_CUR, &available) == S_OK) {
+			CMyComPtr<IOutStream> stream;
+			if (callback->GetOutStream(stream, index) && stream->Seek(0, SEEK_CUR, &available) == S_OK) {
 				return true;
 			}
 			break;

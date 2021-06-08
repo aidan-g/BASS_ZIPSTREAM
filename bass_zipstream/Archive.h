@@ -1,12 +1,12 @@
 #pragma once
 
+#include "ArchiveEntry.h"
 #include "Codecs.h"
 #include "Interfaces.h"
 
 #include "..\7z\CPP\7zip\UI\Common\LoadCodecs.h"
 
 class ArchiveEntry;
-class ArchiveExtractTask;
 
 class Archive
 {
@@ -17,7 +17,7 @@ private:
 	CCodecs* Codecs;
 	CMyComPtr<IInStream> InStream;
 	CMyComPtr<IInArchive> InArchive;
-	CObjectVector<ArchiveExtractTask*> Tasks;
+	CObjectVector<CMyComPtr<ArchiveExtractTask>> Tasks;
 
 	void LoadCodecs();
 
@@ -50,7 +50,7 @@ public:
 
 	void GetEntry(UString& path, UInt64& size, int index);
 
-	void ExtractEntry(IInStream** stream, ArchiveExtractTask** task, int index, bool overwrite);
+	void ExtractEntry(CMyComPtr<IInStream>& stream, CMyComPtr<ArchiveExtractTask>& task, int index, bool overwrite);
 
 	ArchiveEntry* OpenEntry(int index, bool overwrite);
 

@@ -9,6 +9,36 @@ namespace ManagedBass.ZipStream.Tests
     {
         private static readonly string Location = Path.GetDirectoryName(typeof(Utils).Assembly.Location);
 
+        public static int GetEntryCount(string archiveName)
+        {
+            var fileName = Path.Combine(Location, "Media", archiveName);
+
+            var archive = default(IntPtr);
+            if (!Archive.Create(out archive))
+            {
+                Assert.Fail("Failed to create archive.");
+            }
+
+            if (!Archive.Open(archive, fileName))
+            {
+                Assert.Fail("Failed to open archive.");
+            }
+
+            try
+            {
+                var count = default(int);
+                if (!Archive.GetEntryCount(archive, out count))
+                {
+                    Assert.Fail("Failed to get entry count.");
+                }
+                return count;
+            }
+            finally
+            {
+                Archive.Release(archive);
+            }
+        }
+
         public static int GetEntryIndex(string archiveName, string entryPath)
         {
             var fileName = Path.Combine(Location, "Media", archiveName);
@@ -30,7 +60,6 @@ namespace ManagedBass.ZipStream.Tests
             }
             finally
             {
-                Archive.Close(archive);
                 Archive.Release(archive);
             }
         }

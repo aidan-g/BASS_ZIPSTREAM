@@ -4,7 +4,12 @@
 
 class Archive;
 
-struct ArchiveExtractFile {
+class ArchiveExtractFile :
+	public CMyUnknownImp
+{
+public:
+	MY_UNKNOWN_IMP;
+
 	UString Path;
 	UInt64 Size;
 	CMyComPtr<IInStream> InStream;
@@ -20,7 +25,7 @@ private:
 	Archive* Parent;
 	bool Overwrite;
 
-	CObjectVector<ArchiveExtractFile*> Files;
+	CObjectVector<CMyComPtr<ArchiveExtractFile>> Files;
 
 	bool GetTempFileName(UString& path, UInt32 index);
 
@@ -45,8 +50,8 @@ public:
 
 	bool OpenFiles(const UInt32* indices, UInt32 count);
 
-	bool GetInStream(IInStream** stream, int index);
+	bool GetInStream(CMyComPtr<IInStream>& stream, int index);
 
-	bool GetOutStream(IOutStream** stream, int index);
+	bool GetOutStream(CMyComPtr<IOutStream>& stream, int index);
 };
 

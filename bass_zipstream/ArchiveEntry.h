@@ -1,10 +1,11 @@
 #pragma once
 
+#include "ArchiveExtractTask.h"
+
 #include "../7z/CPP/Windows/FileDir.h"
 #include "../7z/CPP/Windows/FileIO.h"
 
 class Archive;
-class ArchiveExtractTask;
 
 class ArchiveEntry
 {
@@ -35,7 +36,7 @@ private:
 	bool Overwrite;
 
 	CMyComPtr<IInStream> InStream;
-	ArchiveExtractTask* Task;
+	CMyComPtr<ArchiveExtractTask> Task;
 
 	void Extract();
 };
