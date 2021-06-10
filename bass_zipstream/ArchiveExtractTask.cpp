@@ -1,7 +1,7 @@
 #include "ArchiveExtractTask.h"
 #include "Common.h"
 
-ArchiveExtractTask::ArchiveExtractTask(CMyComPtr<IInArchive> archive, CMyComPtr<IArchiveExtractCallback> callback) {
+ArchiveExtractTask::ArchiveExtractTask(CMyComPtr<IInArchive> archive, CMyComPtr<ArchiveExtractCallback> callback) {
 	this->Archive = archive;
 	this->Callback = callback;
 	this->Completed = false;
@@ -28,6 +28,9 @@ HRESULT ArchiveExtractTask::Run() {
 	HRESULT result = this->Archive->Extract(indices, this->Indices.Size(), false, this->Callback);
 	free(indices);
 	this->Completed = true;
+	if (result == ERROR_HANDLES_CLOSED) {
+		this->Cancelled = true;
+	}
 	return result;
 }
 
@@ -37,15 +40,18 @@ bool ArchiveExtractTask::IsRunning(UInt32 index, UInt64& available) {
 	}
 	for (unsigned a = 0; a < this->Indices.Size(); a++) {
 		if (this->Indices[a] == index) {
-			ArchiveExtractCallback* callback = (ArchiveExtractCallback*)(IArchiveExtractCallback*)this->Callback;
 			CMyComPtr<IOutStream> stream;
-			if (callback->GetOutStream(stream, index) && stream->Seek(0, SEEK_CUR, &available) == S_OK) {
+			if (this->Callback->GetOutStream(stream, index) && stream->Seek(0, SEEK_CUR, &available) == S_OK) {
 				return true;
 			}
 			break;
 		}
 	}
 	return false;
+}
+
+void ArchiveExtractTask::Cancel() {
+	this->Callback->Close();
 }
 
 void ArchiveExtractTask::Wait() {

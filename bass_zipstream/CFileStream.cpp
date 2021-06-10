@@ -23,12 +23,25 @@ protected:
 	CFileStream* Stream;
 	UInt64 Position;
 	UInt64 Processed;
+	bool IsClosed;
+
+	STDMETHODIMP Begin() {
+		if (this->IsClosed) {
+			return ERROR_HANDLES_CLOSED;
+		}
+		return  this->Stream->Begin();
+	}
+
+	STDMETHODIMP End() {
+		return this->Stream->End();
+	}
 
 public:
 	CFileStreamBase(CFileStream* stream) {
 		this->Stream = stream;
 		this->Position = 0;
 		this->Processed = 0;
+		this->IsClosed = false;
 	}
 };
 
@@ -47,7 +60,7 @@ public:
 	}
 
 	STDMETHODIMP Seek(Int64 offset, UInt32 seekOrigin, UInt64* newPosition) {
-		HRESULT result = this->Stream->Begin();
+		HRESULT result = this->Begin();
 		if (result != S_OK) {
 			return result;
 		}
@@ -71,12 +84,12 @@ public:
 				*newPosition = offset;
 			}
 		}
-		this->Stream->End();
+		this->End();
 		return result;
 	}
 
 	STDMETHODIMP Read(void* data, UInt32 size, UInt32* processedSize) {
-		HRESULT result = this->Stream->Begin();
+		HRESULT result = this->Begin();
 		if (result != S_OK) {
 			return result;
 		}
@@ -98,12 +111,13 @@ public:
 			this->Stream->WriteDirty = true;
 		}
 	done:
-		this->Stream->End();
+		this->End();
 		return result;
 	}
 
 	STDMETHODIMP Close() override {
 		this->Stream->CloseReader();
+		this->IsClosed = true;
 		return S_OK;
 	}
 
@@ -127,7 +141,7 @@ public:
 	}
 
 	STDMETHODIMP Seek(Int64 offset, UInt32 seekOrigin, UInt64* newPosition) {
-		HRESULT result = this->Stream->Begin();
+		HRESULT result = this->Begin();
 		if (result != S_OK) {
 			return result;
 		}
@@ -151,12 +165,12 @@ public:
 				*newPosition = offset;
 			}
 		}
-		this->Stream->End();
+		this->End();
 		return result;
 	}
 
 	STDMETHODIMP Write(const void* data, UInt32 size, UInt32* processedSize) {
-		HRESULT result = this->Stream->Begin();
+		HRESULT result = this->Begin();
 		if (result != S_OK) {
 			return result;
 		}
@@ -178,12 +192,12 @@ public:
 			this->Stream->ReadDirty = true;
 		}
 	done:
-		this->Stream->End();
+		this->End();
 		return result;
 	}
 
 	STDMETHODIMP SetSize(UInt64 newSize) {
-		HRESULT result = this->Stream->Begin();
+		HRESULT result = this->Begin();
 		if (result != S_OK) {
 			return result;
 		}
@@ -197,12 +211,13 @@ public:
 		result = this->Stream->SetSize(newSize);
 		this->Stream->ReadDirty = true;
 	done:
-		this->Stream->End();
+		this->End();
 		return result;
 	}
 
 	STDMETHODIMP Close() override {
 		this->Stream->CloseWriter();
+		this->IsClosed = true;
 		return S_OK;
 	}
 

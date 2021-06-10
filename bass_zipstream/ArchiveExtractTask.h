@@ -10,21 +10,24 @@ class ArchiveExtractTask :
 
 private:
 	CMyComPtr<IInArchive> Archive;
-	CMyComPtr<IArchiveExtractCallback> Callback;
+	CMyComPtr<ArchiveExtractCallback> Callback;
 	CRecordVector<UInt32> Indices;
 	NWindows::CThread Thread;
+	bool Cancelled;
 	bool Completed;
 
 public:
 	MY_UNKNOWN_IMP;
 
-	ArchiveExtractTask(CMyComPtr<IInArchive> archive, CMyComPtr<IArchiveExtractCallback> callback);
+	ArchiveExtractTask(CMyComPtr<IInArchive> archive, CMyComPtr<ArchiveExtractCallback> callback);
 
 	bool Start(const UInt32* indices, UInt32 count);
 
 	bool IsRunning(UInt32 index, UInt64& available);
 
 	HRESULT Run();
+
+	void Cancel();
 
 	void Wait();
 };

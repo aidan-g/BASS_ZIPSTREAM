@@ -98,5 +98,31 @@ namespace ManagedBass.ZipStream.Tests
                 }
             }
         }
+
+        [TestCase("Music.zip")]
+        public void Test004(string archiveName)
+        {
+            var fileName = Path.Combine(Location, "Media", archiveName);
+            var count = Utils.GetEntryCount(fileName);
+
+            for (var a = 0; a < count; a++)
+            {
+                var entry = default(IntPtr);
+                if (!ArchiveEntry.OpenEntry(fileName, a, true, out entry))
+                {
+                    Assert.Fail("Failed to open entry.");
+                }
+
+                try
+                {
+                    var buffer = new byte[10240];
+                    Assert.Greater(ArchiveEntry.ReadEntry(entry, buffer, buffer.Length), 0);
+                }
+                finally
+                {
+                    ArchiveEntry.CloseEntry(entry);
+                }
+            }
+        }
     }
 }

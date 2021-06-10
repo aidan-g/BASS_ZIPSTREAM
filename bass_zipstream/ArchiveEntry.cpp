@@ -73,6 +73,9 @@ bool ArchiveEntry::Seek(UInt64 position) {
 }
 
 void ArchiveEntry::Close() {
+	if (this->Task) {
+		this->Task->Cancel();
+	}
 	if (this->InStream) {
 		//TODO: Close input stream.
 	}

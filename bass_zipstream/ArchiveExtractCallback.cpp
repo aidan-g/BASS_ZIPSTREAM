@@ -89,6 +89,26 @@ bool ArchiveExtractCallback::OpenFiles(const UInt32* indices, UInt32 count) {
 	return true;
 }
 
+void ArchiveExtractCallback::Close() {
+	this->CloseReaders();
+	this->CloseWriters();
+}
+
+void ArchiveExtractCallback::CloseReaders() {
+	for (int a = 0; a < this->Files.Size(); a++) {
+		ArchiveExtractFile* file = this->Files[a];
+		if (file->Stream) {
+			CMyComPtr<IInStream> stream;
+			if (file->Stream->GetReader(stream)) {
+				CMyComPtr<IClosable> closable;
+				if (stream->QueryInterface(IID_IClosable, (void**)&closable) == S_OK) {
+					closable->Close();
+				}
+			}
+		}
+	}
+}
+
 void ArchiveExtractCallback::CloseWriters() {
 	for (int a = 0; a < this->Files.Size(); a++) {
 		ArchiveExtractFile* file = this->Files[a];

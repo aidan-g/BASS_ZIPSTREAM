@@ -27,6 +27,8 @@ private:
 
 	CObjectVector<CMyComPtr<ArchiveExtractFile>> Files;
 
+	void ForEachFile(bool (*action)(ArchiveExtractFile* file));
+
 	bool GetTempFileName(UString& path, UInt32 index);
 
 	bool OpenFile(UInt32 index);
@@ -44,7 +46,11 @@ public:
 
 	bool OpenFiles(const UInt32* indices, UInt32 count);
 
+	void CloseReaders();
+
 	void CloseWriters();
+
+	void Close();
 
 	bool GetInStream(CMyComPtr<IInStream>& stream, int index);
 
