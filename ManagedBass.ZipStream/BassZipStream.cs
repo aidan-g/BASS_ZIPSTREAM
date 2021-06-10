@@ -4,27 +4,7 @@ namespace ManagedBass.ZipStream
 {
     public static class BassZipStream
     {
-        const int BUFFER_FACTOR = 1;
-        const int BUFFER_TIMEOUT = 3000;
-
         const string DllName = "bass_zipstream";
-
-        public static bool Overwrite
-        {
-            get
-            {
-                var overwrite = default(bool);
-                if (!GetConfig(BassZipStreamAttribute.Overwrite, out overwrite))
-                {
-                    return false;
-                }
-                return overwrite;
-            }
-            set
-            {
-                SetConfig(BassZipStreamAttribute.Overwrite, value);
-            }
-        }
 
         [DllImport(DllName)]
         static extern bool BASS_ZIPSTREAM_Init();
@@ -93,7 +73,6 @@ namespace ManagedBass.ZipStream
 
     public enum BassZipStreamAttribute : byte
     {
-        None = 0,
-        Overwrite = 1
+        None = 0
     }
 }

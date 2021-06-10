@@ -8,11 +8,11 @@ namespace ManagedBass.ZipStream
         const string DllName = "bass_zipstream";
 
         [DllImport(DllName, CharSet = CharSet.Unicode)]
-        static extern bool ARCHIVE_OpenEntry(string fileName, int index, bool overwrite, out IntPtr instance);
+        static extern bool ARCHIVE_OpenEntry(string fileName, int index, out IntPtr instance);
 
-        public static bool OpenEntry(string fileName, int index, bool overwrite, out IntPtr instance)
+        public static bool OpenEntry(string fileName, int index, out IntPtr instance)
         {
-            return ARCHIVE_OpenEntry(fileName, index, overwrite, out instance);
+            return ARCHIVE_OpenEntry(fileName, index, out instance);
         }
 
         [DllImport(DllName)]

@@ -10,7 +10,7 @@ class Archive;
 class ArchiveEntry
 {
 public:
-	ArchiveEntry(Archive* parent, int index, bool overwrite);
+	ArchiveEntry(Archive* parent, int index);
 
 	void Open();
 
@@ -33,7 +33,6 @@ private:
 	int Index;
 	UString Path;
 	UInt64 Size;
-	bool Overwrite;
 
 	CMyComPtr<IInStream> InStream;
 	CMyComPtr<ArchiveExtractTask> Task;

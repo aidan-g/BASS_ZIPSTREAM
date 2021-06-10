@@ -2,11 +2,10 @@
 
 #include "../7z/CPP/7zip/Common/FileStreams.h"
 
-ArchiveEntry::ArchiveEntry(Archive* parent, int index, bool overwrite) {
+ArchiveEntry::ArchiveEntry(Archive* parent, int index) {
 	this->Parent = parent;
 	this->Index = index;
 	this->Size = 0;
-	this->Overwrite = overwrite;
 }
 
 void ArchiveEntry::Open() {
@@ -15,7 +14,7 @@ void ArchiveEntry::Open() {
 }
 
 void ArchiveEntry::Extract() {
-	this->Parent->ExtractEntry(this->InStream, this->Task, this->Index, this->Overwrite);
+	this->Parent->ExtractEntry(this->InStream, this->Task, this->Index);
 }
 
 UInt64 ArchiveEntry::GetPosition() {

@@ -23,13 +23,8 @@ class ArchiveExtractCallback :
 {
 private:
 	Archive* Parent;
-	bool Overwrite;
 
 	CObjectVector<CMyComPtr<ArchiveExtractFile>> Files;
-
-	void ForEachFile(bool (*action)(ArchiveExtractFile* file));
-
-	bool GetTempFileName(UString& path, UInt32 index);
 
 	bool OpenFile(UInt32 index);
 
@@ -42,7 +37,9 @@ public:
 		INTERFACE_IArchiveExtractCallback(;)
 
 public:
-	ArchiveExtractCallback(Archive* parent, bool overwrite);
+	ArchiveExtractCallback(Archive* parent);
+
+	bool GetFileName(UString& path, UInt32 index);
 
 	bool OpenFiles(const UInt32* indices, UInt32 count);
 
@@ -55,5 +52,7 @@ public:
 	bool GetInStream(CMyComPtr<IInStream>& stream, int index);
 
 	bool GetOutStream(CMyComPtr<IOutStream>& stream, int index);
+
+	static bool Cleanup();
 };
 

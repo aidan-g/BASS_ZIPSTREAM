@@ -4,18 +4,24 @@ using System.IO;
 
 namespace ManagedBass.ZipStream.Tests
 {
-    [TestFixture]
+    [TestFixture(true)]
+    [TestFixture(false)]
     public class BassZipStreamTests
     {
         private static readonly string Location = Path.GetDirectoryName(typeof(ArchiveTests).Assembly.Location);
 
-        [TestCase("Music.zip", "Gift\\01 Smile.flac", true, 37573200)]
-        [TestCase("Music.zip", "Gift\\01 Smile.flac", false, 37573200)]
-        [TestCase("Music.zip", "Gift\\02 Again & Again.flac", true, 41630400)]
-        [TestCase("Music.zip", "Gift\\02 Again & Again.flac", false, 41630400)]
-        [TestCase("Music.zip", "Gift\\03 Emotional Times.flac", true, 32281200)]
-        [TestCase("Music.zip", "Gift\\03 Emotional Times.flac", false, 32281200)]
-        public void Test001(string archiveName, string entryPath, bool overwrite, long length)
+        public BassZipStreamTests(bool cleanup)
+        {
+            if (cleanup)
+            {
+                Assert.IsTrue(Archive.Cleanup());
+            }
+        }
+
+        [TestCase("Music.zip", "Gift\\01 Smile.flac", 37573200)]
+        [TestCase("Music.zip", "Gift\\02 Again & Again.flac", 41630400)]
+        [TestCase("Music.zip", "Gift\\03 Emotional Times.flac", 32281200)]
+        public void Test001(string archiveName, string entryPath, long length)
         {
             var fileName = Path.Combine(Location, "Media", archiveName);
             var index = Utils.GetEntryIndex(archiveName, entryPath);
@@ -29,8 +35,6 @@ namespace ManagedBass.ZipStream.Tests
             {
                 Assert.Fail("Failed to initialize ZIPSTREAM.");
             }
-
-            BassZipStream.Overwrite = overwrite;
 
             try
             {

@@ -8,12 +8,14 @@
 #include "../7z/CPP/Windows/FileDir.h"
 #include "../7z/CPP/7zip/Common/FileStreams.h"
 
-ArchiveExtractCallback::ArchiveExtractCallback(Archive* parent, bool overwrite) {
+#define TEMP_FILE_PREFIX L"bass_zipstream."
+#define TEMP_FILE_SUFFIX L".tmp"
+
+ArchiveExtractCallback::ArchiveExtractCallback(Archive* parent) {
 	this->Parent = parent;
-	this->Overwrite = overwrite;
 }
 
-bool ArchiveExtractCallback::GetTempFileName(UString& path, UInt32 index) {
+bool ArchiveExtractCallback::GetFileName(UString& path, UInt32 index) {
 	if (!NWindows::NFile::NDir::MyGetTempPath(path)) {
 		return false;
 	}
@@ -27,9 +29,9 @@ bool ArchiveExtractCallback::GetTempFileName(UString& path, UInt32 index) {
 	}
 	char temp[32];
 	ConvertUInt64ToString(hashCode, temp);
-	path += L"bass_zipstream.";
+	path += TEMP_FILE_PREFIX;
 	path += UString(temp).Left(8);
-	path += L".tmp";
+	path += TEMP_FILE_SUFFIX;
 	return true;
 }
 
@@ -53,7 +55,7 @@ bool ArchiveExtractCallback::OpenFile(ArchiveExtractFile* file, bool overwrite) 
 
 bool ArchiveExtractCallback::OpenFile(UInt32 index) {
 	UString path;
-	if (!this->GetTempFileName(path, index)) {
+	if (!this->GetFileName(path, index)) {
 		return false;
 	}
 
@@ -64,9 +66,9 @@ bool ArchiveExtractCallback::OpenFile(UInt32 index) {
 	this->Parent->GetEntry(path, file->Size, index);
 
 	bool overwrite = true;
-	if (!this->Overwrite) {
-		NWindows::NFile::NFind::CFileInfo fileInfo;
-		if (fileInfo.Find(file->Path)) {
+	NWindows::NFile::NFind::CFileInfo fileInfo;
+	if (fileInfo.Find(file->Path)) {
+		if (fileInfo.Size == file->Size) {
 			overwrite = false;
 		}
 	}
@@ -178,4 +180,28 @@ STDMETHODIMP ArchiveExtractCallback::SetTotal(UInt64 total) {
 
 STDMETHODIMP ArchiveExtractCallback::SetCompleted(const UInt64* completeValue) {
 	return S_OK;
+}
+
+bool ArchiveExtractCallback::Cleanup() {
+	FString path;
+	if (!NWindows::NFile::NDir::MyGetTempPath(path)) {
+		return false;
+	}
+	bool success = true;
+	NWindows::NFile::NFind::CEnumerator enumerator;
+	enumerator.SetDirPrefix(path);
+	NWindows::NFile::NFind::CFileInfo fileInfo;
+	while (enumerator.Next(fileInfo))
+	{
+		if (fileInfo.IsDir()) {
+			continue;
+		}
+		if (fileInfo.Name.Find(TEMP_FILE_PREFIX, 0) != 0) {
+			continue;
+		}
+		if (!::DeleteFileW(fs2us(path + fileInfo.Name))) {
+			success = false;
+		}
+	}
+	return success;
 }

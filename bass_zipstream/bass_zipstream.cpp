@@ -30,7 +30,6 @@ extern "C" {
 		if (is_initialized) {
 			return FALSE;
 		}
-		config[ZS_OVERWRITE] = FALSE;
 		is_initialized = TRUE;
 		return TRUE;
 	}
@@ -49,12 +48,8 @@ extern "C" {
 
 	HSTREAM BASSZIPSTREAMDEF(BASS_ZIPSTREAM_StreamCreateFile)(BOOL mem, const void* file, DWORD index, QWORD offset, QWORD length, DWORD flags) {
 		try {
-			DWORD overwrite;
-			if (!BASS_ZIPSTREAM_GetConfig(ZS_OVERWRITE, &overwrite)) {
-				overwrite = FALSE;
-			}
 			ARCHIVE_ENTRY_HANDLE* handle;
-			if (!ARCHIVE_OpenEntry(file, index, overwrite, &handle)) {
+			if (!ARCHIVE_OpenEntry(file, index, &handle)) {
 				//TODO: Warn.
 				return 0;
 			}

@@ -15,7 +15,7 @@ extern "C" {
 		void* entry;
 	} ARCHIVE_ENTRY_HANDLE;
 
-	__declspec(dllexport) BOOL ARCHIVEDEF(ARCHIVE_OpenEntry)(const void* file, DWORD index, BOOL overwrite, ARCHIVE_ENTRY_HANDLE** handle);
+	__declspec(dllexport) BOOL ARCHIVEDEF(ARCHIVE_OpenEntry)(const void* file, DWORD index, ARCHIVE_ENTRY_HANDLE** handle);
 
 	__declspec(dllexport) QWORD ARCHIVEDEF(ARCHIVE_GetEntryPosition)(void* user);
 

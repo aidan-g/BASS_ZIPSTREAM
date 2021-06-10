@@ -50,12 +50,14 @@ public:
 
 	void GetEntry(UString& path, UInt64& size, int index);
 
-	void ExtractEntry(CMyComPtr<IInStream>& stream, CMyComPtr<ArchiveExtractTask>& task, int index, bool overwrite);
+	void ExtractEntry(CMyComPtr<IInStream>& stream, CMyComPtr<ArchiveExtractTask>& task, int index);
 
-	ArchiveEntry* OpenEntry(int index, bool overwrite);
+	ArchiveEntry* OpenEntry(int index);
 
 	void CloseEntry(ArchiveEntry* entry);
 
 	void Close();
+
+	static bool Cleanup();
 };
 

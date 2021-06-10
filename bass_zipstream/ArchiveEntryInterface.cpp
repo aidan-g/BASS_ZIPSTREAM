@@ -7,7 +7,7 @@ extern "C" {
 
 #define BUFFER_TIMEOUT 1000
 
-	BOOL ARCHIVEDEF(ARCHIVE_OpenEntry)(const void* file, DWORD index, BOOL overwrite, ARCHIVE_ENTRY_HANDLE** handle) {
+	BOOL ARCHIVEDEF(ARCHIVE_OpenEntry)(const void* file, DWORD index, ARCHIVE_ENTRY_HANDLE** handle) {
 
 		*handle = (ARCHIVE_ENTRY_HANDLE*)malloc(sizeof(ARCHIVE_ENTRY_HANDLE));
 		if (!*handle) {
@@ -21,7 +21,7 @@ extern "C" {
 		try {
 			archive = new Archive();
 			archive->Open(fileName);
-			entry = archive->OpenEntry(index, overwrite);
+			entry = archive->OpenEntry(index);
 			(*handle)->archive = archive;
 			(*handle)->entry = entry;
 			return TRUE;
@@ -92,9 +92,6 @@ extern "C" {
 					}
 					entry->Buffer(position, BUFFER_TIMEOUT);
 					count = entry->Read(buffer, length);
-					if (!count && entry->GetPosition() < entry->GetSize()) {
-						throw CSystemException(S_FALSE);
-					}
 				}
 			}
 			return count;

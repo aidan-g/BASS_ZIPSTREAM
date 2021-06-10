@@ -102,4 +102,14 @@ extern "C" {
 		ARCHIVE_Close(instance);
 		delete instance;
 	}
+
+	BOOL ARCHIVEDEF(ARCHIVE_Cleanup)() {
+		try {
+			return Archive::Cleanup();
+		}
+		catch (CSystemException e) {
+			//TODO: Warn.
+			return FALSE;
+		}
+	}
 }

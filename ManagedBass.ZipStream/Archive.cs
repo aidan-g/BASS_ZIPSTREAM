@@ -71,6 +71,14 @@ namespace ManagedBass.ZipStream
             ARCHIVE_Release(instance);
         }
 
+        [DllImport(DllName)]
+        static extern bool ARCHIVE_Cleanup();
+
+        public static bool Cleanup()
+        {
+            return ARCHIVE_Cleanup();
+        }
+
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public struct ArchiveFormat
         {

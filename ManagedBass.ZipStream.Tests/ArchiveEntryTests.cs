@@ -4,24 +4,30 @@ using System.IO;
 
 namespace ManagedBass.ZipStream.Tests
 {
-    [TestFixture]
+    [TestFixture(true)]
+    [TestFixture(false)]
     public class ArchiveEntryTests
     {
         private static readonly string Location = Path.GetDirectoryName(typeof(ArchiveEntryTests).Assembly.Location);
 
-        [TestCase("Music.zip", "Gift\\01 Smile.flac", true, 27873249, 811163365)]
-        [TestCase("Music.zip", "Gift\\01 Smile.flac", false, 27873249, 811163365)]
-        [TestCase("Music.zip", "Gift\\02 Again & Again.flac", true, 30222116, 519855218)]
-        [TestCase("Music.zip", "Gift\\02 Again & Again.flac", false, 30222116, 519855218)]
-        [TestCase("Music.zip", "Gift\\03 Emotional Times.flac", true, 23088352, 1409150913)]
-        [TestCase("Music.zip", "Gift\\03 Emotional Times.flac", false, 23088352, 1409150913)]
-        public void Test001(string archiveName, string entryPath, bool overwrite, long length, int hashCode)
+        public ArchiveEntryTests(bool cleanup)
+        {
+            if (cleanup)
+            {
+                Assert.IsTrue(Archive.Cleanup());
+            }
+        }
+
+        [TestCase("Music.zip", "Gift\\01 Smile.flac", 27873249, 811163365)]
+        [TestCase("Music.zip", "Gift\\02 Again & Again.flac", 30222116, 519855218)]
+        [TestCase("Music.zip", "Gift\\03 Emotional Times.flac", 23088352, 1409150913)]
+        public void Test001(string archiveName, string entryPath, long length, int hashCode)
         {
             var fileName = Path.Combine(Location, "Media", archiveName);
             var index = Utils.GetEntryIndex(archiveName, entryPath);
 
             var entry = default(IntPtr);
-            if (!ArchiveEntry.OpenEntry(fileName, index, overwrite, out entry))
+            if (!ArchiveEntry.OpenEntry(fileName, index, out entry))
             {
                 Assert.Fail("Failed to open entry.");
             }
@@ -40,19 +46,16 @@ namespace ManagedBass.ZipStream.Tests
             }
         }
 
-        [TestCase("Music.zip", "Gift\\01 Smile.flac", true, 27873249)]
-        [TestCase("Music.zip", "Gift\\01 Smile.flac", false, 27873249)]
-        [TestCase("Music.zip", "Gift\\02 Again & Again.flac", true, 30222116)]
-        [TestCase("Music.zip", "Gift\\02 Again & Again.flac", false, 30222116)]
-        [TestCase("Music.zip", "Gift\\03 Emotional Times.flac", true, 23088352)]
-        [TestCase("Music.zip", "Gift\\03 Emotional Times.flac", false, 23088352)]
-        public void Test002(string archiveName, string entryPath, bool overwrite, long length)
+        [TestCase("Music.zip", "Gift\\01 Smile.flac", 27873249)]
+        [TestCase("Music.zip", "Gift\\02 Again & Again.flac", 30222116)]
+        [TestCase("Music.zip", "Gift\\03 Emotional Times.flac", 23088352)]
+        public void Test002(string archiveName, string entryPath, long length)
         {
             var fileName = Path.Combine(Location, "Media", archiveName);
             var index = Utils.GetEntryIndex(archiveName, entryPath);
 
             var entry = default(IntPtr);
-            if (!ArchiveEntry.OpenEntry(fileName, index, overwrite, out entry))
+            if (!ArchiveEntry.OpenEntry(fileName, index, out entry))
             {
                 Assert.Fail("Failed to open entry.");
             }
@@ -81,7 +84,7 @@ namespace ManagedBass.ZipStream.Tests
                 for (var b = 0; b < count; b++)
                 {
                     var entry = default(IntPtr);
-                    if (!ArchiveEntry.OpenEntry(fileName, b, a % 2 == 0, out entry))
+                    if (!ArchiveEntry.OpenEntry(fileName, b, out entry))
                     {
                         Assert.Fail("Failed to open entry.");
                     }
@@ -108,7 +111,7 @@ namespace ManagedBass.ZipStream.Tests
             for (var a = 0; a < count; a++)
             {
                 var entry = default(IntPtr);
-                if (!ArchiveEntry.OpenEntry(fileName, a, true, out entry))
+                if (!ArchiveEntry.OpenEntry(fileName, a, out entry))
                 {
                     Assert.Fail("Failed to open entry.");
                 }

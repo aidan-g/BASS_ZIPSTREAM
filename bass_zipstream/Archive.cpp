@@ -135,12 +135,12 @@ void Archive::GetEntry(UString& path, UInt64& size, int index) {
 	}
 }
 
-void Archive::ExtractEntry(CMyComPtr<IInStream>& stream, CMyComPtr<ArchiveExtractTask>& task, int index, bool overwrite) {
+void Archive::ExtractEntry(CMyComPtr<IInStream>& stream, CMyComPtr<ArchiveExtractTask>& task, int index) {
 	const UInt32 indices[1] = {
 		index
 	};
 
-	ArchiveExtractCallback* callback = new ArchiveExtractCallback(this, overwrite);
+	ArchiveExtractCallback* callback = new ArchiveExtractCallback(this);
 	if (!callback->OpenFiles(indices, 1)) {
 		//TODO: Warn.
 		throw CSystemException(S_FALSE);
@@ -160,8 +160,8 @@ void Archive::ExtractEntry(CMyComPtr<IInStream>& stream, CMyComPtr<ArchiveExtrac
 	this->Tasks.Add(task);
 }
 
-ArchiveEntry* Archive::OpenEntry(int index, bool overwrite) {
-	ArchiveEntry* entry = new ArchiveEntry(this, index, overwrite);
+ArchiveEntry* Archive::OpenEntry(int index) {
+	ArchiveEntry* entry = new ArchiveEntry(this, index);
 	entry->Open();
 	return entry;
 }
@@ -187,4 +187,8 @@ void Archive::Close() {
 		//TODO: Close input stream.
 	}
 	this->FileName.Empty();
+}
+
+bool Archive::Cleanup() {
+	return ArchiveExtractCallback::Cleanup();
 }

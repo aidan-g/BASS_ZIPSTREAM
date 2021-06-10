@@ -36,6 +36,8 @@ extern "C" {
 
 	__declspec(dllexport) VOID ARCHIVEDEF(ARCHIVE_Release)(void* instance);
 
+	__declspec(dllexport) BOOL ARCHIVEDEF(ARCHIVE_Cleanup)();
+
 #if __cplusplus
 }
 #endif
