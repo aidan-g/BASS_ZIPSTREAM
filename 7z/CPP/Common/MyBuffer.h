@@ -145,8 +145,8 @@ public:
   {
     if (size != 0)
     {
-      MY_ARRAY_NEW(_items, T, size)
-      // _items = new T[size];
+      //MY_ARRAY_NEW(_items, T, size)
+      _items = new T[size];
     }
   }
   CObjArray(): _items(0) {};

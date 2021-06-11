@@ -170,7 +170,6 @@ STDMETHODIMP ArchiveExtractCallback::PrepareOperation(Int32 askExtractMode) {
 }
 
 STDMETHODIMP ArchiveExtractCallback::SetOperationResult(Int32 opRes) {
-	this->CloseWriters();
 	return S_OK;
 }
 

@@ -45,6 +45,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="..\Media\Music.7z" Link="Media\Music.7z">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Media\Music.tar" Link="Media\Music.tar">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="..\Media\Music.zip" Link="Media\Music.zip">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

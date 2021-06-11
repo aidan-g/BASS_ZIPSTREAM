@@ -87,8 +87,8 @@ public:
       delete []_items;
       _items = NULL;
       _capacity = 0;
-      MY_ARRAY_NEW(_items, T, newCapacity)
-      // _items = new T[newCapacity];
+      //MY_ARRAY_NEW(_items, T, newCapacity)
+      _items = new T[newCapacity];
       _capacity = newCapacity;
     }
   }

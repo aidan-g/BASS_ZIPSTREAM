@@ -129,6 +129,7 @@ extern "C" {
 		}
 		catch (CSystemException e) {
 			//TODO: Warn.
+			return FALSE;
 		}
 	}
 

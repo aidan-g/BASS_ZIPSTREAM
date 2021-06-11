@@ -18,6 +18,12 @@ namespace ManagedBass.ZipStream.Tests
             }
         }
 
+        [TestCase("Music.7z", "Gift\\01 Smile.flac", 27873249, 811163365)]
+        [TestCase("Music.7z", "Gift\\02 Again & Again.flac", 30222116, 519855218)]
+        [TestCase("Music.7z", "Gift\\03 Emotional Times.flac", 23088352, 1409150913)]
+        [TestCase("Music.tar", "Gift\\01 Smile.flac", 27873249, 811163365)]
+        [TestCase("Music.tar", "Gift\\02 Again & Again.flac", 30222116, 519855218)]
+        [TestCase("Music.tar", "Gift\\03 Emotional Times.flac", 23088352, 1409150913)]
         [TestCase("Music.zip", "Gift\\01 Smile.flac", 27873249, 811163365)]
         [TestCase("Music.zip", "Gift\\02 Again & Again.flac", 30222116, 519855218)]
         [TestCase("Music.zip", "Gift\\03 Emotional Times.flac", 23088352, 1409150913)]

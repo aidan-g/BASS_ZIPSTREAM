@@ -1771,11 +1771,4 @@ STDMETHODIMP CHandler::Extract(const UInt32 *indices, UInt32 numItems,
 
 IMPL_ISetCompressCodecsInfo
 
-REGISTER_ARC_I(
-  "Rar", "rar r00", 0, 3,
-  kMarker,
-  0,
-  NArcInfoFlags::kFindSignature,
-  NULL)
-
 }}

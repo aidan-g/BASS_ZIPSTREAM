@@ -130,8 +130,8 @@ void Archive::GetEntry(UString& path, UInt64& size, int index) {
 		throw CSystemException(S_FALSE);
 	}
 	if (!this->ReadProperty(size, kpidSize, index)) {
-		//TODO: Warn.
-		throw CSystemException(S_FALSE);
+		//Not a file.
+		size = 0;
 	}
 }
 

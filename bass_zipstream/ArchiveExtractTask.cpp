@@ -31,6 +31,7 @@ HRESULT ArchiveExtractTask::Run() {
 	if (result == ERROR_HANDLES_CLOSED) {
 		this->Cancelled = true;
 	}
+	this->Callback->CloseWriters();
 	return result;
 }
 
