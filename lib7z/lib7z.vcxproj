@@ -22,7 +22,6 @@
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zIn.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zOut.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zProperties.cpp" />
-    <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zRegister.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zSpecStream.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zUpdate.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\StdAfx.cpp" />
@@ -32,17 +31,14 @@
     <ClCompile Include="..\7z\CPP\7zip\Archive\Iso\IsoHandler.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Iso\IsoHeader.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Iso\IsoIn.cpp" />
-    <ClCompile Include="..\7z\CPP\7zip\Archive\Iso\IsoRegister.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Rar\Rar5Handler.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Rar\RarHandler.cpp" />
-    <ClCompile Include="..\7z\CPP\7zip\Archive\Rar\RarRegister.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Rar\StdAfx.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarHandler.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarHandlerOut.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarHeader.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarIn.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarOut.cpp" />
-    <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarRegister.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarUpdate.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Common\FilePathAutoRename.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Common\InOutTempBuffer.cpp" />
@@ -74,8 +70,6 @@
     <ClCompile Include="..\7z\CPP\7zip\Crypto\Rar20Crypto.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Crypto\Rar5Aes.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Crypto\RarAes.cpp" />
-    <ClCompile Include="..\7z\CPP\7zip\UI\Common\ArchiveExtractCallback.cpp" />
-    <ClCompile Include="..\7z\CPP\7zip\UI\Common\ArchiveOpenCallback.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\UI\Common\DefaultName.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\UI\Common\ExtractingFilePath.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\UI\Common\OpenArchive.cpp" />
@@ -98,7 +92,6 @@
     <ClCompile Include="..\7z\CPP\7zip\Archive\Zip\ZipIn.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Zip\ZipItem.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Zip\ZipOut.cpp" />
-    <ClCompile Include="..\7z\CPP\7zip\Archive\Zip\ZipRegister.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Zip\ZipUpdate.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Common\CreateCoder.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Common\CWrappers.cpp" />
@@ -259,8 +252,6 @@
     <ClInclude Include="..\7z\CPP\7zip\Crypto\Rar20Crypto.h" />
     <ClInclude Include="..\7z\CPP\7zip\Crypto\Rar5Aes.h" />
     <ClInclude Include="..\7z\CPP\7zip\Crypto\RarAes.h" />
-    <ClInclude Include="..\7z\CPP\7zip\UI\Common\ArchiveExtractCallback.h" />
-    <ClInclude Include="..\7z\CPP\7zip\UI\Common\ArchiveOpenCallback.h" />
     <ClInclude Include="..\7z\CPP\7zip\UI\Common\DefaultName.h" />
     <ClInclude Include="..\7z\CPP\7zip\UI\Common\ExtractingFilePath.h" />
     <ClInclude Include="..\7z\CPP\7zip\UI\Common\IFileExtractCallback.h" />

@@ -31,9 +31,6 @@
     <ClCompile Include="..\7z\CPP\7zip\Archive\Zip\ZipOut.cpp">
       <Filter>Archive\Zip</Filter>
     </ClCompile>
-    <ClCompile Include="..\7z\CPP\7zip\Archive\Zip\ZipRegister.cpp">
-      <Filter>Archive\Zip</Filter>
-    </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\Archive\Zip\ZipUpdate.cpp">
       <Filter>Archive\Zip</Filter>
     </ClCompile>
@@ -346,9 +343,6 @@
     <ClCompile Include="..\7z\CPP\7zip\Common\FileStreams.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\7z\CPP\7zip\UI\Common\ArchiveExtractCallback.cpp">
-      <Filter>UI\Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\Common\FilePathAutoRename.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -383,9 +377,6 @@
       <Filter>UI\Common</Filter>
     </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\UI\Common\DefaultName.cpp">
-      <Filter>UI\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\7z\CPP\7zip\UI\Common\ArchiveOpenCallback.cpp">
       <Filter>UI\Common</Filter>
     </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\UI\Common\SetProperties.cpp">
@@ -481,9 +472,6 @@
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zProperties.cpp">
       <Filter>Archive\7z</Filter>
     </ClCompile>
-    <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zRegister.cpp">
-      <Filter>Archive\7z</Filter>
-    </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zSpecStream.cpp">
       <Filter>Archive\7z</Filter>
     </ClCompile>
@@ -502,9 +490,6 @@
     <ClCompile Include="..\7z\CPP\7zip\Archive\Iso\IsoIn.cpp">
       <Filter>Archive\Iso</Filter>
     </ClCompile>
-    <ClCompile Include="..\7z\CPP\7zip\Archive\Iso\IsoRegister.cpp">
-      <Filter>Archive\Iso</Filter>
-    </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarHandler.cpp">
       <Filter>Archive\Tar</Filter>
     </ClCompile>
@@ -518,9 +503,6 @@
       <Filter>Archive\Tar</Filter>
     </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarOut.cpp">
-      <Filter>Archive\Tar</Filter>
-    </ClCompile>
-    <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarRegister.cpp">
       <Filter>Archive\Tar</Filter>
     </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarUpdate.cpp">
@@ -540,9 +522,6 @@
     </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\Common\InOutTempBuffer.cpp">
       <Filter>Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\7z\CPP\7zip\Archive\Rar\RarRegister.cpp">
-      <Filter>Archive\Rar</Filter>
     </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\Crypto\Rar5Aes.cpp">
       <Filter>Crypto</Filter>
@@ -939,9 +918,6 @@
     <ClInclude Include="..\7z\CPP\7zip\Common\FileStreams.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\7z\CPP\7zip\UI\Common\ArchiveExtractCallback.h">
-      <Filter>UI\Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\7z\CPP\7zip\Common\FilePathAutoRename.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -973,9 +949,6 @@
       <Filter>UI\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\7z\CPP\7zip\UI\Common\DefaultName.h">
-      <Filter>UI\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\7z\CPP\7zip\UI\Common\ArchiveOpenCallback.h">
       <Filter>UI\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\7z\CPP\7zip\UI\Common\SetProperties.h">

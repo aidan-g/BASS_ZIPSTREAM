@@ -1,4 +1,5 @@
 #include "Archive.h"
+#include "Common.h"
 
 #include "../7z/CPP/7zip/Common/FileStreams.h"
 
