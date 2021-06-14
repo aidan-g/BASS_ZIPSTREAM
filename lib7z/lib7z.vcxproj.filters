@@ -13,25 +13,13 @@
     <ClCompile Include="..\7z\CPP\Common\MyVector.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\7z\CPP\7zip\Archive\Zip\ZipAddCommon.cpp">
-      <Filter>Archive\Zip</Filter>
-    </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\Archive\Zip\ZipHandler.cpp">
-      <Filter>Archive\Zip</Filter>
-    </ClCompile>
-    <ClCompile Include="..\7z\CPP\7zip\Archive\Zip\ZipHandlerOut.cpp">
       <Filter>Archive\Zip</Filter>
     </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\Archive\Zip\ZipIn.cpp">
       <Filter>Archive\Zip</Filter>
     </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\Archive\Zip\ZipItem.cpp">
-      <Filter>Archive\Zip</Filter>
-    </ClCompile>
-    <ClCompile Include="..\7z\CPP\7zip\Archive\Zip\ZipOut.cpp">
-      <Filter>Archive\Zip</Filter>
-    </ClCompile>
-    <ClCompile Include="..\7z\CPP\7zip\Archive\Zip\ZipUpdate.cpp">
       <Filter>Archive\Zip</Filter>
     </ClCompile>
     <ClCompile Include="..\7z\CPP\Common\MyWindows.cpp">
@@ -439,13 +427,7 @@
     <ClCompile Include="..\7z\CPP\7zip\Archive\Rar\StdAfx.cpp">
       <Filter>Archive\Rar</Filter>
     </ClCompile>
-    <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zCompressionMode.cpp">
-      <Filter>Archive\7z</Filter>
-    </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zDecode.cpp">
-      <Filter>Archive\7z</Filter>
-    </ClCompile>
-    <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zEncode.cpp">
       <Filter>Archive\7z</Filter>
     </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zExtract.cpp">
@@ -457,25 +439,16 @@
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zHandler.cpp">
       <Filter>Archive\7z</Filter>
     </ClCompile>
-    <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zHandlerOut.cpp">
-      <Filter>Archive\7z</Filter>
-    </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zHeader.cpp">
       <Filter>Archive\7z</Filter>
     </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zIn.cpp">
       <Filter>Archive\7z</Filter>
     </ClCompile>
-    <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zOut.cpp">
-      <Filter>Archive\7z</Filter>
-    </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zProperties.cpp">
       <Filter>Archive\7z</Filter>
     </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zSpecStream.cpp">
-      <Filter>Archive\7z</Filter>
-    </ClCompile>
-    <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zUpdate.cpp">
       <Filter>Archive\7z</Filter>
     </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\StdAfx.cpp">
@@ -493,19 +466,10 @@
     <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarHandler.cpp">
       <Filter>Archive\Tar</Filter>
     </ClCompile>
-    <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarHandlerOut.cpp">
-      <Filter>Archive\Tar</Filter>
-    </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarHeader.cpp">
       <Filter>Archive\Tar</Filter>
     </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarIn.cpp">
-      <Filter>Archive\Tar</Filter>
-    </ClCompile>
-    <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarOut.cpp">
-      <Filter>Archive\Tar</Filter>
-    </ClCompile>
-    <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarUpdate.cpp">
       <Filter>Archive\Tar</Filter>
     </ClCompile>
     <ClCompile Include="..\7z\CPP\7zip\Archive\HandlerCont.cpp">
@@ -582,12 +546,6 @@
     <ClInclude Include="..\7z\CPP\7zip\Archive\Zip\StdAfx.h">
       <Filter>Archive\Zip</Filter>
     </ClInclude>
-    <ClInclude Include="..\7z\CPP\7zip\Archive\Zip\ZipAddCommon.h">
-      <Filter>Archive\Zip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\7z\CPP\7zip\Archive\Zip\ZipCompressionMode.h">
-      <Filter>Archive\Zip</Filter>
-    </ClInclude>
     <ClInclude Include="..\7z\CPP\7zip\Archive\Zip\ZipHandler.h">
       <Filter>Archive\Zip</Filter>
     </ClInclude>
@@ -598,12 +556,6 @@
       <Filter>Archive\Zip</Filter>
     </ClInclude>
     <ClInclude Include="..\7z\CPP\7zip\Archive\Zip\ZipItem.h">
-      <Filter>Archive\Zip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\7z\CPP\7zip\Archive\Zip\ZipOut.h">
-      <Filter>Archive\Zip</Filter>
-    </ClInclude>
-    <ClInclude Include="..\7z\CPP\7zip\Archive\Zip\ZipUpdate.h">
       <Filter>Archive\Zip</Filter>
     </ClInclude>
     <ClInclude Include="..\7z\CPP\Common\MyWindows.h">
@@ -996,13 +948,7 @@
     <ClInclude Include="..\7z\CPP\7zip\Archive\Rar\StdAfx.h">
       <Filter>Archive\Rar</Filter>
     </ClInclude>
-    <ClInclude Include="..\7z\CPP\7zip\Archive\7z\7zCompressionMode.h">
-      <Filter>Archive\7z</Filter>
-    </ClInclude>
     <ClInclude Include="..\7z\CPP\7zip\Archive\7z\7zDecode.h">
-      <Filter>Archive\7z</Filter>
-    </ClInclude>
-    <ClInclude Include="..\7z\CPP\7zip\Archive\7z\7zEncode.h">
       <Filter>Archive\7z</Filter>
     </ClInclude>
     <ClInclude Include="..\7z\CPP\7zip\Archive\7z\7zFolderInStream.h">
@@ -1020,16 +966,10 @@
     <ClInclude Include="..\7z\CPP\7zip\Archive\7z\7zItem.h">
       <Filter>Archive\7z</Filter>
     </ClInclude>
-    <ClInclude Include="..\7z\CPP\7zip\Archive\7z\7zOut.h">
-      <Filter>Archive\7z</Filter>
-    </ClInclude>
     <ClInclude Include="..\7z\CPP\7zip\Archive\7z\7zProperties.h">
       <Filter>Archive\7z</Filter>
     </ClInclude>
     <ClInclude Include="..\7z\CPP\7zip\Archive\7z\7zSpecStream.h">
-      <Filter>Archive\7z</Filter>
-    </ClInclude>
-    <ClInclude Include="..\7z\CPP\7zip\Archive\7z\7zUpdate.h">
       <Filter>Archive\7z</Filter>
     </ClInclude>
     <ClInclude Include="..\7z\CPP\7zip\Archive\7z\StdAfx.h">
@@ -1063,12 +1003,6 @@
       <Filter>Archive\Tar</Filter>
     </ClInclude>
     <ClInclude Include="..\7z\CPP\7zip\Archive\Tar\TarItem.h">
-      <Filter>Archive\Tar</Filter>
-    </ClInclude>
-    <ClInclude Include="..\7z\CPP\7zip\Archive\Tar\TarOut.h">
-      <Filter>Archive\Tar</Filter>
-    </ClInclude>
-    <ClInclude Include="..\7z\CPP\7zip\Archive\Tar\TarUpdate.h">
       <Filter>Archive\Tar</Filter>
     </ClInclude>
     <ClInclude Include="..\7z\CPP\7zip\Archive\HandlerCont.h">

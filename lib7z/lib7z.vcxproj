@@ -11,19 +11,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zCompressionMode.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zDecode.cpp" />
-    <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zEncode.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zExtract.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zFolderInStream.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zHandler.cpp" />
-    <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zHandlerOut.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zHeader.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zIn.cpp" />
-    <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zOut.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zProperties.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zSpecStream.cpp" />
-    <ClCompile Include="..\7z\CPP\7zip\Archive\7z\7zUpdate.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\7z\StdAfx.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Common\CoderMixer2.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Common\FindSignature.cpp" />
@@ -35,11 +30,8 @@
     <ClCompile Include="..\7z\CPP\7zip\Archive\Rar\RarHandler.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Rar\StdAfx.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarHandler.cpp" />
-    <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarHandlerOut.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarHeader.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarIn.cpp" />
-    <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarOut.cpp" />
-    <ClCompile Include="..\7z\CPP\7zip\Archive\Tar\TarUpdate.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Common\FilePathAutoRename.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Common\InOutTempBuffer.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Common\StreamBinder.cpp" />
@@ -86,13 +78,9 @@
     <ClCompile Include="..\7z\CPP\7zip\Archive\Common\InStreamWithCRC.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Common\ItemNameUtils.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Common\OutStreamWithCRC.cpp" />
-    <ClCompile Include="..\7z\CPP\7zip\Archive\Zip\ZipAddCommon.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Zip\ZipHandler.cpp" />
-    <ClCompile Include="..\7z\CPP\7zip\Archive\Zip\ZipHandlerOut.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Zip\ZipIn.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Archive\Zip\ZipItem.cpp" />
-    <ClCompile Include="..\7z\CPP\7zip\Archive\Zip\ZipOut.cpp" />
-    <ClCompile Include="..\7z\CPP\7zip\Archive\Zip\ZipUpdate.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Common\CreateCoder.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Common\CWrappers.cpp" />
     <ClCompile Include="..\7z\CPP\7zip\Common\FileStreams.cpp" />
@@ -198,18 +186,14 @@
     <ClCompile Include="..\7z\C\XzIn.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\7z\CPP\7zip\Archive\7z\7zCompressionMode.h" />
     <ClInclude Include="..\7z\CPP\7zip\Archive\7z\7zDecode.h" />
-    <ClInclude Include="..\7z\CPP\7zip\Archive\7z\7zEncode.h" />
     <ClInclude Include="..\7z\CPP\7zip\Archive\7z\7zFolderInStream.h" />
     <ClInclude Include="..\7z\CPP\7zip\Archive\7z\7zHandler.h" />
     <ClInclude Include="..\7z\CPP\7zip\Archive\7z\7zHeader.h" />
     <ClInclude Include="..\7z\CPP\7zip\Archive\7z\7zIn.h" />
     <ClInclude Include="..\7z\CPP\7zip\Archive\7z\7zItem.h" />
-    <ClInclude Include="..\7z\CPP\7zip\Archive\7z\7zOut.h" />
     <ClInclude Include="..\7z\CPP\7zip\Archive\7z\7zProperties.h" />
     <ClInclude Include="..\7z\CPP\7zip\Archive\7z\7zSpecStream.h" />
-    <ClInclude Include="..\7z\CPP\7zip\Archive\7z\7zUpdate.h" />
     <ClInclude Include="..\7z\CPP\7zip\Archive\7z\StdAfx.h" />
     <ClInclude Include="..\7z\CPP\7zip\Archive\Common\CoderMixer2.h" />
     <ClInclude Include="..\7z\CPP\7zip\Archive\Common\FindSignature.h" />
@@ -230,8 +214,6 @@
     <ClInclude Include="..\7z\CPP\7zip\Archive\Tar\TarHeader.h" />
     <ClInclude Include="..\7z\CPP\7zip\Archive\Tar\TarIn.h" />
     <ClInclude Include="..\7z\CPP\7zip\Archive\Tar\TarItem.h" />
-    <ClInclude Include="..\7z\CPP\7zip\Archive\Tar\TarOut.h" />
-    <ClInclude Include="..\7z\CPP\7zip\Archive\Tar\TarUpdate.h" />
     <ClInclude Include="..\7z\CPP\7zip\Common\FilePathAutoRename.h" />
     <ClInclude Include="..\7z\CPP\7zip\Common\InOutTempBuffer.h" />
     <ClInclude Include="..\7z\CPP\7zip\Common\RegisterCodec.h" />
@@ -271,14 +253,10 @@
     <ClInclude Include="..\7z\CPP\7zip\Archive\Common\OutStreamWithCRC.h" />
     <ClInclude Include="..\7z\CPP\7zip\Archive\IArchive.h" />
     <ClInclude Include="..\7z\CPP\7zip\Archive\Zip\StdAfx.h" />
-    <ClInclude Include="..\7z\CPP\7zip\Archive\Zip\ZipAddCommon.h" />
-    <ClInclude Include="..\7z\CPP\7zip\Archive\Zip\ZipCompressionMode.h" />
     <ClInclude Include="..\7z\CPP\7zip\Archive\Zip\ZipHandler.h" />
     <ClInclude Include="..\7z\CPP\7zip\Archive\Zip\ZipHeader.h" />
     <ClInclude Include="..\7z\CPP\7zip\Archive\Zip\ZipIn.h" />
     <ClInclude Include="..\7z\CPP\7zip\Archive\Zip\ZipItem.h" />
-    <ClInclude Include="..\7z\CPP\7zip\Archive\Zip\ZipOut.h" />
-    <ClInclude Include="..\7z\CPP\7zip\Archive\Zip\ZipUpdate.h" />
     <ClInclude Include="..\7z\CPP\7zip\Common\CreateCoder.h" />
     <ClInclude Include="..\7z\CPP\7zip\Common\CWrappers.h" />
     <ClInclude Include="..\7z\CPP\7zip\Common\FileStreams.h" />
@@ -435,6 +413,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <PreprocessorDefinitions>EXTRACT_ONLY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>
@@ -452,6 +431,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <PreprocessorDefinitions>EXTRACT_ONLY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>

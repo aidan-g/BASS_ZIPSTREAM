@@ -26,7 +26,9 @@ extern const char * const kMethodNames2[kNumMethodNames2];
 class CHandler:
   public IInArchive,
   // public IArchiveGetRawProps,
+#ifndef EXTRACT_ONLY
   public IOutArchive,
+#endif
   public ISetProperties,
   PUBLIC_ISetCompressCodecsInfo
   public CMyUnknownImp
@@ -34,7 +36,9 @@ class CHandler:
 public:
   MY_QUERYINTERFACE_BEGIN2(IInArchive)
   // MY_QUERYINTERFACE_ENTRY(IArchiveGetRawProps)
+#ifndef EXTRACT_ONLY
   MY_QUERYINTERFACE_ENTRY(IOutArchive)
+#endif
   MY_QUERYINTERFACE_ENTRY(ISetProperties)
   QUERY_ENTRY_ISetCompressCodecsInfo
   MY_QUERYINTERFACE_END
@@ -42,7 +46,9 @@ public:
 
   INTERFACE_IInArchive(;)
   // INTERFACE_IArchiveGetRawProps(;)
+#ifndef EXTRACT_ONLY
   INTERFACE_IOutArchive(;)
+#endif
 
   STDMETHOD(SetProperties)(const wchar_t * const *names, const PROPVARIANT *values, UInt32 numProps);
 

@@ -1465,6 +1465,99 @@ STDMETHODIMP CHandler::Extract(const UInt32 *indices, UInt32 numItems,
   COM_TRY_END
 }
 
+#ifdef EXTRACT_ONLY
+
+STDMETHODIMP CHandler::SetProperties(const wchar_t* const* names, const PROPVARIANT* values, UInt32 numProps)
+{
+    InitMethodProps();
+
+    for (UInt32 i = 0; i < numProps; i++)
+    {
+        UString name = names[i];
+        name.MakeLower_Ascii();
+        if (name.IsEmpty())
+            return E_INVALIDARG;
+
+        const PROPVARIANT& prop = values[i];
+
+        if (name.IsEqualTo_Ascii_NoCase("em"))
+        {
+            if (prop.vt != VT_BSTR)
+                return E_INVALIDARG;
+            {
+                const wchar_t* m = prop.bstrVal;
+                if (IsString1PrefixedByString2_NoCase_Ascii(m, "aes"))
+                {
+                    m += 3;
+                    if (StringsAreEqual_Ascii(m, "128"))
+                        _props.AesKeyMode = 1;
+                    else if (StringsAreEqual_Ascii(m, "192"))
+                        _props.AesKeyMode = 2;
+                    else if (StringsAreEqual_Ascii(m, "256") || m[0] == 0)
+                        _props.AesKeyMode = 3;
+                    else
+                        return E_INVALIDARG;
+                    _props.IsAesMode = true;
+                    m_ForceAesMode = true;
+                }
+                else if (StringsAreEqualNoCase_Ascii(m, "ZipCrypto"))
+                {
+                    _props.IsAesMode = false;
+                    m_ForceAesMode = true;
+                }
+                else
+                    return E_INVALIDARG;
+            }
+        }
+        else if (name.IsEqualTo("tc"))
+        {
+            RINOK(PROPVARIANT_to_bool(prop, m_WriteNtfsTimeExtra));
+        }
+        else if (name.IsEqualTo("cl"))
+        {
+            RINOK(PROPVARIANT_to_bool(prop, m_ForceLocal));
+            if (m_ForceLocal)
+                m_ForceUtf8 = false;
+        }
+        else if (name.IsEqualTo("cu"))
+        {
+            RINOK(PROPVARIANT_to_bool(prop, m_ForceUtf8));
+            if (m_ForceUtf8)
+                m_ForceLocal = false;
+        }
+        else if (name.IsEqualTo("cp"))
+        {
+            UInt32 cp = CP_OEMCP;
+            RINOK(ParsePropToUInt32(L"", prop, cp));
+            _forceCodePage = true;
+            _specifiedCodePage = cp;
+        }
+        else if (name.IsEqualTo("rsfx"))
+        {
+            RINOK(PROPVARIANT_to_bool(prop, _removeSfxBlock));
+        }
+        else
+        {
+            if (name.IsEqualTo_Ascii_NoCase("m") && prop.vt == VT_UI4)
+            {
+                UInt32 id = prop.ulVal;
+                if (id > 0xFF)
+                    return E_INVALIDARG;
+                m_MainMethod = id;
+            }
+            else
+            {
+                return E_INVALIDARG;
+            }
+            // RINOK(_props.MethodInfo.ParseParamsFromPROPVARIANT(name, prop));
+        }
+    }
+
+    return S_OK;
+}
+
+#endif
+
 IMPL_ISetCompressCodecsInfo
 
 }}

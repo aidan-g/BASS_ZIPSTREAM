@@ -17,14 +17,22 @@ namespace NZip {
 const CMethodId kMethodId_ZipBase = 0x040100;
 const CMethodId kMethodId_BZip2   = 0x040202;
 
+#if EXTRACT_ONLY
+struct CBaseProps : public CCommonMethodProps
+#else
 struct CBaseProps: public CMultiMethodProps
+#endif
 {
   bool IsAesMode;
   Byte AesKeyMode;
 
   void Init()
   {
+#if EXTRACT_ONLY
+      CCommonMethodProps::InitCommon();
+#else
     CMultiMethodProps::Init();
+#endif
     
     IsAesMode = false;
     AesKeyMode = 3;
