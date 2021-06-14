@@ -9,8 +9,12 @@ namespace ManagedBass.ZipStream.Tests
     {
         private static readonly string Location = Path.GetDirectoryName(typeof(ArchiveTests).Assembly.Location);
 
-        [Test]
-        public void Test001()
+        [TestCase("7z", "7z")]
+        [TestCase("Iso", "iso,img")]
+        [TestCase("Rar", "rar,r00")]
+        [TestCase("Tar", "tar,ova")]
+        [TestCase("Zip", "zip,z01,zipx,jar,xpi,odt,ods,docx,xlsx,epub,ipa,apk,appx")]
+        public void Test001(string name, string extensions)
         {
             var archive = default(IntPtr);
             if (!Archive.Create(out archive))
@@ -33,7 +37,17 @@ namespace ManagedBass.ZipStream.Tests
                     {
                         Assert.Fail("Failed to get format.");
                     }
+                    if (!string.Equals(format.name, name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+                    if (!string.Equals(format.extensions, extensions, StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+                    return;
                 }
+                Assert.Fail("Expected format was not found.");
             }
             finally
             {
