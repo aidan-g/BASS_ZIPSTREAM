@@ -109,5 +109,29 @@ namespace ManagedBass.ZipStream.Tests
             } while (true);
             return Math.Abs(hashCode);
         }
+
+        public static class PasswordHandler
+        {
+            public static string FileName { get; private set; }
+
+            public static string Password { get; private set; }
+
+            public static void SetPassword(string fileName, string password)
+            {
+                FileName = fileName;
+                Password = password;
+                Archive.GetPassword(GetPassword);
+            }
+
+            public static bool GetPassword(ref Archive.ArchivePassword password)
+            {
+                if (!string.Equals(password.path, FileName, StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+                password.password = Password;
+                return !string.IsNullOrEmpty(password.password);
+            }
+        }
     }
 }

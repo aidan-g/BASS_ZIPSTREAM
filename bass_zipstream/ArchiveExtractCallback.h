@@ -17,8 +17,11 @@ public:
 	UInt32 Index;
 };
 
+typedef bool (*ArchiveExtractPrompt)(UString fileName, UString& password);
+
 class ArchiveExtractCallback :
 	public IArchiveExtractCallback,
+	public ICryptoGetTextPassword,
 	public CMyUnknownImp
 {
 private:
@@ -32,6 +35,7 @@ private:
 
 public:
 	MY_QUERYINTERFACE_BEGIN2(IArchiveExtractCallback)
+		MY_QUERYINTERFACE_ENTRY(ICryptoGetTextPassword)
 		MY_QUERYINTERFACE_END
 		MY_ADDREF_RELEASE
 		INTERFACE_IArchiveExtractCallback(;)
@@ -52,6 +56,10 @@ public:
 	bool GetInStream(CMyComPtr<IInStream>& stream, int index);
 
 	bool GetOutStream(CMyComPtr<IOutStream>& stream, int index);
+
+	STDMETHOD(CryptoGetTextPassword)(BSTR* password);
+
+	static ArchiveExtractPrompt Prompt;
 
 	static bool Cleanup();
 };

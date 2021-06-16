@@ -20,6 +20,11 @@ extern "C" {
 		QWORD size;
 	} ARCHIVE_ENTRY;
 
+	typedef struct ARCHIVE_PASSWORD {
+		wchar_t path[MAX_PATH];
+		wchar_t password[50];
+	}ARCHIVE_PASSWORD;
+
 	__declspec(dllexport) BOOL ARCHIVEDEF(ARCHIVE_Create)(void** instance);
 
 	__declspec(dllexport) BOOL ARCHIVEDEF(ARCHIVE_GetFormatCount)(void* instance, DWORD* count);
@@ -37,6 +42,8 @@ extern "C" {
 	__declspec(dllexport) VOID ARCHIVEDEF(ARCHIVE_Release)(void* instance);
 
 	__declspec(dllexport) BOOL ARCHIVEDEF(ARCHIVE_Cleanup)();
+
+	_declspec(dllexport) VOID ARCHIVEDEF(ARCHIVE_GetPassword)(BOOL(*prompt)(ARCHIVE_PASSWORD* password));
 
 #if __cplusplus
 }

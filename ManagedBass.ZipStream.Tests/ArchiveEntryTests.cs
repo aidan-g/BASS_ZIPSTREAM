@@ -133,5 +133,37 @@ namespace ManagedBass.ZipStream.Tests
                 }
             }
         }
+
+
+
+        [TestCase("Music (Protected).zip", "Gift\\01 Smile.flac", "password", 27873249, 811163365)]
+        [TestCase("Music (Protected).zip", "Gift\\02 Again & Again.flac", "password", 30222116, 519855218)]
+        [TestCase("Music (Protected).zip", "Gift\\03 Emotional Times.flac", "password", 23088352, 1409150913)]
+        public void Test005(string archiveName, string entryPath, string password, long length, int hashCode)
+        {
+            var fileName = Path.Combine(Location, "Media", archiveName);
+            var index = Utils.GetEntryIndex(archiveName, entryPath);
+
+            Utils.PasswordHandler.SetPassword(fileName, password);
+
+            var entry = default(IntPtr);
+            if (!ArchiveEntry.OpenEntry(fileName, index, out entry))
+            {
+                Assert.Fail("Failed to open entry.");
+            }
+
+            try
+            {
+                Assert.AreEqual(0, ArchiveEntry.GetEntryPosition(entry));
+                Assert.AreEqual(length, ArchiveEntry.GetEntryLength(entry));
+                Assert.AreEqual(hashCode, Utils.GetEntryHashCode(entry));
+                Assert.AreEqual(length, ArchiveEntry.GetEntryPosition(entry));
+                Assert.IsTrue(ArchiveEntry.IsEOF(entry));
+            }
+            finally
+            {
+                ArchiveEntry.CloseEntry(entry);
+            }
+        }
     }
 }

@@ -12,9 +12,10 @@ class Archive
 {
 private:
 	UString FileName;
+	UString Password;
 	int FormatIndex;
 
-	CCodecs* Codecs;
+	CMyComPtr<CCodecs> Codecs;
 	CMyComPtr<IInStream> InStream;
 	CMyComPtr<IInArchive> InArchive;
 	CObjectVector<CMyComPtr<ArchiveExtractTask>> Tasks;
@@ -45,6 +46,10 @@ public:
 	void Open(UString& fileName);
 
 	bool IsOpen(UString& fileName);
+
+	bool GetPassword(UString& password);
+
+	void SetPassword(UString password);
 
 	int GetEntryCount();
 

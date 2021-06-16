@@ -79,6 +79,14 @@ namespace ManagedBass.ZipStream
             return ARCHIVE_Cleanup();
         }
 
+        [DllImport(DllName)]
+        static extern void ARCHIVE_GetPassword(GetPasswordHandler handler);
+
+        public static void GetPassword(GetPasswordHandler handler)
+        {
+            ARCHIVE_GetPassword(handler);
+        }
+
         [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
         public struct ArchiveFormat
         {
@@ -95,5 +103,16 @@ namespace ManagedBass.ZipStream
             public string path;
             public long size;
         }
+
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        public struct ArchivePassword
+        {
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 260)]
+            public string path;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 50)]
+            public string password;
+        }
+
+        public delegate bool GetPasswordHandler(ref ArchivePassword password);
     }
 }

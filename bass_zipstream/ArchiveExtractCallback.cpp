@@ -181,6 +181,27 @@ STDMETHODIMP ArchiveExtractCallback::SetCompleted(const UInt64* completeValue) {
 	return S_OK;
 }
 
+STDMETHODIMP ArchiveExtractCallback::CryptoGetTextPassword(BSTR* result) {
+	UString password;
+	if (!this->Parent->GetPassword(password)) {
+		if (!this->Prompt) {
+			return E_ACCESSDENIED;
+		}
+		UString fileName;
+		if (!this->Parent->IsOpen(fileName)) {
+			return ERROR_HANDLES_CLOSED;
+		}
+		if (!Prompt(fileName, password)) {
+			return E_ACCESSDENIED;
+		}
+		this->Parent->SetPassword(password);
+	}
+	StringToBstr(password, result);
+	return S_OK;
+}
+
+ArchiveExtractPrompt ArchiveExtractCallback::Prompt = 0;
+
 bool ArchiveExtractCallback::Cleanup() {
 	FString path;
 	if (!NWindows::NFile::NDir::MyGetTempPath(path)) {

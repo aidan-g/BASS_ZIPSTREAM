@@ -115,6 +115,15 @@ bool Archive::IsOpen(UString& fileName) {
 	return !fileName.IsEmpty();
 }
 
+bool Archive::GetPassword(UString& password) {
+	password = this->Password;
+	return !password.IsEmpty();
+}
+
+void Archive::SetPassword(UString password) {
+	this->Password = password;
+}
+
 int Archive::GetEntryCount() {
 	UInt32 count;
 	if (this->InArchive->GetNumberOfItems(&count) != S_OK) {
