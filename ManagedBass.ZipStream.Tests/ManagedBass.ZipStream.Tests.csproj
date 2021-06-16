@@ -5,7 +5,7 @@
     <AssemblyName>ManagedBass.ZipStream.Tests</AssemblyName>
     <OutputPath>..\distribution\$(Platform)\</OutputPath>
     <Platforms>x86;x64</Platforms>
-    <Configurations>Debug</Configurations>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <ItemGroup>

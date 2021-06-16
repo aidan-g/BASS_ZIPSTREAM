@@ -15,7 +15,6 @@ static inline HRESULT ConvertBoolToHRESULT(bool result)
 
 class CFileStreamBase :
 	public CMyUnknownImp,
-	public IUnknown,
 	public IClosable
 {
 
@@ -72,7 +71,7 @@ public:
 			offset += this->Stream->GetSize();
 			break;
 		}
-		if (offset < 0 || offset > this->Stream->GetSize()) {
+		if (offset < 0 || (UInt64)offset > this->Stream->GetSize()) {
 			result = E_FAIL;
 		}
 		else {
@@ -153,7 +152,7 @@ public:
 			offset += this->Stream->GetSize();
 			break;
 		}
-		if (offset < 0 || offset > this->Stream->GetSize()) {
+		if (offset < 0 || (UInt64)offset > this->Stream->GetSize()) {
 			result = E_FAIL;
 		}
 		else {

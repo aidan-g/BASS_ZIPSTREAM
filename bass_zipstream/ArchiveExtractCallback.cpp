@@ -24,7 +24,7 @@ bool ArchiveExtractCallback::GetFileName(UString& path, UInt32 index) {
 		return false;
 	}
 	UInt64 hashCode = 7;
-	for (int a = 0; a < fileName.Len(); a++) {
+	for (unsigned a = 0; a < fileName.Len(); a++) {
 		hashCode = 31 * hashCode + fileName[a] + index;
 	}
 	char temp[32];
@@ -97,7 +97,7 @@ void ArchiveExtractCallback::Close() {
 }
 
 void ArchiveExtractCallback::CloseReaders() {
-	for (int a = 0; a < this->Files.Size(); a++) {
+	for (unsigned a = 0; a < this->Files.Size(); a++) {
 		ArchiveExtractFile* file = this->Files[a];
 		if (file->Stream) {
 			CMyComPtr<IInStream> stream;
@@ -112,7 +112,7 @@ void ArchiveExtractCallback::CloseReaders() {
 }
 
 void ArchiveExtractCallback::CloseWriters() {
-	for (int a = 0; a < this->Files.Size(); a++) {
+	for (unsigned a = 0; a < this->Files.Size(); a++) {
 		ArchiveExtractFile* file = this->Files[a];
 		if (file->Stream) {
 			CMyComPtr<IOutStream> stream;
@@ -127,7 +127,7 @@ void ArchiveExtractCallback::CloseWriters() {
 }
 
 bool ArchiveExtractCallback::GetInStream(CMyComPtr<IInStream>& stream, int index) {
-	for (int a = 0; a < this->Files.Size(); a++) {
+	for (unsigned a = 0; a < this->Files.Size(); a++) {
 		ArchiveExtractFile* file = this->Files[a];
 		if (file->Index == index) {
 			if (!file->Stream) {
@@ -140,7 +140,7 @@ bool ArchiveExtractCallback::GetInStream(CMyComPtr<IInStream>& stream, int index
 }
 
 bool ArchiveExtractCallback::GetOutStream(CMyComPtr<IOutStream>& stream, int index) {
-	for (int a = 0; a < this->Files.Size(); a++) {
+	for (unsigned a = 0; a < this->Files.Size(); a++) {
 		ArchiveExtractFile* file = this->Files[a];
 		if (file->Index == index) {
 			if (!file->Stream) {

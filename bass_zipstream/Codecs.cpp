@@ -10,13 +10,7 @@
 #include "../7z/CPP/7zip/Compress/Bcj2Register.cpp"
 #include "../7z/CPP/7zip/Compress/BZip2Register.cpp"
 #include "../7z/CPP/7zip/Compress/CopyRegister.cpp"
-
-#if _WIN64
-#include "../7z/CPP/7zip/Compress/Deflate64Register.cpp"
-#elif _WIN32
 #include "../7z/CPP/7zip/Compress/DeflateRegister.cpp"
-#endif
-
 #include "../7z/CPP/7zip/Compress/LzmaRegister.cpp"
 #include "../7z/CPP/7zip/Compress/Lzma2Register.cpp"
 #include "../7z/CPP/7zip/Compress/PpmdRegister.cpp"

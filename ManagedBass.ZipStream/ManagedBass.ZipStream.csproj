@@ -7,7 +7,7 @@
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<Version>0.1.0</Version>
 		<Platforms>x86;x64</Platforms>
-		<Configurations>Debug</Configurations>
+		<Configurations>Debug;Release</Configurations>
 	</PropertyGroup>
 
 	<ItemGroup>
