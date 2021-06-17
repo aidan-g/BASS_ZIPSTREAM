@@ -145,6 +145,7 @@
     <ClCompile Include="CFile.cpp" />
     <ClCompile Include="CFileStream.cpp" />
     <ClCompile Include="Codecs.cpp" />
+    <ClCompile Include="Config.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\bass\bass.h" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Codecs.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="ArchiveExtractTask.h" />
+    <ClInclude Include="Config.h" />
     <ClInclude Include="IClosable.h" />
     <ClInclude Include="Interfaces.h" />
     <ClInclude Include="IOUtils.h" />

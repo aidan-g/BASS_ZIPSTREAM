@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Config.h"
+
 #include "../bass/bass.h"
 #include "../bass/bass_addon.h"
 
@@ -10,8 +12,6 @@
 #if __cplusplus
 extern "C" {
 #endif
-	typedef enum {
-	} ZS_ATTRIBUTE;
 
 	__declspec(dllexport) BOOL BASSZIPSTREAMDEF(BASS_ZIPSTREAM_Init)();
 

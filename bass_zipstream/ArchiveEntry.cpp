@@ -58,6 +58,7 @@ bool ArchiveEntry::Buffer(UInt64 position, UInt32 timeout) {
 		}
 		Sleep(1);
 	}
+	//TODO: Warn.
 	return false;
 }
 

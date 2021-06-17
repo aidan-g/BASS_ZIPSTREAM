@@ -6,6 +6,46 @@ namespace ManagedBass.ZipStream
     {
         const string DllName = "bass_zipstream";
 
+        /// <summary>
+        /// //Buffer 20% before creating stream.
+        /// </summary>
+        const int DEFAULT_BUFFER_MIN = 20;
+        const int DEFAULT_BUFFER_TIMEOUT = 1000;
+
+        public static int BufferMin
+        {
+            get
+            {
+                var value = default(int);
+                if (BASS_ZIPSTREAM_GetConfig(BassZipStreamAttribute.BufferMin, out value))
+                {
+                    return value;
+                }
+                return DEFAULT_BUFFER_MIN;
+            }
+            set
+            {
+                BASS_ZIPSTREAM_SetConfig(BassZipStreamAttribute.BufferMin, value);
+            }
+        }
+
+        public static int BufferTimeout
+        {
+            get
+            {
+                var value = default(int);
+                if (BASS_ZIPSTREAM_GetConfig(BassZipStreamAttribute.BufferTimeout, out value))
+                {
+                    return value;
+                }
+                return DEFAULT_BUFFER_TIMEOUT;
+            }
+            set
+            {
+                BASS_ZIPSTREAM_SetConfig(BassZipStreamAttribute.BufferTimeout, value);
+            }
+        }
+
         [DllImport(DllName)]
         static extern bool BASS_ZIPSTREAM_Init();
 
@@ -73,6 +113,8 @@ namespace ManagedBass.ZipStream
 
     public enum BassZipStreamAttribute : byte
     {
-        None = 0
+        None = 0,
+        BufferMin = 1,
+        BufferTimeout = 2
     }
 }

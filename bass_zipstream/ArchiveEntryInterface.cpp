@@ -1,11 +1,18 @@
 #include "Archive.h"
 #include "ArchiveEntry.h"
 #include "ArchiveEntryInterface.h"
+#include "Config.h"
 #include "Common.h"
 
 extern "C" {
 
-#define BUFFER_TIMEOUT 1000
+	DWORD GetTimeout() {
+		DWORD timeout;
+		if (!GetConfig(ZS_BUFFER_TIMEOUT, &timeout)) {
+			timeout = DEFAULT_BUFFER_TIMEOUT;
+		}
+		return timeout;
+	}
 
 	BOOL ARCHIVEDEF(ARCHIVE_OpenEntry)(const void* file, DWORD index, ARCHIVE_ENTRY_HANDLE** handle) {
 
@@ -77,6 +84,18 @@ extern "C" {
 		}
 	}
 
+	BOOL ARCHIVEDEF(ARCHIVE_BufferEntry)(QWORD position, void* user) {
+		try {
+			ARCHIVE_ENTRY_HANDLE* handle = (ARCHIVE_ENTRY_HANDLE*)user;
+			ArchiveEntry* entry = (ArchiveEntry*)handle->entry;
+			return entry->Buffer(position, GetTimeout());
+		}
+		catch (CSystemException e) {
+			//TODO: Warn.
+			return FALSE;
+		}
+	}
+
 	DWORD ARCHIVEDEF(ARCHIVE_ReadEntry)(void* buffer, DWORD length, void* user) {
 		try {
 			ARCHIVE_ENTRY_HANDLE* handle = (ARCHIVE_ENTRY_HANDLE*)user;
@@ -90,7 +109,7 @@ extern "C" {
 					if (position > size) {
 						position = size;
 					}
-					entry->Buffer(position, BUFFER_TIMEOUT);
+					entry->Buffer(position, GetTimeout());
 					count = entry->Read(buffer, length);
 				}
 			}
@@ -109,7 +128,7 @@ extern "C" {
 			if (!entry->Seek(offset)) {
 				QWORD size = entry->GetSize();
 				if (offset <= size) {
-					entry->Buffer(offset, BUFFER_TIMEOUT);
+					entry->Buffer(offset, GetTimeout());
 					return entry->Seek(offset);
 				}
 			}
