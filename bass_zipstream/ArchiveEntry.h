@@ -22,6 +22,8 @@ public:
 
 	UInt32 Read(void* buffer, UInt32 length);
 
+	UInt32 Read(void* buffer, UInt32 offset, UInt32 length);
+
 	bool Buffer(UInt64 position, UInt32 timeout);
 
 	bool Seek(UInt64 position);

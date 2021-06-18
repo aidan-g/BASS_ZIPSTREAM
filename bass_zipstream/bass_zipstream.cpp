@@ -56,7 +56,7 @@ extern "C" {
 				if (factor > 1) {
 					factor = 1;
 				}
-				QWORD position = ARCHIVE_GetEntryLength(handle) * factor;
+				QWORD position = (QWORD)((FLOAT)ARCHIVE_GetEntryLength(handle) * factor);
 				ARCHIVE_BufferEntry(position, handle);
 			}
 			return BASS_StreamCreateFileUser(STREAMFILE_BUFFER, flags, &procs, handle);

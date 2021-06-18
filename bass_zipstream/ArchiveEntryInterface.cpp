@@ -97,10 +97,14 @@ extern "C" {
 	}
 
 	DWORD ARCHIVEDEF(ARCHIVE_ReadEntry)(void* buffer, DWORD length, void* user) {
+		return ARCHIVE_ReadEntry2(buffer, 0, length, user);
+	}
+
+	DWORD ARCHIVEDEF(ARCHIVE_ReadEntry2)(void* buffer, DWORD offset, DWORD length, void* user) {
 		try {
 			ARCHIVE_ENTRY_HANDLE* handle = (ARCHIVE_ENTRY_HANDLE*)user;
 			ArchiveEntry* entry = (ArchiveEntry*)handle->entry;
-			DWORD count = entry->Read(buffer, length);
+			DWORD count = entry->Read(buffer, offset, length);
 			if (!count) {
 				QWORD position = entry->GetPosition();
 				QWORD size = entry->GetSize();
@@ -110,7 +114,7 @@ extern "C" {
 						position = size;
 					}
 					entry->Buffer(position, GetTimeout());
-					count = entry->Read(buffer, length);
+					count = entry->Read(buffer, offset, length);
 				}
 			}
 			return count;

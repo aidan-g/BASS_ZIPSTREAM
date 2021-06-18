@@ -1,4 +1,5 @@
 #include "ArchiveExtractCallback.h"
+#include "ArchiveExtractPrompt.h"
 
 #include "Archive.h"
 #include "CFileStream.h"
@@ -184,14 +185,14 @@ STDMETHODIMP ArchiveExtractCallback::SetCompleted(const UInt64* completeValue) {
 STDMETHODIMP ArchiveExtractCallback::CryptoGetTextPassword(BSTR* result) {
 	UString password;
 	if (!this->Parent->GetPassword(password)) {
-		if (!this->Prompt) {
+		if (!ArchiveExtractPrompt::CanPrompt()) {
 			return E_ACCESSDENIED;
 		}
 		UString fileName;
 		if (!this->Parent->IsOpen(fileName)) {
 			return ERROR_HANDLES_CLOSED;
 		}
-		if (!Prompt(fileName, password)) {
+		if (!ArchiveExtractPrompt::Prompt(fileName, password)) {
 			return E_ACCESSDENIED;
 		}
 		this->Parent->SetPassword(password);
@@ -199,8 +200,6 @@ STDMETHODIMP ArchiveExtractCallback::CryptoGetTextPassword(BSTR* result) {
 	StringToBstr(password, result);
 	return S_OK;
 }
-
-ArchiveExtractPrompt ArchiveExtractCallback::Prompt = 0;
 
 bool ArchiveExtractCallback::Cleanup() {
 	FString path;

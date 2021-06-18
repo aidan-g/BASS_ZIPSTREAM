@@ -18,6 +18,12 @@ namespace ManagedBass.ZipStream.Tests
             }
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            Utils.PasswordHandler.Reset();
+        }
+
         [TestCase("Music.7z", "Gift\\01 Smile.flac", 27873249, 811163365)]
         [TestCase("Music.7z", "Gift\\02 Again & Again.flac", 30222116, 519855218)]
         [TestCase("Music.7z", "Gift\\03 Emotional Times.flac", 23088352, 1409150913)]
@@ -43,6 +49,12 @@ namespace ManagedBass.ZipStream.Tests
                 Assert.AreEqual(0, ArchiveEntry.GetEntryPosition(entry));
                 Assert.AreEqual(length, ArchiveEntry.GetEntryLength(entry));
                 Assert.AreEqual(hashCode, Utils.GetEntryHashCode(entry));
+                Assert.AreEqual(length, ArchiveEntry.GetEntryPosition(entry));
+                Assert.IsTrue(ArchiveEntry.IsEOF(entry));
+
+                //This just checks GetEntryHashCode2 works, it uses ARCHIVE_ReadEntry2.
+                Assert.IsTrue(ArchiveEntry.SeekEntry(entry, 0));
+                Assert.AreEqual(hashCode, Utils.GetEntryHashCode2(entry));
                 Assert.AreEqual(length, ArchiveEntry.GetEntryPosition(entry));
                 Assert.IsTrue(ArchiveEntry.IsEOF(entry));
             }
@@ -144,7 +156,7 @@ namespace ManagedBass.ZipStream.Tests
             var fileName = Path.Combine(Location, "Media", archiveName);
             var index = Utils.GetEntryIndex(archiveName, entryPath);
 
-            Utils.PasswordHandler.SetPassword(fileName, password);
+            Utils.PasswordHandler.Set(fileName, password);
 
             var entry = default(IntPtr);
             if (!ArchiveEntry.OpenEntry(fileName, index, out entry))

@@ -1,4 +1,5 @@
 #include "Archive.h"
+#include "ArchiveExtractPrompt.h"
 #include "Common.h"
 
 #include "../7z/CPP/7zip/Common/FileStreams.h"
@@ -40,7 +41,14 @@ UInt64 ArchiveEntry::GetAvailable() {
 }
 
 UInt32 ArchiveEntry::Read(void* buffer, UInt32 length) {
+	return this->Read(buffer, 0, length);
+}
+
+UInt32 ArchiveEntry::Read(void* buffer, UInt32 offset, UInt32 length) {
 	UInt32 count;
+	if (offset) {
+		buffer = (byte*)buffer + (sizeof(byte) * offset);
+	}
 	if (this->InStream->Read(buffer, length, &count)) {
 		//TODO: Warn.
 		throw CSystemException(S_FALSE);
@@ -52,11 +60,22 @@ bool ArchiveEntry::Buffer(UInt64 position, UInt32 timeout) {
 	if (position > this->Size) {
 		return false;
 	}
+retry:
 	for (unsigned a = 0; a < timeout; a++) {
 		if (this->GetAvailable() >= position) {
 			return true;
 		}
+		Yield();
 		Sleep(1);
+		Yield();
+	}
+	//If buffer timed out then check if we're prompting for input (likely password).
+	UString fileName;
+	if (this->Parent->IsOpen(fileName)) {
+		if (ArchiveExtractPrompt::Wait(fileName)) {
+			//If a prompt was presented then try again.
+			goto retry;
+		}
 	}
 	//TODO: Warn.
 	return false;

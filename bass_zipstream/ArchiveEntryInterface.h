@@ -27,6 +27,8 @@ extern "C" {
 
 	__declspec(dllexport) DWORD ARCHIVEDEF(ARCHIVE_ReadEntry)(void* buffer, DWORD length, void* user);
 
+	__declspec(dllexport) DWORD ARCHIVEDEF(ARCHIVE_ReadEntry2)(void* buffer, DWORD offset, DWORD length, void* user);
+
 	__declspec(dllexport) BOOL ARCHIVEDEF(ARCHIVE_SeekEntry)(QWORD offset, void* user);
 
 	__declspec(dllexport) BOOL ARCHIVEDEF(ARCHIVE_IsEOF)(void* user);

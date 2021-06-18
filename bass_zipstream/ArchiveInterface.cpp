@@ -1,5 +1,6 @@
 #include "Archive.h"
 #include "ArchiveInterface.h"
+#include "ArchiveExtractPrompt.h"
 #include "Common.h"
 
 #include <wchar.h>
@@ -113,7 +114,7 @@ extern "C" {
 		}
 	}
 
-	static BOOL(*__prompt1__)(ARCHIVE_PASSWORD* password) = 0;
+	static BOOL(*__prompt1__)(ARCHIVE_PASSWORD* password) = NULL;
 
 	static bool __prompt2__(UString fileName, UString& password) {
 		if (!__prompt1__) {
@@ -130,6 +131,6 @@ extern "C" {
 
 	VOID ARCHIVEDEF(ARCHIVE_GetPassword)(BOOL(*prompt)(ARCHIVE_PASSWORD* password)) {
 		__prompt1__ = prompt;
-		ArchiveExtractCallback::Prompt = &__prompt2__;
+		ArchiveExtractPrompt::Handler = &__prompt2__;
 	}
 }

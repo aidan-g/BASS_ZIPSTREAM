@@ -9,8 +9,8 @@ namespace ManagedBass.ZipStream
         /// <summary>
         /// //Buffer 20% before creating stream.
         /// </summary>
-        const int DEFAULT_BUFFER_MIN = 20;
-        const int DEFAULT_BUFFER_TIMEOUT = 1000;
+        public const int DEFAULT_BUFFER_MIN = 20;
+        public const int DEFAULT_BUFFER_TIMEOUT = 1000;
 
         public static int BufferMin
         {

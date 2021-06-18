@@ -48,6 +48,14 @@ namespace ManagedBass.ZipStream
         }
 
         [DllImport(DllName)]
+        static extern int ARCHIVE_ReadEntry2([In, Out] byte[] buffer, int offset, int length, IntPtr instance);
+
+        public static int ReadEntry(IntPtr instance, byte[] buffer, int offset, int length)
+        {
+            return ARCHIVE_ReadEntry2(buffer, offset, length, instance);
+        }
+
+        [DllImport(DllName)]
         static extern bool ARCHIVE_SeekEntry(long offset, IntPtr instance);
 
         public static bool SeekEntry(IntPtr instance, long offset)

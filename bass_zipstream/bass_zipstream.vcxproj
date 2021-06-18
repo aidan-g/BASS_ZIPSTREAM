@@ -139,6 +139,7 @@
     <ClCompile Include="ArchiveEntry.cpp" />
     <ClCompile Include="ArchiveEntryInterface.cpp" />
     <ClCompile Include="ArchiveExtractCallback.cpp" />
+    <ClCompile Include="ArchiveExtractPrompt.cpp" />
     <ClCompile Include="ArchiveInterface.cpp" />
     <ClCompile Include="bass_zipstream.cpp" />
     <ClCompile Include="ArchiveExtractTask.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="ArchiveEntry.h" />
     <ClInclude Include="ArchiveEntryInterface.h" />
     <ClInclude Include="ArchiveExtractCallback.h" />
+    <ClInclude Include="ArchiveExtractPrompt.h" />
     <ClInclude Include="ArchiveInterface.h" />
     <ClInclude Include="bass_zipstream.h" />
     <ClInclude Include="CFile.h" />

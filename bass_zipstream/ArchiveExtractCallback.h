@@ -17,8 +17,6 @@ public:
 	UInt32 Index;
 };
 
-typedef bool (*ArchiveExtractPrompt)(UString fileName, UString& password);
-
 class ArchiveExtractCallback :
 	public IArchiveExtractCallback,
 	public ICryptoGetTextPassword,
@@ -58,8 +56,6 @@ public:
 	bool GetOutStream(CMyComPtr<IOutStream>& stream, int index);
 
 	STDMETHOD(CryptoGetTextPassword)(BSTR* password);
-
-	static ArchiveExtractPrompt Prompt;
 
 	static bool Cleanup();
 };
