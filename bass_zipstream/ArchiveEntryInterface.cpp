@@ -84,6 +84,25 @@ extern "C" {
 		}
 	}
 
+	BOOL ARCHIVEDEF(ARCHIVE_GetEntryResult)(HRESULT* result, void* user) {
+		try {
+			ARCHIVE_ENTRY_HANDLE* handle = (ARCHIVE_ENTRY_HANDLE*)user;
+			ArchiveEntry* entry = (ArchiveEntry*)handle->entry;
+			if (entry->IsCompleted()) {
+				*result = entry->GetResult();
+				return TRUE;
+			}
+			else {
+				*result = S_FALSE;
+				return FALSE;
+			}
+		}
+		catch (CSystemException e) {
+			//TODO: Warn.
+			return FALSE;
+		}
+	}
+
 	BOOL ARCHIVEDEF(ARCHIVE_BufferEntry)(QWORD position, void* user) {
 		try {
 			ARCHIVE_ENTRY_HANDLE* handle = (ARCHIVE_ENTRY_HANDLE*)user;

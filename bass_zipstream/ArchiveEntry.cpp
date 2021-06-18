@@ -40,6 +40,14 @@ UInt64 ArchiveEntry::GetAvailable() {
 	return this->Size;
 }
 
+bool ArchiveEntry::IsCompleted() {
+	return this->Task->IsCompleted();
+}
+
+HRESULT ArchiveEntry::GetResult() {
+	return this->Task->GetResult();
+}
+
 UInt32 ArchiveEntry::Read(void* buffer, UInt32 length) {
 	return this->Read(buffer, 0, length);
 }

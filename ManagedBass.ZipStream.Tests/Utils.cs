@@ -133,6 +133,21 @@ namespace ManagedBass.ZipStream.Tests
             return Math.Abs(hashCode);
         }
 
+        public static long GetEntryResult(IntPtr entry)
+        {
+            do
+            {
+                var result = default(long);
+                if (ArchiveEntry.GetEntryResult(entry, out result))
+                {
+                    return result;
+                }
+                Thread.Yield();
+                Thread.Sleep(5000);
+                Thread.Yield();
+            } while (true);
+        }
+
         public static class PasswordHandler
         {
             public static string FileName { get; private set; }

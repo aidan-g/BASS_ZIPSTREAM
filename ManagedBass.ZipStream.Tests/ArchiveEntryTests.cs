@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System;
 using System.IO;
+using System.Threading;
 
 namespace ManagedBass.ZipStream.Tests
 {
@@ -12,7 +13,15 @@ namespace ManagedBass.ZipStream.Tests
 
         public ArchiveEntryTests(bool cleanup)
         {
-            if (cleanup)
+            this.Cleanup = cleanup;
+        }
+
+        public bool Cleanup { get; private set; }
+
+        [SetUp]
+        public void SetUp()
+        {
+            if (this.Cleanup)
             {
                 Assert.IsTrue(Archive.Cleanup());
             }
@@ -171,6 +180,37 @@ namespace ManagedBass.ZipStream.Tests
                 Assert.AreEqual(hashCode, Utils.GetEntryHashCode(entry));
                 Assert.AreEqual(length, ArchiveEntry.GetEntryPosition(entry));
                 Assert.IsTrue(ArchiveEntry.IsEOF(entry));
+            }
+            finally
+            {
+                ArchiveEntry.CloseEntry(entry);
+            }
+        }
+
+        [TestCase("Music (Protected).zip", "Gift\\01 Smile.flac")]
+        [TestCase("Music (Protected).zip", "Gift\\02 Again & Again.flac")]
+        [TestCase("Music (Protected).zip", "Gift\\03 Emotional Times.flac")]
+        public void Test006(string archiveName, string entryPath)
+        {
+            if (!this.Cleanup)
+            {
+                Assert.Ignore("Requires clean state.");
+            }
+
+            var fileName = Path.Combine(Location, "Media", archiveName);
+            var index = Utils.GetEntryIndex(archiveName, entryPath);
+
+            var entry = default(IntPtr);
+            if (!ArchiveEntry.OpenEntry(fileName, index, out entry))
+            {
+                Assert.Fail("Failed to open entry.");
+            }
+
+            try
+            {
+                Assert.AreEqual(0, ArchiveEntry.GetEntryPosition(entry));
+                Assert.AreEqual(0, Utils.GetEntryHashCode(entry));
+                Assert.AreEqual(ArchiveEntry.RESULT_PASSWORD_REQUIRED, Utils.GetEntryResult(entry));
             }
             finally
             {

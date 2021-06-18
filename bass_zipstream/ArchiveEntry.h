@@ -20,6 +20,10 @@ public:
 
 	UInt64 GetAvailable();
 
+	bool IsCompleted();
+
+	HRESULT GetResult();
+
 	UInt32 Read(void* buffer, UInt32 length);
 
 	UInt32 Read(void* buffer, UInt32 offset, UInt32 length);

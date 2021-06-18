@@ -7,6 +7,10 @@ namespace ManagedBass.ZipStream
     {
         const string DllName = "bass_zipstream";
 
+        public const long RESULT_CANCELLED = 676;
+
+        public const long RESULT_PASSWORD_REQUIRED = 0x80070005L;
+
         [DllImport(DllName, CharSet = CharSet.Unicode)]
         static extern bool ARCHIVE_OpenEntry(string fileName, int index, out IntPtr instance);
 
@@ -37,6 +41,14 @@ namespace ManagedBass.ZipStream
         public static long GetEntryAvailable(IntPtr instance)
         {
             return ARCHIVE_GetEntryAvailable(instance);
+        }
+
+        [DllImport(DllName)]
+        static extern bool ARCHIVE_GetEntryResult(out long result, IntPtr instance);
+
+        public static bool GetEntryResult(IntPtr instance, out long result)
+        {
+            return ARCHIVE_GetEntryResult(out result, instance);
         }
 
         [DllImport(DllName)]

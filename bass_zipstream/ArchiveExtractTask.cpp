@@ -4,15 +4,17 @@
 ArchiveExtractTask::ArchiveExtractTask(CMyComPtr<IInArchive> archive, CMyComPtr<ArchiveExtractCallback> callback) {
 	this->Archive = archive;
 	this->Callback = callback;
+	this->Result = S_FALSE;
 	this->Completed = false;
 }
 
 bool ArchiveExtractTask::Start(const UInt32* indices, UInt32 count) {
 	this->Indices.Clear();
-	this->Completed = false;
 	for (unsigned a = 0; a < count; a++) {
 		this->Indices.Add(indices[a]);
 	}
+	this->Result = S_FALSE;
+	this->Completed = false;
 	return this->Thread.Create(ExtractThread, this) == 0;
 }
 
@@ -25,14 +27,11 @@ HRESULT ArchiveExtractTask::Run() {
 	for (unsigned a = 0; a < this->Indices.Size(); a++) {
 		indices[a] = this->Indices[a];
 	}
-	HRESULT result = this->Archive->Extract(indices, this->Indices.Size(), false, this->Callback);
+	this->Result = this->Archive->Extract(indices, this->Indices.Size(), false, this->Callback);
 	free(indices);
-	this->Completed = true;
-	if (result == ERROR_HANDLES_CLOSED) {
-		this->Cancelled = true;
-	}
 	this->Callback->CloseWriters();
-	return result;
+	this->Completed = true;
+	return this->Result;
 }
 
 bool ArchiveExtractTask::IsRunning(UInt32 index, UInt64& available) {
@@ -57,6 +56,14 @@ void ArchiveExtractTask::Cancel() {
 
 void ArchiveExtractTask::Wait() {
 	this->Thread.Wait();
+}
+
+bool ArchiveExtractTask::IsCompleted() {
+	return this->Completed;
+}
+
+HRESULT ArchiveExtractTask::GetResult() {
+	return this->Result;
 }
 
 static THREAD_FUNC_DECL ExtractThread(void* param)

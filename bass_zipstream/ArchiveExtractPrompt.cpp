@@ -21,7 +21,7 @@ void ArchiveExtractPrompt::RemoveFile(UString fileName) {
 ArchiveExtractPromptHandler ArchiveExtractPrompt::Handler = nullptr;
 
 bool ArchiveExtractPrompt::CanPrompt() {
-	return ArchiveExtractPrompt::Handler;
+	return ArchiveExtractPrompt::Handler != nullptr;
 }
 
 bool ArchiveExtractPrompt::Prompt(UString fileName, UString& password) {

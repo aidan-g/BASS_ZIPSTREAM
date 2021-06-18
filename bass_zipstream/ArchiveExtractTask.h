@@ -13,7 +13,7 @@ private:
 	CMyComPtr<ArchiveExtractCallback> Callback;
 	CRecordVector<UInt32> Indices;
 	NWindows::CThread Thread;
-	bool Cancelled;
+	HRESULT Result;
 	bool Completed;
 
 public:
@@ -30,5 +30,9 @@ public:
 	void Cancel();
 
 	void Wait();
+
+	bool IsCompleted();
+
+	HRESULT GetResult();
 };
 

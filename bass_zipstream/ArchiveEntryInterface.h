@@ -23,6 +23,8 @@ extern "C" {
 
 	__declspec(dllexport) QWORD ARCHIVEDEF(ARCHIVE_GetEntryAvailable)(void* user);
 
+	__declspec(dllexport) BOOL ARCHIVEDEF(ARCHIVE_GetEntryResult)(HRESULT* result, void* user);
+
 	__declspec(dllexport) BOOL ARCHIVEDEF(ARCHIVE_BufferEntry)(QWORD position, void* user);
 
 	__declspec(dllexport) DWORD ARCHIVEDEF(ARCHIVE_ReadEntry)(void* buffer, DWORD length, void* user);
