@@ -155,8 +155,6 @@ namespace ManagedBass.ZipStream.Tests
             }
         }
 
-
-
         [TestCase("Music (Protected).zip", "Gift\\01 Smile.flac", "password", 27873249, 811163365)]
         [TestCase("Music (Protected).zip", "Gift\\02 Again & Again.flac", "password", 30222116, 519855218)]
         [TestCase("Music (Protected).zip", "Gift\\03 Emotional Times.flac", "password", 23088352, 1409150913)]
@@ -187,10 +185,13 @@ namespace ManagedBass.ZipStream.Tests
             }
         }
 
-        [TestCase("Music (Protected).zip", "Gift\\01 Smile.flac")]
-        [TestCase("Music (Protected).zip", "Gift\\02 Again & Again.flac")]
-        [TestCase("Music (Protected).zip", "Gift\\03 Emotional Times.flac")]
-        public void Test006(string archiveName, string entryPath)
+        [TestCase("Music (Protected).zip", "Gift\\01 Smile.flac", "")]
+        [TestCase("Music (Protected).zip", "Gift\\01 Smile.flac", "wrong")]
+        [TestCase("Music (Protected).zip", "Gift\\02 Again & Again.flac", "")]
+        [TestCase("Music (Protected).zip", "Gift\\02 Again & Again.flac", "wrong")]
+        [TestCase("Music (Protected).zip", "Gift\\03 Emotional Times.flac", "")]
+        [TestCase("Music (Protected).zip", "Gift\\03 Emotional Times.flac", "wrong")]
+        public void Test006(string archiveName, string entryPath, string password)
         {
             if (!this.Cleanup)
             {
@@ -199,6 +200,15 @@ namespace ManagedBass.ZipStream.Tests
 
             var fileName = Path.Combine(Location, "Media", archiveName);
             var index = Utils.GetEntryIndex(archiveName, entryPath);
+
+            if (string.IsNullOrEmpty(password))
+            {
+                Utils.PasswordHandler.Reset();
+            }
+            else
+            {
+                Utils.PasswordHandler.Set(fileName, password);
+            }
 
             var entry = default(IntPtr);
             if (!ArchiveEntry.OpenEntry(fileName, index, out entry))

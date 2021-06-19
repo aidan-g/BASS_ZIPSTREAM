@@ -171,6 +171,13 @@ STDMETHODIMP ArchiveExtractCallback::PrepareOperation(Int32 askExtractMode) {
 }
 
 STDMETHODIMP ArchiveExtractCallback::SetOperationResult(Int32 opRes) {
+	switch (opRes) {
+	case NArchive::NExtract::NOperationResult::kOK:
+		return S_OK;
+	case NArchive::NExtract::NOperationResult::kWrongPassword:
+		return E_ACCESSDENIED;
+	}
+	//Unknown failure?
 	return S_OK;
 }
 
