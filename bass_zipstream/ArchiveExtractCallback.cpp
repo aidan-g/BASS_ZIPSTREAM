@@ -75,6 +75,7 @@ bool ArchiveExtractCallback::OpenFile(UInt32 index) {
 	}
 
 	if (!this->OpenFile(file, overwrite)) {
+		delete file;
 		return false;
 	}
 

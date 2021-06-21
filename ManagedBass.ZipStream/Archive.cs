@@ -48,11 +48,11 @@ namespace ManagedBass.ZipStream
         }
 
         [DllImport(DllName)]
-        static extern bool ARCHIVE_GetEntry(IntPtr instance, out ArchiveEntry Entry, int index);
+        static extern bool ARCHIVE_GetEntry(IntPtr instance, out ArchiveEntry entry, int index);
 
-        public static bool GetEntry(IntPtr instance, out ArchiveEntry Entry, int index)
+        public static bool GetEntry(IntPtr instance, out ArchiveEntry entry, int index)
         {
-            return ARCHIVE_GetEntry(instance, out Entry, index);
+            return ARCHIVE_GetEntry(instance, out entry, index);
         }
 
         [DllImport(DllName)]

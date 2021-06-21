@@ -106,7 +106,7 @@ namespace ManagedBass.ZipStream.Tests
             var fileName = Path.Combine(Location, "Media", archiveName);
             var count = Utils.GetEntryCount(fileName);
 
-            for (var a = 0; a < iterations; a++)
+            Utils.Iterations(a =>
             {
                 for (var b = 0; b < count; b++)
                 {
@@ -126,7 +126,7 @@ namespace ManagedBass.ZipStream.Tests
                         ArchiveEntry.CloseEntry(entry);
                     }
                 }
-            }
+            }, iterations);
         }
 
         [TestCase("Music.zip")]
@@ -163,7 +163,7 @@ namespace ManagedBass.ZipStream.Tests
             var fileName = Path.Combine(Location, "Media", archiveName);
             var index = Utils.GetEntryIndex(archiveName, entryPath);
 
-            Utils.PasswordHandler.Set(fileName, password);
+            Utils.PasswordHandler.Set(fileName, password, 5000);
 
             var entry = default(IntPtr);
             if (!ArchiveEntry.OpenEntry(fileName, index, out entry))
@@ -207,7 +207,7 @@ namespace ManagedBass.ZipStream.Tests
             }
             else
             {
-                Utils.PasswordHandler.Set(fileName, password);
+                Utils.PasswordHandler.Set(fileName, password, 5000);
             }
 
             var entry = default(IntPtr);
@@ -226,6 +226,37 @@ namespace ManagedBass.ZipStream.Tests
             {
                 ArchiveEntry.CloseEntry(entry);
             }
+        }
+
+        [TestCase("Music (Protected).zip", "password")]
+        public void Test007(string archiveName, string password)
+        {
+            var fileName = Path.Combine(Location, "Media", archiveName);
+            var count = Utils.GetEntryCount(fileName);
+
+            Utils.PasswordHandler.Set(fileName, password, 5000);
+
+            Utils.ParallelIterations(a =>
+            {
+                var entry = default(IntPtr);
+                var isFile = default(bool);
+                Utils.GetEntryType(archiveName, a, out isFile);
+                var isOpen = ArchiveEntry.OpenEntry(fileName, a, out entry);
+                Assert.AreEqual(isFile, isOpen);
+
+                try
+                {
+                    if (isFile)
+                    {
+                        Utils.GetEntryHashCode(entry);
+                        Assert.IsTrue(ArchiveEntry.IsEOF(entry));
+                    }
+                }
+                finally
+                {
+                    ArchiveEntry.CloseEntry(entry);
+                }
+            }, count);
         }
     }
 }

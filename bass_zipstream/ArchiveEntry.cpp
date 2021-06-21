@@ -12,7 +12,9 @@ ArchiveEntry::ArchiveEntry(Archive* parent, int index) {
 
 void ArchiveEntry::Open() {
 	this->Parent->GetEntry(this->Path, this->Size, this->Index);
-	this->Extract();
+	if (this->Size) {
+		this->Extract();
+	}
 }
 
 void ArchiveEntry::Extract() {
@@ -73,9 +75,7 @@ retry:
 		if (this->GetAvailable() >= position) {
 			return true;
 		}
-		Yield();
 		Sleep(1);
-		Yield();
 	}
 	//If buffer timed out then check if we're prompting for input (likely password).
 	UString fileName;

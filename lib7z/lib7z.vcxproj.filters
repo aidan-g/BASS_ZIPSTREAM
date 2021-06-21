@@ -520,6 +520,9 @@
     <ClCompile Include="..\7z\CPP\7zip\Compress\BcjCoder.cpp">
       <Filter>Compress</Filter>
     </ClCompile>
+    <ClCompile Include="..\7z\CPP\Windows\Synchronization.cpp">
+      <Filter>Windows</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\7z\CPP\Common\Common.h">
@@ -1052,6 +1055,9 @@
     </ClInclude>
     <ClInclude Include="..\7z\CPP\7zip\Compress\BcjCoder.h">
       <Filter>Compress</Filter>
+    </ClInclude>
+    <ClInclude Include="..\7z\CPP\Windows\Synchronization.h">
+      <Filter>Windows</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

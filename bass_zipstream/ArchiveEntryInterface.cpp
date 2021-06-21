@@ -16,6 +16,10 @@ extern "C" {
 
 	BOOL ARCHIVEDEF(ARCHIVE_OpenEntry)(const void* file, DWORD index, ARCHIVE_ENTRY_HANDLE** handle) {
 
+		if (!file || !handle) {
+			return FALSE;
+		}
+
 		*handle = (ARCHIVE_ENTRY_HANDLE*)malloc(sizeof(ARCHIVE_ENTRY_HANDLE));
 		if (!*handle) {
 			//TODO: Warn.
@@ -29,26 +33,35 @@ extern "C" {
 			archive = new Archive();
 			archive->Open(fileName);
 			entry = archive->OpenEntry(index);
-			(*handle)->archive = archive;
-			(*handle)->entry = entry;
-			return TRUE;
+			if (entry->GetSize()) {
+				(*handle)->archive = archive;
+				(*handle)->entry = entry;
+				return TRUE;
+			}
+			else {
+				//TODO: Warn, not a file.
+			}
 		}
 		catch (CSystemException e) {
-			if (*handle) {
-				free(*handle);
-			}
-			if (entry) {
-				delete entry;
-			}
-			if (archive) {
-				delete archive;
-			}
 			//TODO: Warn.
-			return FALSE;
 		}
+		if (*handle) {
+			free(*handle);
+			*handle = NULL;
+		}
+		if (entry) {
+			delete entry;
+		}
+		if (archive) {
+			delete archive;
+		}
+		return FALSE;
 	}
 
 	QWORD ARCHIVEDEF(ARCHIVE_GetEntryPosition)(void* user) {
+		if (!user) {
+			return 0;
+		}
 		try {
 			ARCHIVE_ENTRY_HANDLE* handle = (ARCHIVE_ENTRY_HANDLE*)user;
 			ArchiveEntry* entry = (ArchiveEntry*)handle->entry;
@@ -61,6 +74,9 @@ extern "C" {
 	}
 
 	QWORD ARCHIVEDEF(ARCHIVE_GetEntryLength)(void* user) {
+		if (!user) {
+			return 0;
+		}
 		try {
 			ARCHIVE_ENTRY_HANDLE* handle = (ARCHIVE_ENTRY_HANDLE*)user;
 			ArchiveEntry* entry = (ArchiveEntry*)handle->entry;
@@ -73,6 +89,9 @@ extern "C" {
 	}
 
 	QWORD ARCHIVEDEF(ARCHIVE_GetEntryAvailable)(void* user) {
+		if (!user) {
+			return 0;
+		}
 		try {
 			ARCHIVE_ENTRY_HANDLE* handle = (ARCHIVE_ENTRY_HANDLE*)user;
 			ArchiveEntry* entry = (ArchiveEntry*)handle->entry;
@@ -85,6 +104,9 @@ extern "C" {
 	}
 
 	BOOL ARCHIVEDEF(ARCHIVE_GetEntryResult)(HRESULT* result, void* user) {
+		if (!result || !user) {
+			return 0;
+		}
 		try {
 			ARCHIVE_ENTRY_HANDLE* handle = (ARCHIVE_ENTRY_HANDLE*)user;
 			ArchiveEntry* entry = (ArchiveEntry*)handle->entry;
@@ -104,6 +126,9 @@ extern "C" {
 	}
 
 	BOOL ARCHIVEDEF(ARCHIVE_BufferEntry)(QWORD position, void* user) {
+		if (!user) {
+			return FALSE;
+		}
 		try {
 			ARCHIVE_ENTRY_HANDLE* handle = (ARCHIVE_ENTRY_HANDLE*)user;
 			ArchiveEntry* entry = (ArchiveEntry*)handle->entry;
@@ -120,6 +145,9 @@ extern "C" {
 	}
 
 	DWORD ARCHIVEDEF(ARCHIVE_ReadEntry2)(void* buffer, DWORD offset, DWORD length, void* user) {
+		if (!buffer || !length || !user) {
+			return 0;
+		}
 		try {
 			ARCHIVE_ENTRY_HANDLE* handle = (ARCHIVE_ENTRY_HANDLE*)user;
 			ArchiveEntry* entry = (ArchiveEntry*)handle->entry;
@@ -145,6 +173,9 @@ extern "C" {
 	}
 
 	BOOL ARCHIVEDEF(ARCHIVE_SeekEntry)(QWORD offset, void* user) {
+		if (!user) {
+			return FALSE;
+		}
 		try {
 			ARCHIVE_ENTRY_HANDLE* handle = (ARCHIVE_ENTRY_HANDLE*)user;
 			ArchiveEntry* entry = (ArchiveEntry*)handle->entry;
@@ -164,6 +195,9 @@ extern "C" {
 	}
 
 	BOOL ARCHIVEDEF(ARCHIVE_IsEOF)(void* user) {
+		if (!user) {
+			return FALSE;
+		}
 		try {
 			ARCHIVE_ENTRY_HANDLE* handle = (ARCHIVE_ENTRY_HANDLE*)user;
 			ArchiveEntry* entry = (ArchiveEntry*)handle->entry;
@@ -176,6 +210,9 @@ extern "C" {
 	}
 
 	VOID ARCHIVEDEF(ARCHIVE_CloseEntry)(void* user) {
+		if (!user) {
+			return;
+		}
 		try {
 			ARCHIVE_ENTRY_HANDLE* handle = (ARCHIVE_ENTRY_HANDLE*)user;
 			Archive* archive = (Archive*)handle->archive;

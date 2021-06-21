@@ -17,15 +17,21 @@ extern "C" {
 			return TRUE;
 		}
 		catch (CSystemException e) {
+			*instance = nullptr;
 			//TODO: Warn.
 			return FALSE;
 		}
 	}
 
 	BOOL ARCHIVEDEF(ARCHIVE_GetFormatCount)(void* instance, DWORD* count) {
+		if (!instance) {
+			return FALSE;
+		}
 		try {
 			Archive* archive = (Archive*)instance;
-			*count = archive->GetFormatCount();
+			if (count) {
+				*count = archive->GetFormatCount();
+			}
 			return TRUE;
 		}
 		catch (CSystemException e) {
@@ -35,13 +41,18 @@ extern "C" {
 	}
 
 	BOOL ARCHIVEDEF(ARCHIVE_GetFormat)(void* instance, ARCHIVE_FORMAT* format, DWORD index) {
+		if (!instance) {
+			return FALSE;
+		}
 		try {
 			Archive* archive = (Archive*)instance;
 			UString name;
 			UString extensions;
 			archive->GetFormat(name, extensions, index);
-			COPYSTRING(format->name, name);
-			COPYSTRING(format->extensions, extensions);
+			if (format) {
+				COPYSTRING(format->name, name);
+				COPYSTRING(format->extensions, extensions);
+			}
 			return TRUE;
 		}
 		catch (CSystemException e) {
@@ -51,6 +62,9 @@ extern "C" {
 	}
 
 	BOOL ARCHIVEDEF(ARCHIVE_Open)(void* instance, const void* file) {
+		if (!instance || !file) {
+			return FALSE;
+		}
 		try {
 			Archive* archive = (Archive*)instance;
 			UString fileName = UString((const wchar_t*)file);
@@ -64,9 +78,14 @@ extern "C" {
 	}
 
 	BOOL ARCHIVEDEF(ARCHIVE_GetEntryCount)(void* instance, DWORD* count) {
+		if (!instance) {
+			return FALSE;
+		}
 		try {
 			Archive* archive = (Archive*)instance;
-			*count = archive->GetEntryCount();
+			if (count) {
+				*count = archive->GetEntryCount();
+			}
 			return TRUE;
 		}
 		catch (CSystemException e) {
@@ -76,11 +95,16 @@ extern "C" {
 	}
 
 	BOOL ARCHIVEDEF(ARCHIVE_GetEntry)(void* instance, ARCHIVE_ENTRY* entry, DWORD index) {
+		if (!instance) {
+			return FALSE;
+		}
 		try {
 			Archive* archive = (Archive*)instance;
-			UString path;
-			archive->GetEntry(path, entry->size, index);
-			COPYSTRING(entry->path, path);
+			if (entry) {
+				UString path;
+				archive->GetEntry(path, entry->size, index);
+				COPYSTRING(entry->path, path);
+			}
 			return TRUE;
 		}
 		catch (CSystemException e) {
@@ -90,6 +114,9 @@ extern "C" {
 	}
 
 	VOID ARCHIVEDEF(ARCHIVE_Close)(void* instance) {
+		if (!instance) {
+			return;
+		}
 		try {
 			Archive* archive = (Archive*)instance;
 			archive->Close();
@@ -100,6 +127,9 @@ extern "C" {
 	}
 
 	VOID ARCHIVEDEF(ARCHIVE_Release)(void* instance) {
+		if (!instance) {
+			return;
+		}
 		ARCHIVE_Close(instance);
 		delete instance;
 	}

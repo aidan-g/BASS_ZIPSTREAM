@@ -4,6 +4,7 @@ using System.IO;
 
 namespace ManagedBass.ZipStream.Tests
 {
+    [Explicit]
     [TestFixture(true)]
     [TestFixture(false)]
     public class BassZipStreamTests

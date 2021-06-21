@@ -2,6 +2,7 @@
 
 #include "../7z/CPP/Common/MyString.h"
 #include "../7z/CPP/Common/MyVector.h"
+#include "../7z/CPP/Windows/Synchronization.h"
 
 typedef bool (*ArchiveExtractPromptHandler)(UString fileName, UString& password);
 
@@ -9,6 +10,7 @@ class ArchiveExtractPrompt
 {
 private:
 	static CObjectVector<UString> FileNames;
+	static NWindows::NSynchronization::CCriticalSection SyncRoot;
 
 	static bool ContainsFile(UString fileName);
 

@@ -1,17 +1,21 @@
 #include "ArchiveExtractPrompt.h"
 
 CObjectVector<UString> ArchiveExtractPrompt::FileNames;
+NWindows::NSynchronization::CCriticalSection ArchiveExtractPrompt::SyncRoot;
 
 bool ArchiveExtractPrompt::ContainsFile(UString fileName) {
+	NWindows::NSynchronization::CCriticalSectionLock lock(ArchiveExtractPrompt::SyncRoot);
 	int index = ArchiveExtractPrompt::FileNames.FindInSorted(fileName);
 	return index >= 0;
 }
 
 void ArchiveExtractPrompt::AddFile(UString fileName) {
+	NWindows::NSynchronization::CCriticalSectionLock lock(ArchiveExtractPrompt::SyncRoot);
 	ArchiveExtractPrompt::FileNames.Add(fileName);
 }
 
 void ArchiveExtractPrompt::RemoveFile(UString fileName) {
+	NWindows::NSynchronization::CCriticalSectionLock lock(ArchiveExtractPrompt::SyncRoot);
 	int index = ArchiveExtractPrompt::FileNames.FindInSorted(fileName);
 	if (index >= 0) {
 		ArchiveExtractPrompt::FileNames.Delete(index);
@@ -41,9 +45,7 @@ bool ArchiveExtractPrompt::Wait(UString fileName) {
 	bool result = false;
 	while (ArchiveExtractPrompt::ContainsFile(fileName)) {
 		result = true;
-		Yield();
 		Sleep(100);
-		Yield();
 	}
 	return result;
 }

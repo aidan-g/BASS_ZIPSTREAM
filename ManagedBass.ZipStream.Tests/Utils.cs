@@ -2,12 +2,26 @@
 using System;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace ManagedBass.ZipStream.Tests
 {
     public static class Utils
     {
         private static readonly string Location = Path.GetDirectoryName(typeof(Utils).Assembly.Location);
+
+        public static void Iterations(Action<int> action, int count)
+        {
+            for (var a = 0; a < count; a++)
+            {
+                action(a);
+            }
+        }
+
+        public static void ParallelIterations(Action<int> action, int count)
+        {
+            Parallel.For(0, count, action);
+        }
 
         public static int GetEntryCount(string archiveName)
         {
@@ -32,6 +46,36 @@ namespace ManagedBass.ZipStream.Tests
                     Assert.Fail("Failed to get entry count.");
                 }
                 return count;
+            }
+            finally
+            {
+                Archive.Release(archive);
+            }
+        }
+
+        public static void GetEntryType(string archiveName, int index, out bool isFile)
+        {
+            var fileName = Path.Combine(Location, "Media", archiveName);
+
+            var archive = default(IntPtr);
+            if (!Archive.Create(out archive))
+            {
+                Assert.Fail("Failed to create archive.");
+            }
+
+            if (!Archive.Open(archive, fileName))
+            {
+                Assert.Fail("Failed to open archive.");
+            }
+
+            try
+            {
+                var entry = default(Archive.ArchiveEntry);
+                if (!Archive.GetEntry(archive, out entry, index))
+                {
+                    Assert.Fail("Failed to get entry.");
+                }
+                isFile = entry.size > 0;
             }
             finally
             {
@@ -154,14 +198,14 @@ namespace ManagedBass.ZipStream.Tests
 
             public static string Password { get; private set; }
 
-            public static void Set(string fileName, string password)
+            public static int Delay { get; private set; }
+
+            public static void Set(string fileName, string password, int delay)
             {
                 FileName = fileName;
                 Password = password;
+                Delay = delay;
                 Archive.GetPassword(Get);
-                //We need a shorter timeout as Sleep(1) can actually take much longer than 1ms.
-                //This 100ms timeout combined with the 5000ms sleep in the password handler ensures all code is exercised.
-                BassZipStream.BufferTimeout = 100;
             }
 
             public static bool Get(ref Archive.ArchivePassword password)
@@ -170,20 +214,22 @@ namespace ManagedBass.ZipStream.Tests
                 {
                     return false;
                 }
-                //This pause is long enough to cause the buffer operation to time out.
-                Thread.Yield();
-                Thread.Sleep(5000);
-                Thread.Yield();
+                if (Delay > 0)
+                {
+                    Thread.Yield();
+                    Thread.Sleep(Delay);
+                    Thread.Yield();
+                }
                 password.password = Password;
                 return !string.IsNullOrEmpty(password.password);
             }
 
             public static void Reset()
             {
+                Archive.GetPassword(null);
                 FileName = string.Empty;
                 Password = string.Empty;
-                Archive.GetPassword(null);
-                BassZipStream.BufferTimeout = BassZipStream.DEFAULT_BUFFER_TIMEOUT;
+                Delay = 0;
             }
         }
     }

@@ -139,6 +139,7 @@
     <ClCompile Include="..\7z\CPP\Windows\FileIO.cpp" />
     <ClCompile Include="..\7z\CPP\Windows\PropVariant.cpp" />
     <ClCompile Include="..\7z\CPP\Windows\PropVariantUtils.cpp" />
+    <ClCompile Include="..\7z\CPP\Windows\Synchronization.cpp" />
     <ClCompile Include="..\7z\CPP\Windows\System.cpp" />
     <ClCompile Include="..\7z\CPP\Windows\TimeUtils.cpp" />
     <ClCompile Include="..\7z\C\7zAlloc.c" />
@@ -327,6 +328,7 @@
     <ClInclude Include="..\7z\CPP\Windows\FileIO.h" />
     <ClInclude Include="..\7z\CPP\Windows\PropVariant.h" />
     <ClInclude Include="..\7z\CPP\Windows\PropVariantUtils.h" />
+    <ClInclude Include="..\7z\CPP\Windows\Synchronization.h" />
     <ClInclude Include="..\7z\CPP\Windows\System.h" />
     <ClInclude Include="..\7z\CPP\Windows\TimeUtils.h" />
     <ClInclude Include="..\7z\C\7z.h" />
