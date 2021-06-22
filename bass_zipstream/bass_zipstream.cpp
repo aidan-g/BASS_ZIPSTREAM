@@ -3,6 +3,7 @@
 #include "bass_zipstream.h"
 #include "ArchiveEntryInterface.h"
 #include "Common.h"
+#include "ErrorInterface.h"
 
 extern "C" {
 
@@ -44,7 +45,6 @@ extern "C" {
 		try {
 			ARCHIVE_ENTRY_HANDLE* handle;
 			if (!ARCHIVE_OpenEntry(file, index, &handle)) {
-				//TODO: Warn.
 				return 0;
 			}
 			DWORD min;
@@ -62,7 +62,7 @@ extern "C" {
 			return BASS_StreamCreateFileUser(STREAMFILE_BUFFER, flags, &procs, handle);
 		}
 		catch (CSystemException e) {
-			//TODO: Warn.
+			ARCHIVE_SetLastError(e.ErrorCode);
 			return 0;
 		}
 	}

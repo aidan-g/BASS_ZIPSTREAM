@@ -21,8 +21,7 @@ bool ArchiveExtractTask::Start(const UInt32* indices, UInt32 count) {
 HRESULT ArchiveExtractTask::Run() {
 	UInt32* indices = (UInt32*)malloc(sizeof(UInt32) * this->Indices.Size());
 	if (!indices) {
-		//TODO: Warn.
-		return S_FALSE;
+		return E_OUTOFMEMORY;
 	}
 	for (unsigned a = 0; a < this->Indices.Size(); a++) {
 		indices[a] = this->Indices[a];

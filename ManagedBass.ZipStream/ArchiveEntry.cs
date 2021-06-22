@@ -7,6 +7,8 @@ namespace ManagedBass.ZipStream
     {
         const string DllName = "bass_zipstream";
 
+        public const long RESULT_OK = 0;
+
         public const long RESULT_CANCELLED = 676;
 
         public const long RESULT_PASSWORD_REQUIRED = 0x80070005L;

@@ -2,6 +2,7 @@
 #include "ArchiveInterface.h"
 #include "ArchiveExtractPrompt.h"
 #include "Common.h"
+#include "ErrorInterface.h"
 
 #include <wchar.h>
 
@@ -18,7 +19,7 @@ extern "C" {
 		}
 		catch (CSystemException e) {
 			*instance = nullptr;
-			//TODO: Warn.
+			ARCHIVE_SetLastError(e.ErrorCode);
 			return FALSE;
 		}
 	}
@@ -35,7 +36,7 @@ extern "C" {
 			return TRUE;
 		}
 		catch (CSystemException e) {
-			//TODO: Warn.
+			ARCHIVE_SetLastError(e.ErrorCode);
 			return FALSE;
 		}
 	}
@@ -56,7 +57,7 @@ extern "C" {
 			return TRUE;
 		}
 		catch (CSystemException e) {
-			//TODO: Warn.
+			ARCHIVE_SetLastError(e.ErrorCode);
 			return FALSE;
 		}
 	}
@@ -72,7 +73,7 @@ extern "C" {
 			return TRUE;
 		}
 		catch (CSystemException e) {
-			//TODO: Warn.
+			ARCHIVE_SetLastError(e.ErrorCode);
 			return FALSE;
 		}
 	}
@@ -89,7 +90,7 @@ extern "C" {
 			return TRUE;
 		}
 		catch (CSystemException e) {
-			//TODO: Warn.
+			ARCHIVE_SetLastError(e.ErrorCode);
 			return FALSE;
 		}
 	}
@@ -108,7 +109,7 @@ extern "C" {
 			return TRUE;
 		}
 		catch (CSystemException e) {
-			//TODO: Warn.
+			ARCHIVE_SetLastError(e.ErrorCode);
 			return FALSE;
 		}
 	}
@@ -122,7 +123,7 @@ extern "C" {
 			archive->Close();
 		}
 		catch (CSystemException e) {
-			//TODO: Warn.
+			ARCHIVE_SetLastError(e.ErrorCode);
 		}
 	}
 
@@ -139,7 +140,7 @@ extern "C" {
 			return Archive::Cleanup();
 		}
 		catch (CSystemException e) {
-			//TODO: Warn.
+			ARCHIVE_SetLastError(e.ErrorCode);
 			return FALSE;
 		}
 	}

@@ -23,9 +23,9 @@ void ArchiveEntry::Extract() {
 
 UInt64 ArchiveEntry::GetPosition() {
 	UInt64 position;
-	if (this->InStream->Seek(0, STREAM_SEEK_CUR, &position) != S_OK) {
-		//TODO: Warn.
-		throw CSystemException(S_FALSE);
+	HRESULT result = this->InStream->Seek(0, STREAM_SEEK_CUR, &position);
+	if (result != S_OK) {
+		throw CSystemException(result);
 	}
 	return position;
 }
@@ -59,9 +59,9 @@ UInt32 ArchiveEntry::Read(void* buffer, UInt32 offset, UInt32 length) {
 	if (offset) {
 		buffer = (byte*)buffer + (sizeof(byte) * offset);
 	}
-	if (this->InStream->Read(buffer, length, &count)) {
-		//TODO: Warn.
-		throw CSystemException(S_FALSE);
+	HRESULT result = this->InStream->Read(buffer, length, &count);
+	if (result != S_OK) {
+		throw CSystemException(result);
 	}
 	return count;
 }
@@ -85,7 +85,6 @@ retry:
 			goto retry;
 		}
 	}
-	//TODO: Warn.
 	return false;
 }
 
@@ -96,15 +95,11 @@ bool ArchiveEntry::Seek(UInt64 position) {
 	if (this->InStream->Seek(position, STREAM_SEEK_SET, nullptr) == S_OK) {
 		return true;
 	}
-	//TODO: Warn.
 	return false;
 }
 
 void ArchiveEntry::Close() {
 	if (this->Task) {
 		this->Task->Cancel();
-	}
-	if (this->InStream) {
-		//TODO: Close input stream.
 	}
 }

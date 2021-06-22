@@ -21,8 +21,7 @@ void Archive::LoadCodecs() {
 void Archive::LoadFormat() {
 	this->FormatIndex = this->Codecs->FindFormatForArchiveName(this->FileName);
 	if (this->FormatIndex < 0) {
-		//TODO: Warn.
-		throw CSystemException(S_FALSE);
+		throw CSystemException(E_NOTIMPL);
 	}
 }
 
@@ -56,27 +55,23 @@ void Archive::CreateInStream() {
 	CInFileStream* fileStream = new CInFileStream;
 	this->InStream = fileStream;
 	if (!fileStream->Open(this->FileName)) {
-		//TODO: Warn.
-		throw CSystemException(S_FALSE);
+		//Hopefully there's an error from IO.
+		throw CSystemException(::GetLastError());
 	}
 }
 
 void Archive::CreateInArchive() {
-	if (this->Codecs->CreateInArchive(this->FormatIndex, this->InArchive) != S_OK) {
-		//TODO: Warn.
-		throw CSystemException(S_FALSE);
-	}
-	if (!this->InArchive) {
-		//TODO: Warn.
-		throw CSystemException(S_FALSE);
+	HRESULT result = this->Codecs->CreateInArchive(this->FormatIndex, this->InArchive);
+	if (result != S_OK) {
+		throw CSystemException(result);
 	}
 }
 
 void Archive::OpenInArchive() {
 	UInt64 maxStartPosition = 1 << 23;
-	if (this->InArchive->Open(this->InStream, &maxStartPosition, nullptr) != S_OK) {
-		//TODO: Warn.
-		throw CSystemException(S_FALSE);
+	HRESULT result = this->InArchive->Open(this->InStream, &maxStartPosition, nullptr);
+	if (result != S_OK) {
+		throw CSystemException(result);
 	}
 }
 
@@ -126,17 +121,17 @@ void Archive::SetPassword(UString password) {
 
 int Archive::GetEntryCount() {
 	UInt32 count;
-	if (this->InArchive->GetNumberOfItems(&count) != S_OK) {
-		//TODO: Warn.
-		throw CSystemException(S_FALSE);
+	HRESULT result = this->InArchive->GetNumberOfItems(&count);
+	if (result != S_OK) {
+		throw CSystemException(result);
 	}
 	return count;
 }
 
 void Archive::GetEntry(UString& path, UInt64& size, int index) {
 	if (!this->ReadProperty(path, kpidPath, index)) {
-		//TODO: Warn.
-		throw CSystemException(S_FALSE);
+		//Could not read entry name for some reason.
+		throw CSystemException(E_NOTIMPL);
 	}
 	if (!this->ReadProperty(size, kpidSize, index)) {
 		//Not a file.
@@ -151,8 +146,8 @@ void Archive::ExtractEntry(CMyComPtr<IInStream>& stream, CMyComPtr<ArchiveExtrac
 
 	ArchiveExtractCallback* callback = new ArchiveExtractCallback(this);
 	if (!callback->OpenFiles(indices, 1)) {
-		//TODO: Warn.
-		throw CSystemException(S_FALSE);
+		//Hopefully there's an error from IO.
+		throw CSystemException(::GetLastError());
 	}
 
 	if (!callback->GetInStream(stream, index)) {
@@ -162,8 +157,8 @@ void Archive::ExtractEntry(CMyComPtr<IInStream>& stream, CMyComPtr<ArchiveExtrac
 
 	task = new ArchiveExtractTask(this->InArchive, callback);
 	if (!task->Start(indices, 1)) {
-		//TODO: Warn.
-		throw CSystemException(S_FALSE);
+		//Hopefully there's an error from thread start.
+		throw CSystemException(::GetLastError());
 	}
 
 	this->Tasks.Add(task);
@@ -191,9 +186,6 @@ void Archive::Close() {
 	this->WaitForTasks();
 	if (this->InArchive) {
 		this->InArchive->Close();
-	}
-	if (this->InStream) {
-		//TODO: Close input stream.
 	}
 	this->FileName.Empty();
 }

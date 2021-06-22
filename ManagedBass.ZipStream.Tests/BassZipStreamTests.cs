@@ -19,6 +19,7 @@ namespace ManagedBass.ZipStream.Tests
             }
         }
 
+        [Explicit]
         [TestCase("Music.zip", "Gift\\01 Smile.flac", 37573200)]
         [TestCase("Music.zip", "Gift\\02 Again & Again.flac", 41630400)]
         [TestCase("Music.zip", "Gift\\03 Emotional Times.flac", 32281200)]

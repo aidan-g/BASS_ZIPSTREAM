@@ -3,6 +3,7 @@
 #include "ArchiveEntryInterface.h"
 #include "Config.h"
 #include "Common.h"
+#include "ErrorInterface.h"
 
 extern "C" {
 
@@ -22,7 +23,7 @@ extern "C" {
 
 		*handle = (ARCHIVE_ENTRY_HANDLE*)malloc(sizeof(ARCHIVE_ENTRY_HANDLE));
 		if (!*handle) {
-			//TODO: Warn.
+			ARCHIVE_SetLastError(E_OUTOFMEMORY);
 			return FALSE;
 		}
 
@@ -39,11 +40,11 @@ extern "C" {
 				return TRUE;
 			}
 			else {
-				//TODO: Warn, not a file.
+				ARCHIVE_SetLastError(E_NOT_A_FILE);
 			}
 		}
 		catch (CSystemException e) {
-			//TODO: Warn.
+			ARCHIVE_SetLastError(e.ErrorCode);
 		}
 		if (*handle) {
 			free(*handle);
@@ -68,7 +69,7 @@ extern "C" {
 			return entry->GetPosition();
 		}
 		catch (CSystemException e) {
-			//TODO: Warn.
+			ARCHIVE_SetLastError(e.ErrorCode);
 			return 0;
 		}
 	}
@@ -83,7 +84,7 @@ extern "C" {
 			return entry->GetSize();
 		}
 		catch (CSystemException e) {
-			//TODO: Warn.
+			ARCHIVE_SetLastError(e.ErrorCode);
 			return 0;
 		}
 	}
@@ -98,7 +99,7 @@ extern "C" {
 			return entry->GetAvailable();
 		}
 		catch (CSystemException e) {
-			//TODO: Warn.
+			ARCHIVE_SetLastError(e.ErrorCode);
 			return 0;
 		}
 	}
@@ -120,7 +121,7 @@ extern "C" {
 			}
 		}
 		catch (CSystemException e) {
-			//TODO: Warn.
+			ARCHIVE_SetLastError(e.ErrorCode);
 			return FALSE;
 		}
 	}
@@ -132,10 +133,16 @@ extern "C" {
 		try {
 			ARCHIVE_ENTRY_HANDLE* handle = (ARCHIVE_ENTRY_HANDLE*)user;
 			ArchiveEntry* entry = (ArchiveEntry*)handle->entry;
-			return entry->Buffer(position, GetTimeout());
+			if (entry->Buffer(position, GetTimeout())) {
+				return TRUE;
+			}
+			else {
+				ARCHIVE_SetLastError(E_TIMEOUT);
+				return FALSE;
+			}
 		}
 		catch (CSystemException e) {
-			//TODO: Warn.
+			ARCHIVE_SetLastError(e.ErrorCode);
 			return FALSE;
 		}
 	}
@@ -167,7 +174,7 @@ extern "C" {
 			return count;
 		}
 		catch (CSystemException e) {
-			//TODO: Warn.
+			ARCHIVE_SetLastError(e.ErrorCode);
 			return 0;
 		}
 	}
@@ -189,7 +196,7 @@ extern "C" {
 			return TRUE;
 		}
 		catch (CSystemException e) {
-			//TODO: Warn.
+			ARCHIVE_SetLastError(e.ErrorCode);
 			return FALSE;
 		}
 	}
@@ -204,7 +211,7 @@ extern "C" {
 			return entry->GetPosition() >= entry->GetSize();
 		}
 		catch (CSystemException e) {
-			//TODO: Warn.
+			ARCHIVE_SetLastError(e.ErrorCode);
 			return FALSE;
 		}
 	}
@@ -223,7 +230,7 @@ extern "C" {
 			free(handle);
 		}
 		catch (CSystemException e) {
-			//TODO: Warn.
+			ARCHIVE_SetLastError(e.ErrorCode);
 		}
 	}
 }
