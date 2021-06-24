@@ -224,6 +224,10 @@ extern "C" {
 			ARCHIVE_ENTRY_HANDLE* handle = (ARCHIVE_ENTRY_HANDLE*)user;
 			Archive* archive = (Archive*)handle->archive;
 			ArchiveEntry* entry = (ArchiveEntry*)handle->entry;
+			HRESULT result = entry->GetResult();
+			if (result != S_OK) {
+				ARCHIVE_SetLastError(result);
+			}
 			archive->CloseEntry(entry);
 			archive->Close();
 			delete archive;

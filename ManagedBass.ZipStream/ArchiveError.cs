@@ -10,6 +10,7 @@ namespace ManagedBass.ZipStream
 
         public const int E_NOT_A_FILE = 0x9000100;
         public const int E_TIMEOUT = 0x9000200;
+        public const int E_PASSWORD_REQUIRED = unchecked((int)0x80070005);
 
         [DllImport(DllName)]
         static extern int ARCHIVE_GetLastError();

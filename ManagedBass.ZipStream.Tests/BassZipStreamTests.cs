@@ -13,10 +13,24 @@ namespace ManagedBass.ZipStream.Tests
 
         public BassZipStreamTests(bool cleanup)
         {
-            if (cleanup)
+            this.Cleanup = cleanup;
+        }
+
+        public bool Cleanup { get; private set; }
+
+        [SetUp]
+        public void SetUp()
+        {
+            if (this.Cleanup)
             {
                 Assert.IsTrue(Archive.Cleanup());
             }
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            Utils.PasswordHandler.Reset();
         }
 
         [Explicit]
@@ -74,6 +88,62 @@ namespace ManagedBass.ZipStream.Tests
                 {
                     Assert.Fail(string.Format("Failed to free the source stream: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
                 }
+            }
+            finally
+            {
+                if (!BassZipStream.Free())
+                {
+                    Assert.Fail(string.Format("Failed to free ZIPSTREAM: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
+                }
+
+                if (!Bass.Free())
+                {
+                    Assert.Fail(string.Format("Failed to free BASS: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
+                }
+            }
+        }
+
+        [Explicit]
+        [TestCase("Music (Protected).zip", "Gift\\01 Smile.flac", "")]
+        [TestCase("Music (Protected).zip", "Gift\\01 Smile.flac", "wrong")]
+        [TestCase("Music (Protected).zip", "Gift\\02 Again & Again.flac", "")]
+        [TestCase("Music (Protected).zip", "Gift\\02 Again & Again.flac", "wrong")]
+        [TestCase("Music (Protected).zip", "Gift\\03 Emotional Times.flac", "")]
+        [TestCase("Music (Protected).zip", "Gift\\03 Emotional Times.flac", "wrong")]
+        public void Test002(string archiveName, string entryPath, string password)
+        {
+            if (!this.Cleanup)
+            {
+                Assert.Ignore("Requires clean state.");
+            }
+
+            var fileName = Path.Combine(Location, "Media", archiveName);
+            var index = Utils.GetEntryIndex(archiveName, entryPath);
+
+            if (!Bass.Init(Bass.DefaultDevice))
+            {
+                Assert.Fail(string.Format("Failed to initialize BASS: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
+            }
+
+            if (!BassZipStream.Init())
+            {
+                Assert.Fail("Failed to initialize ZIPSTREAM.");
+            }
+
+            if (string.IsNullOrEmpty(password))
+            {
+                Utils.PasswordHandler.Reset();
+            }
+            else
+            {
+                Utils.PasswordHandler.Set(fileName, password, 5000);
+            }
+
+            try
+            {
+                var sourceChannel = BassZipStream.CreateStream(fileName, index);
+                Assert.AreEqual(0, sourceChannel);
+                Assert.AreEqual(ArchiveError.E_PASSWORD_REQUIRED, ArchiveError.GetLastError());
             }
             finally
             {

@@ -188,6 +188,8 @@ void Archive::Close() {
 		this->InArchive->Close();
 	}
 	this->FileName.Empty();
+	this->Password.Empty();
+	this->FormatIndex = -1;
 }
 
 bool Archive::Cleanup() {
