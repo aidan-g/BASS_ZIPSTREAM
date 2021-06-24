@@ -156,6 +156,9 @@ extern "C" {
 		if (!__prompt1__(&result)) {
 			return false;
 		}
+		if (!result.password) {
+			return false;
+		}
 		password = result.password;
 		return true;
 	}
