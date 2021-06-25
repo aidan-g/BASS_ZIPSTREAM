@@ -84,6 +84,7 @@ namespace ManagedBass.ZipStream
 
         public static void GetPassword(GetPasswordHandler handler)
         {
+            Handles.Pin(nameof(ARCHIVE_GetPassword), handler);
             ARCHIVE_GetPassword(handler);
         }
 

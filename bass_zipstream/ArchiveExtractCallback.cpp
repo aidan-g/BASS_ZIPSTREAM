@@ -192,6 +192,7 @@ STDMETHODIMP ArchiveExtractCallback::SetCompleted(const UInt64* completeValue) {
 
 STDMETHODIMP ArchiveExtractCallback::CryptoGetTextPassword(BSTR* result) {
 	UString password;
+	*result = nullptr;
 	if (!this->Parent->GetPassword(password)) {
 		if (!ArchiveExtractPrompt::CanPrompt()) {
 			return E_ACCESSDENIED;
