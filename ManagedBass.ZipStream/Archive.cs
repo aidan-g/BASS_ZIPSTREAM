@@ -114,6 +114,7 @@ namespace ManagedBass.ZipStream
             public string password;
         }
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate bool GetPasswordHandler(ref ArchivePassword password);
     }
 }
