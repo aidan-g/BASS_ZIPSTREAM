@@ -11,6 +11,7 @@ namespace ManagedBass.ZipStream
         /// </summary>
         public const int DEFAULT_BUFFER_MIN = 20;
         public const int DEFAULT_BUFFER_TIMEOUT = 1000;
+        public const bool DEFAULT_DOUBLE_BUFFER = false;
 
         public static int BufferMin
         {
@@ -43,6 +44,23 @@ namespace ManagedBass.ZipStream
             set
             {
                 BASS_ZIPSTREAM_SetConfig(BassZipStreamAttribute.BufferTimeout, value);
+            }
+        }
+
+        public static bool DoubleBuffer
+        {
+            get
+            {
+                var value = default(bool);
+                if (BASS_ZIPSTREAM_GetConfig(BassZipStreamAttribute.DoubleBuffer, out value))
+                {
+                    return value;
+                }
+                return DEFAULT_DOUBLE_BUFFER;
+            }
+            set
+            {
+                BASS_ZIPSTREAM_SetConfig(BassZipStreamAttribute.DoubleBuffer, value);
             }
         }
 
@@ -115,6 +133,7 @@ namespace ManagedBass.ZipStream
     {
         None = 0,
         BufferMin = 1,
-        BufferTimeout = 2
+        BufferTimeout = 2,
+        DoubleBuffer = 3
     }
 }

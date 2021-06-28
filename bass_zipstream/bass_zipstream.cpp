@@ -27,8 +27,7 @@ extern "C" {
 		if (is_initialized) {
 			return FALSE;
 		}
-		BASS_ZIPSTREAM_SetConfig(ZS_BUFFER_MIN, DEFAULT_BUFFER_MIN);
-		BASS_ZIPSTREAM_SetConfig(ZS_BUFFER_TIMEOUT, DEFAULT_BUFFER_TIMEOUT);
+		InitConfig();
 		is_initialized = TRUE;
 		return TRUE;
 	}
@@ -43,10 +42,12 @@ extern "C" {
 
 	HSTREAM BASSZIPSTREAMDEF(BASS_ZIPSTREAM_StreamCreateFile)(BOOL mem, const void* file, DWORD index, QWORD offset, QWORD length, DWORD flags) {
 		try {
+			//Open the entry.
 			ARCHIVE_ENTRY_HANDLE* handle;
 			if (!ARCHIVE_OpenEntry(file, index, &handle)) {
 				return 0;
 			}
+			//Ensure the minimum buffer percent is available.
 			DWORD min;
 			if (!BASS_ZIPSTREAM_GetConfig(ZS_BUFFER_MIN, &min)) {
 				min = DEFAULT_BUFFER_MIN;
@@ -59,7 +60,20 @@ extern "C" {
 				QWORD position = (QWORD)((FLOAT)ARCHIVE_GetEntryLength(handle) * factor);
 				ARCHIVE_BufferEntry(position, handle);
 			}
-			return BASS_StreamCreateFileUser(STREAMFILE_BUFFER, flags, &procs, handle);
+			//Determine whether we should double buffer (using the BASS stream buffer).
+			DWORD doubleBuffer;
+			if (!BASS_ZIPSTREAM_GetConfig(ZS_DOUBLE_BUFFER, &doubleBuffer)) {
+				doubleBuffer = DEFAULT_DOUBLE_BUFFER;
+			}
+			DWORD system;
+			if (doubleBuffer) {
+				system = STREAMFILE_BUFFER;
+			}
+			else {
+				system = STREAMFILE_NOBUFFER;
+			}
+			//Attempt to create the stream, if this fails ARCHIVE_CloseEntry will be called immidiately.
+			return BASS_StreamCreateFileUser(system, flags, &procs, handle);
 		}
 		catch (CSystemException e) {
 			ARCHIVE_SetLastError(e.ErrorCode);
