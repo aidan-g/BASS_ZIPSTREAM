@@ -18,6 +18,7 @@
     </ClCompile>
     <Link>
       <ModuleDefinitionFile>bass_zipstream.def</ModuleDefinitionFile>
+      <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

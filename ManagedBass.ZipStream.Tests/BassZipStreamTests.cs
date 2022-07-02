@@ -21,13 +21,13 @@ namespace ManagedBass.ZipStream.Tests
         [SetUp]
         public void SetUp()
         {
+            Assert.IsTrue(Loader.Load("bass"));
+            Assert.IsTrue(BassZipStream.Load());
+            Assert.IsTrue(Bass.Init(Bass.DefaultDevice));
             if (this.Cleanup)
             {
                 Assert.IsTrue(Archive.Cleanup());
             }
-            Assert.IsTrue(Loader.Load("bass"));
-            Assert.IsTrue(BassZipStream.Load());
-            Assert.IsTrue(Bass.Init(Bass.DefaultDevice));
         }
 
         [TearDown]

@@ -9,6 +9,19 @@ namespace ManagedBass.ZipStream.Tests
     {
         private static readonly string Location = Path.GetDirectoryName(typeof(ArchiveTests).Assembly.Location);
 
+        [SetUp]
+        public void SetUp()
+        {
+            Assert.IsTrue(Loader.Load("bass"));
+            Assert.IsTrue(BassZipStream.Load());
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            BassZipStream.Unload();
+        }
+
         [TestCase("7z", "7z")]
         [TestCase("Iso", "iso,img")]
         [TestCase("Rar", "rar,r00")]

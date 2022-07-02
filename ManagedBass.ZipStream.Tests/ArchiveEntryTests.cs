@@ -21,6 +21,8 @@ namespace ManagedBass.ZipStream.Tests
         [SetUp]
         public void SetUp()
         {
+            Assert.IsTrue(Loader.Load("bass"));
+            Assert.IsTrue(BassZipStream.Load());
             if (this.Cleanup)
             {
                 Assert.IsTrue(Archive.Cleanup());
@@ -31,6 +33,7 @@ namespace ManagedBass.ZipStream.Tests
         public void TearDown()
         {
             Utils.PasswordHandler.Reset();
+            BassZipStream.Unload();
         }
 
         [TestCase("Music.7z", "Gift\\01 Smile.flac", 27873249, 811163365)]
