@@ -148,10 +148,10 @@ extern "C" {
 	}
 
 	DWORD ARCHIVEDEF(ARCHIVE_ReadEntry)(void* buffer, DWORD length, void* user) {
-		return ARCHIVE_ReadEntry2(buffer, 0, length, user);
+		return ARCHIVE_ReadEntryWithOffset(buffer, 0, length, user);
 	}
 
-	DWORD ARCHIVEDEF(ARCHIVE_ReadEntry2)(void* buffer, DWORD offset, DWORD length, void* user) {
+	DWORD ARCHIVEDEF(ARCHIVE_ReadEntryWithOffset)(void* buffer, DWORD offset, DWORD length, void* user) {
 		if (!buffer || !length || !user) {
 			return 0;
 		}

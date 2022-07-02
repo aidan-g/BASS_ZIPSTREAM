@@ -1,6 +1,9 @@
 ﻿<Project>
 	<ItemGroup>
-		<None Include="$(MSBuildThisFileDirectory)\$(Platform)\bass_zipstream.dll" Link="$(Platform)\bass_zipstream.dll">
+		<None Include="$(MSBuildThisFileDirectory)\x86\bass_zipstream.dll" Link="x86\bass_zipstream.dll">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Include="$(MSBuildThisFileDirectory)\x64\bass_zipstream.dll" Link="x64\bass_zipstream.dll">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>

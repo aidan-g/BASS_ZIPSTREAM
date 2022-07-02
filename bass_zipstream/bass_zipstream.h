@@ -13,15 +13,17 @@
 extern "C" {
 #endif
 
-	__declspec(dllexport) BOOL BASSZIPSTREAMDEF(BASS_ZIPSTREAM_Init)();
+	BOOL BASSDEF(DllMain)(HANDLE dll, DWORD reason, LPVOID reserved);
 
-	__declspec(dllexport) BOOL BASSZIPSTREAMDEF(BASS_ZIPSTREAM_SetConfig)(ZS_ATTRIBUTE attrib, DWORD value);
+	const VOID* BASSDEF(BASSplugin)(DWORD face);
 
-	__declspec(dllexport) BOOL BASSZIPSTREAMDEF(BASS_ZIPSTREAM_GetConfig)(ZS_ATTRIBUTE attrib, DWORD* value);
+	BOOL BASSZIPSTREAMDEF(BASS_ZIPSTREAM_SetConfig)(ZS_ATTRIBUTE attrib, DWORD value);
 
-	__declspec(dllexport) HSTREAM BASSZIPSTREAMDEF(BASS_ZIPSTREAM_StreamCreateFile)(BOOL mem, const void* file, DWORD index, QWORD offset, QWORD length, DWORD flags);
+	BOOL BASSZIPSTREAMDEF(BASS_ZIPSTREAM_GetConfig)(ZS_ATTRIBUTE attrib, DWORD* value);
 
-	__declspec(dllexport) BOOL BASSZIPSTREAMDEF(BASS_ZIPSTREAM_Free)();
+	HSTREAM BASSZIPSTREAMDEF(BASS_ZIPSTREAM_StreamCreateFile)(BOOL mem, const void* file, DWORD index, QWORD offset, QWORD length, DWORD flags);
+
+	BOOL BASSZIPSTREAMDEF(BASS_ZIPSTREAM_Free)();
 
 #if __cplusplus
 }

@@ -5,6 +5,9 @@
 #include "Common.h"
 #include "ErrorInterface.h"
 
+//2.4.0.0
+#define BASS_VERSION 0x02040000
+
 extern "C" {
 
 	BASS_FILEPROCS procs = {
@@ -14,7 +17,6 @@ extern "C" {
 		ARCHIVE_SeekEntry
 	};
 
-	BOOL is_initialized = FALSE;
 
 	//I have no idea how to prevent linking against this routine in msvcrt.
 	//It doesn't exist on Windows XP.
@@ -23,13 +25,28 @@ extern "C" {
 		return 0;
 	}
 
-	BOOL BASSZIPSTREAMDEF(BASS_ZIPSTREAM_Init)() {
-		if (is_initialized) {
-			return FALSE;
+	static const BASS_PLUGININFO plugin_info = { BASS_VERSION, 0, NULL };
+
+	BOOL BASSDEF(DllMain)(HANDLE dll, DWORD reason, LPVOID reserved) {
+		switch (reason) {
+		case DLL_PROCESS_ATTACH:
+			DisableThreadLibraryCalls((HMODULE)dll);
+			if (HIWORD(BASS_GetVersion()) != BASSVERSION || !GetBassFunc()) {
+				MessageBoxA(0, "Incorrect BASS.DLL version (" BASSVERSIONTEXT " is required)", "BASS", MB_ICONERROR | MB_OK);
+				return FALSE;
+			}
+			InitConfig();
+			break;
 		}
-		InitConfig();
-		is_initialized = TRUE;
 		return TRUE;
+	}
+
+	const VOID* BASSDEF(BASSplugin)(DWORD face) {
+		switch (face) {
+		case BASSPLUGIN_INFO:
+			return (void*)&plugin_info;
+		}
+		return NULL;
 	}
 
 	BOOL BASSZIPSTREAMDEF(BASS_ZIPSTREAM_GetConfig)(ZS_ATTRIBUTE attrib, DWORD* value) {
@@ -79,13 +96,5 @@ extern "C" {
 			ARCHIVE_SetLastError(e.ErrorCode);
 			return 0;
 		}
-	}
-
-	BOOL BASSZIPSTREAMDEF(BASS_ZIPSTREAM_Free)() {
-		if (!is_initialized) {
-			return FALSE;
-		}
-		is_initialized = FALSE;
-		return TRUE;
 	}
 }

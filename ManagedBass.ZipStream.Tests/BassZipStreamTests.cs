@@ -25,12 +25,17 @@ namespace ManagedBass.ZipStream.Tests
             {
                 Assert.IsTrue(Archive.Cleanup());
             }
+            Assert.IsTrue(Loader.Load("bass"));
+            Assert.IsTrue(BassZipStream.Load());
+            Assert.IsTrue(Bass.Init(Bass.DefaultDevice));
         }
 
         [TearDown]
         public void TearDown()
         {
             Utils.PasswordHandler.Reset();
+            BassZipStream.Unload();
+            Bass.Free();
         }
 
         [Explicit]
@@ -42,64 +47,39 @@ namespace ManagedBass.ZipStream.Tests
             var fileName = Path.Combine(Location, "Media", archiveName);
             var index = Utils.GetEntryIndex(archiveName, entryPath);
 
-            if (!Bass.Init(Bass.DefaultDevice))
+            var sourceChannel = BassZipStream.CreateStream(fileName, index);
+            if (sourceChannel == 0)
             {
-                Assert.Fail(string.Format("Failed to initialize BASS: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
+                Assert.Fail(string.Format("Failed to create source stream: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
             }
 
-            if (!BassZipStream.Init())
+            Assert.AreEqual(length, Bass.ChannelGetLength(sourceChannel));
+
+            if (!Bass.ChannelPlay(sourceChannel))
             {
-                Assert.Fail("Failed to initialize ZIPSTREAM.");
+                Assert.Fail(string.Format("Failed to play the source stream: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
             }
 
-            try
+            //Play for a bit.
+            global::System.Threading.Thread.Sleep(10000);
+
+            if (!Bass.ChannelSetPosition(sourceChannel, Bass.ChannelGetLength(sourceChannel) - Bass.ChannelSeconds2Bytes(sourceChannel, 10)))
             {
-                var sourceChannel = BassZipStream.CreateStream(fileName, index);
-                if (sourceChannel == 0)
-                {
-                    Assert.Fail(string.Format("Failed to create source stream: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
-                }
-
-                Assert.AreEqual(length, Bass.ChannelGetLength(sourceChannel));
-
-                if (!Bass.ChannelPlay(sourceChannel))
-                {
-                    Assert.Fail(string.Format("Failed to play the source stream: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
-                }
-
-                //Play for a bit.
-                global::System.Threading.Thread.Sleep(10000);
-
-                if (!Bass.ChannelSetPosition(sourceChannel, Bass.ChannelGetLength(sourceChannel) - Bass.ChannelSeconds2Bytes(sourceChannel, 10)))
-                {
-                    Assert.Fail(string.Format("Failed to seek the source stream: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
-                }
-
-                //Play for a bit.
-                while (Bass.ChannelIsActive(sourceChannel) == PlaybackState.Playing)
-                {
-                    global::System.Threading.Thread.Sleep(1000);
-                }
-
-                //TODO: Not working, reported position is greater than the length?
-                //Assert.AreEqual(length, Bass.ChannelGetPosition(sourceChannel));
-
-                if (!Bass.StreamFree(sourceChannel))
-                {
-                    Assert.Fail(string.Format("Failed to free the source stream: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
-                }
+                Assert.Fail(string.Format("Failed to seek the source stream: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
             }
-            finally
-            {
-                if (!BassZipStream.Free())
-                {
-                    Assert.Fail(string.Format("Failed to free ZIPSTREAM: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
-                }
 
-                if (!Bass.Free())
-                {
-                    Assert.Fail(string.Format("Failed to free BASS: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
-                }
+            //Play for a bit.
+            while (Bass.ChannelIsActive(sourceChannel) == PlaybackState.Playing)
+            {
+                global::System.Threading.Thread.Sleep(1000);
+            }
+
+            //TODO: Not working, reported position is greater than the length?
+            //Assert.AreEqual(length, Bass.ChannelGetPosition(sourceChannel));
+
+            if (!Bass.StreamFree(sourceChannel))
+            {
+                Assert.Fail(string.Format("Failed to free the source stream: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
             }
         }
 
@@ -120,16 +100,6 @@ namespace ManagedBass.ZipStream.Tests
             var fileName = Path.Combine(Location, "Media", archiveName);
             var index = Utils.GetEntryIndex(archiveName, entryPath);
 
-            if (!Bass.Init(Bass.DefaultDevice))
-            {
-                Assert.Fail(string.Format("Failed to initialize BASS: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
-            }
-
-            if (!BassZipStream.Init())
-            {
-                Assert.Fail("Failed to initialize ZIPSTREAM.");
-            }
-
             if (string.IsNullOrEmpty(password))
             {
                 Utils.PasswordHandler.Reset();
@@ -139,24 +109,9 @@ namespace ManagedBass.ZipStream.Tests
                 Utils.PasswordHandler.Set(fileName, password, 5000);
             }
 
-            try
-            {
-                var sourceChannel = BassZipStream.CreateStream(fileName, index);
-                Assert.AreEqual(0, sourceChannel);
-                Assert.AreEqual(ArchiveError.E_PASSWORD_REQUIRED, ArchiveError.GetLastError());
-            }
-            finally
-            {
-                if (!BassZipStream.Free())
-                {
-                    Assert.Fail(string.Format("Failed to free ZIPSTREAM: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
-                }
-
-                if (!Bass.Free())
-                {
-                    Assert.Fail(string.Format("Failed to free BASS: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
-                }
-            }
+            var sourceChannel = BassZipStream.CreateStream(fileName, index);
+            Assert.AreEqual(0, sourceChannel);
+            Assert.AreEqual(ArchiveError.E_PASSWORD_REQUIRED, ArchiveError.GetLastError());
         }
     }
 }

@@ -124,3 +124,6 @@ source/.vs/
 #libs
 lib/x86/bass_zipstream*
 lib/x64/bass_zipstream*
+
+lib/x86/lib7z*
+lib/x64/lib7z*

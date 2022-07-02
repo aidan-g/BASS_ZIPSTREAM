@@ -4,10 +4,16 @@
 		<TargetFrameworks>net40;net461</TargetFrameworks>
 		<AssemblyName>ManagedBass.ZipStream</AssemblyName>
 		<OutputPath>..\distribution\</OutputPath>
+		<Version>0.2.0</Version>
+		<Platforms>AnyCPU</Platforms>
+	</PropertyGroup>
+
+	<PropertyGroup>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Version>0.1.0</Version>
-		<Platforms>x86;x64</Platforms>
-		<Configurations>Debug;Release</Configurations>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<IncludeSymbols>true</IncludeSymbols>
+		<RepositoryUrl>https://github.com/aidan-g/BASS_ZIPSTREAM.git</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -23,19 +29,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<Folder Include="x64\" />
+		<Folder Include="x86\" />
 		<Folder Include="Properties\" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(Platform)' == 'x86'">
-		<None Include="..\lib\x86\bass_zipstream.dll" Link="bass_zipstream.dll" PackagePath="build\x86">
+	<ItemGroup>
+		<None Include="..\lib\x86\bass_zipstream.dll" Link="x86\bass_zipstream.dll" PackagePath="build\x86">
 			<Pack>true</Pack>
 			<PackageCopyToOutput>true</PackageCopyToOutput>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(Platform)' == 'x64'">
-		<None Include="..\lib\x64\bass_zipstream.dll" Link="bass_zipstream.dll" PackagePath="build\x64">
+		<None Include="..\lib\x64\bass_zipstream.dll" Link="x64\bass_zipstream.dll" PackagePath="build\x64">
 			<Pack>true</Pack>
 			<PackageCopyToOutput>true</PackageCopyToOutput>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

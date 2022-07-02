@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using System.IO;
+using System.Runtime.InteropServices;
 
 namespace ManagedBass.ZipStream
 {
@@ -64,28 +65,37 @@ namespace ManagedBass.ZipStream
             }
         }
 
-        [DllImport(DllName)]
-        static extern bool BASS_ZIPSTREAM_Init();
+        public static int Module = 0;
 
-        /// <summary>
-        /// Initialize.
-        /// </summary>
-        /// <returns></returns>
-        public static bool Init()
+        public static bool Load(string folderName = null)
         {
-            return BASS_ZIPSTREAM_Init();
+            if (Module == 0)
+            {
+                var fileName = default(string);
+                if (!string.IsNullOrEmpty(folderName))
+                {
+                    fileName = Path.Combine(folderName, DllName);
+                }
+                else
+                {
+                    fileName = Path.Combine(Loader.FolderName, DllName);
+                }
+                Module = Bass.PluginLoad(string.Format("{0}.{1}", fileName, Loader.Extension));
+            }
+            return Module != 0;
         }
 
-        [DllImport(DllName)]
-        static extern bool BASS_ZIPSTREAM_Free();
-
-        /// <summary>
-        /// Free.
-        /// </summary>
-        /// <returns></returns>
-        public static bool Free()
+        public static bool Unload()
         {
-            return BASS_ZIPSTREAM_Free();
+            if (Module != 0)
+            {
+                if (!Bass.PluginFree(Module))
+                {
+                    return false;
+                }
+                Module = 0;
+            }
+            return true;
         }
 
         [DllImport(DllName)]
