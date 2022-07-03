@@ -63,12 +63,6 @@ namespace ManagedBass.ZipStream.Tests
                 Assert.AreEqual(hashCode, Utils.GetEntryHashCode(entry));
                 Assert.AreEqual(length, ArchiveEntry.GetEntryPosition(entry));
                 Assert.IsTrue(ArchiveEntry.IsEOF(entry));
-
-                //This just checks GetEntryHashCode2 works, it uses ARCHIVE_ReadEntry2.
-                Assert.IsTrue(ArchiveEntry.SeekEntry(entry, 0));
-                Assert.AreEqual(hashCode, Utils.GetEntryHashCode2(entry));
-                Assert.AreEqual(length, ArchiveEntry.GetEntryPosition(entry));
-                Assert.IsTrue(ArchiveEntry.IsEOF(entry));
             }
             finally
             {

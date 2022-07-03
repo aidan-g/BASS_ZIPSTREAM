@@ -54,15 +54,7 @@ HRESULT ArchiveEntry::GetResult() {
 }
 
 UInt32 ArchiveEntry::Read(void* buffer, UInt32 length) {
-	return this->Read(buffer, 0, length);
-}
-
-UInt32 ArchiveEntry::Read(void* buffer, UInt32 offset, UInt32 length) {
 	UInt32 count;
-	if (offset) {
-		//TODO: I'm pretty sure this is wrong, should be buffer = (byte*)buffer + offset;
-		buffer = (byte*)buffer + (sizeof(byte) * offset);
-	}
 	HRESULT result = this->InStream->Read(buffer, length, &count);
 	if (result != S_OK) {
 		throw CSystemException(result);

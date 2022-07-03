@@ -154,29 +154,6 @@ namespace ManagedBass.ZipStream.Tests
             return Math.Abs(hashCode);
         }
 
-        public static int GetEntryHashCode2(IntPtr entry)
-        {
-            var hashCode = default(int);
-            var buffer = new byte[10240];
-            var length = (int)Math.Floor((float)buffer.Length / 2);
-            do
-            {
-                var count = ArchiveEntry.ReadEntry(entry, buffer, length, length);
-                if (count <= 0)
-                {
-                    break;
-                }
-                for (var a = 0; a < count; a++)
-                {
-                    unchecked
-                    {
-                        hashCode += buffer[length + a];
-                    }
-                }
-            } while (true);
-            return Math.Abs(hashCode);
-        }
-
         public static long GetEntryResult(IntPtr entry)
         {
             do

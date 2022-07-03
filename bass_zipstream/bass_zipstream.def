@@ -22,7 +22,6 @@ ARCHIVE_GetEntryAvailable
 ARCHIVE_GetEntryResult
 ARCHIVE_BufferEntry
 ARCHIVE_ReadEntry
-ARCHIVE_ReadEntryWithOffset
 ARCHIVE_SeekEntry
 ARCHIVE_IsEOF
 ARCHIVE_CloseEntry
