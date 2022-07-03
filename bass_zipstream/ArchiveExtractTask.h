@@ -2,6 +2,8 @@
 
 #include "..\7z\CPP\Windows\Thread.h"
 
+#define S_PENDING ((HRESULT)1L)
+
 static THREAD_FUNC_DECL ExtractThread(void* param);
 
 class ArchiveExtractTask :

@@ -84,13 +84,50 @@ namespace ManagedBass.ZipStream.Tests
         }
 
         [Explicit]
+        [TestCase("Music (Protected).zip", "Gift\\01 Smile.flac", 37573200, "password")]
+        [TestCase("Music (Protected).zip", "Gift\\02 Again & Again.flac", 41630400, "password")]
+        [TestCase("Music (Protected).zip", "Gift\\03 Emotional Times.flac", 32281200, "password")]
+        public void Test002(string archiveName, string entryPath, long length, string password)
+        {
+            if (!this.Cleanup)
+            {
+                Assert.Ignore("Requires clean state.");
+            }
+
+            var fileName = Path.Combine(Location, "Media", archiveName);
+            var index = Utils.GetEntryIndex(archiveName, entryPath);
+
+            if (string.IsNullOrEmpty(password))
+            {
+                Utils.PasswordHandler.Reset();
+            }
+            else
+            {
+                Utils.PasswordHandler.Set(fileName, password, 5000);
+            }
+
+            var sourceChannel = BassZipStream.CreateStream(fileName, index);
+            if (sourceChannel == 0)
+            {
+                Assert.Fail(string.Format("Failed to create source stream: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
+            }
+
+            Assert.AreEqual(length, Bass.ChannelGetLength(sourceChannel));
+
+            if (!Bass.StreamFree(sourceChannel))
+            {
+                Assert.Fail(string.Format("Failed to free the source stream: {0}", Enum.GetName(typeof(Errors), Bass.LastError)));
+            }
+        }
+
+        [Explicit]
         [TestCase("Music (Protected).zip", "Gift\\01 Smile.flac", "")]
         [TestCase("Music (Protected).zip", "Gift\\01 Smile.flac", "wrong")]
         [TestCase("Music (Protected).zip", "Gift\\02 Again & Again.flac", "")]
         [TestCase("Music (Protected).zip", "Gift\\02 Again & Again.flac", "wrong")]
         [TestCase("Music (Protected).zip", "Gift\\03 Emotional Times.flac", "")]
         [TestCase("Music (Protected).zip", "Gift\\03 Emotional Times.flac", "wrong")]
-        public void Test002(string archiveName, string entryPath, string password)
+        public void Test003(string archiveName, string entryPath, string password)
         {
             if (!this.Cleanup)
             {

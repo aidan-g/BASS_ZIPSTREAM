@@ -137,7 +137,13 @@ extern "C" {
 				return TRUE;
 			}
 			else {
-				ARCHIVE_SetLastError(E_TIMEOUT);
+				HRESULT result = entry->GetResult();
+				if (entry->IsCompleted() && result != S_OK) {
+					ARCHIVE_SetLastError(result);
+				}
+				else {
+					ARCHIVE_SetLastError(E_TIMEOUT);
+				}
 				return FALSE;
 			}
 		}

@@ -26,3 +26,5 @@ ARCHIVE_ReadEntryWithOffset
 ARCHIVE_SeekEntry
 ARCHIVE_IsEOF
 ARCHIVE_CloseEntry
+ARCHIVE_GetLastError
+ARCHIVE_SetLastError

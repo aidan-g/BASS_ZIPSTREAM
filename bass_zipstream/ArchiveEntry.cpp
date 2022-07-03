@@ -39,6 +39,9 @@ UInt64 ArchiveEntry::GetAvailable() {
 	if (this->Task->IsRunning(this->Index, available)) {
 		return available;
 	}
+	if (this->Task->GetResult() != S_OK) {
+		return 0;
+	}
 	return this->Size;
 }
 
@@ -57,6 +60,7 @@ UInt32 ArchiveEntry::Read(void* buffer, UInt32 length) {
 UInt32 ArchiveEntry::Read(void* buffer, UInt32 offset, UInt32 length) {
 	UInt32 count;
 	if (offset) {
+		//TODO: I'm pretty sure this is wrong, should be buffer = (byte*)buffer + offset;
 		buffer = (byte*)buffer + (sizeof(byte) * offset);
 	}
 	HRESULT result = this->InStream->Read(buffer, length, &count);
@@ -70,6 +74,10 @@ bool ArchiveEntry::Buffer(UInt64 position, UInt32 timeout) {
 	if (position > this->Size) {
 		return false;
 	}
+	if (this->Task->IsCompleted()) {
+		return this->GetAvailable() >= position;
+	}
+	//Extract task is in progress, loop until we either have enough data or the timeout elapses.
 retry:
 	for (unsigned a = 0; a < timeout; a++) {
 		if (this->GetAvailable() >= position) {
@@ -77,7 +85,7 @@ retry:
 		}
 		Sleep(1);
 	}
-	//If buffer timed out then check if we're prompting for input (likely password).
+	//If timed out then check if we're prompting for input (likely password).
 	UString fileName;
 	if (this->Parent->IsOpen(fileName)) {
 		if (ArchiveExtractPrompt::Wait(fileName)) {

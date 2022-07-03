@@ -4,7 +4,7 @@
 ArchiveExtractTask::ArchiveExtractTask(CMyComPtr<IInArchive> archive, CMyComPtr<ArchiveExtractCallback> callback) {
 	this->Archive = archive;
 	this->Callback = callback;
-	this->Result = S_FALSE;
+	this->Result = S_PENDING;
 	this->Completed = false;
 }
 
@@ -13,7 +13,7 @@ bool ArchiveExtractTask::Start(const UInt32* indices, UInt32 count) {
 	for (unsigned a = 0; a < count; a++) {
 		this->Indices.Add(indices[a]);
 	}
-	this->Result = S_FALSE;
+	this->Result = S_PENDING;
 	this->Completed = false;
 	return this->Thread.Create(ExtractThread, this) == 0;
 }
@@ -21,13 +21,15 @@ bool ArchiveExtractTask::Start(const UInt32* indices, UInt32 count) {
 HRESULT ArchiveExtractTask::Run() {
 	UInt32* indices = (UInt32*)malloc(sizeof(UInt32) * this->Indices.Size());
 	if (!indices) {
-		return E_OUTOFMEMORY;
+		this->Result = E_OUTOFMEMORY;
 	}
-	for (unsigned a = 0; a < this->Indices.Size(); a++) {
-		indices[a] = this->Indices[a];
+	else {
+		for (unsigned a = 0; a < this->Indices.Size(); a++) {
+			indices[a] = this->Indices[a];
+		}
+		this->Result = this->Archive->Extract(indices, this->Indices.Size(), false, this->Callback);
+		free(indices);
 	}
-	this->Result = this->Archive->Extract(indices, this->Indices.Size(), false, this->Callback);
-	free(indices);
 	this->Callback->CloseWriters();
 	this->Completed = true;
 	return this->Result;
@@ -65,8 +67,7 @@ HRESULT ArchiveExtractTask::GetResult() {
 	return this->Result;
 }
 
-static THREAD_FUNC_DECL ExtractThread(void* param)
-{
+static THREAD_FUNC_DECL ExtractThread(void* param) {
 	ArchiveExtractTask* task = (ArchiveExtractTask*)param;
 	task->Run();
 	return 0;

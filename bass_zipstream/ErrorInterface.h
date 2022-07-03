@@ -13,9 +13,9 @@
 extern "C" {
 #endif
 
-	__declspec(dllexport) HRESULT ARCHIVEDEF(ARCHIVE_GetLastError)();
+	HRESULT ARCHIVEDEF(ARCHIVE_GetLastError)();
 
-	__declspec(dllexport) VOID ARCHIVEDEF(ARCHIVE_SetLastError)(HRESULT result);
+	VOID ARCHIVEDEF(ARCHIVE_SetLastError)(HRESULT result);
 
 #if __cplusplus
 }

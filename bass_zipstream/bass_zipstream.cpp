@@ -75,7 +75,11 @@ extern "C" {
 					factor = 1;
 				}
 				QWORD position = (QWORD)((FLOAT)ARCHIVE_GetEntryLength(handle) * factor);
-				ARCHIVE_BufferEntry(position, handle);
+				if (!ARCHIVE_BufferEntry(position, handle)) {
+					//Failed to get required data.
+					ARCHIVE_CloseEntry(handle);
+					return 0;
+				}
 			}
 			//Determine whether we should double buffer (using the BASS stream buffer).
 			DWORD doubleBuffer;
