@@ -4,7 +4,7 @@
 		<TargetFrameworks>net40;net461</TargetFrameworks>
 		<AssemblyName>ManagedBass.ZipStream</AssemblyName>
 		<OutputPath>..\distribution\</OutputPath>
-		<Version>0.2.0</Version>
+		<Version>0.2.1</Version>
 		<Platforms>AnyCPU</Platforms>
 	</PropertyGroup>
 
@@ -48,7 +48,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="ManagedBass.ZipStream.targets" PackagePath="build">
+		<None Include="ManagedBass.ZipStream.targets" PackagePath="build">
 			<pack>true</pack>
 		</None>
 	</ItemGroup>
